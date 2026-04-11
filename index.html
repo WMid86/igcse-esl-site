@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Igcse ESL Resources</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; }
+    h1 { color: #333; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin: 0.5rem 0; }
+    a { color: #0066cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .notice { background-color: #f9f9f9; border-left: 4px solid #ccc; padding: 1rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>IGCSE ESL Resource Portal</h1>
+  <div class="notice">
+    <p>This site hosts your IGCSE ESL HTML files. To add new lessons or files, upload them to this repository and update the <code>index.html</code> file when you publish on GitHub Pages.</p>
+    <p>Visitors must enter the shared username and password provided to you. Analytics are collected using GoatCounter (a privacy‑friendly, open‑source analytics tool).</p>
+  </div>
+  <h2>Available Lessons</h2>
+  <ul>
+    <!-- Add links to your HTML files here, for example: -->
+    <li><a href="lesson1.html">Lesson&nbsp;1</a></li>
+    <li><a href="lesson2.html">Lesson&nbsp;2</a></li>
+    <!-- You can duplicate the list items above and change the href and text to match your files. -->
+  </ul>
+  
+  <!-- GoatCounter analytics script -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <!-- Simple client-side password protection -->
+  <script>
+    (function () {
+      // Shared credentials
+      const correctUsername = "igcse";
+      const correctPassword = "esl2026";
+
+      function promptForCredentials() {
+        const username = window.prompt("Enter username:");
+        const password = window.prompt("Enter password:");
+        if (username === correctUsername && password === correctPassword) {
+          // Store a flag so returning users don't have to re‑enter credentials during the same browser session
+          sessionStorage.setItem("igcse_esl_authenticated", "true");
+        } else {
+          alert("Incorrect credentials. Please try again.");
+          promptForCredentials();
+        }
+      }
+
+      // If the visitor hasn't authenticated yet, prompt for credentials
+      if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+        promptForCredentials();
+      }
+    })();
+  </script>
+</body>
+</html>
