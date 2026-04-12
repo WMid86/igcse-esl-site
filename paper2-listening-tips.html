@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper 2 Listening Strategies – IGCSE ESL</title>
+  <!-- Import global styles for colour palette and layout -->
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem 1rem 2rem;
+      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-top: 1rem;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+    .tips-list {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .practice-area {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-2);
+      border-radius: var(--radius);
+    }
+    .language-switcher {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin-left: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Language switcher to toggle between English and Chinese versions -->
+  <nav class="language-switcher">
+    <a href="paper2-listening-tips.html" class="active">EN</a> |
+    <a href="paper2-listening-tips-zh.html">中文</a>
+  </nav>
+  <h1>Paper 2 Listening Strategies</h1>
+  <p>This page offers advice for the listening component of the IGCSE ESL exam. Use these tips to improve your listening skills and better prepare for the examination.</p>
+  <h2>Listening Tips</h2>
+  <ul class="tips-list">
+    <li><strong>Listen widely and often:</strong> Spend time listening to different speakers and topics. The more listening you do, the better your comprehension will become【52116344114370†L1744-L1752】.</li>
+    <li><strong>Practise listening for key words and phrases:</strong> Try to predict when a particular word or phrase may be said and focus your attention【52116344114370†L1815-L1826】.</li>
+    <li><strong>Take notes as you listen:</strong> In the exam you will need to fill in gaps using notes. Practise making notes of the main points using single words or short phrases while you listen【52116344114370†L1828-L1834】.</li>
+    <li><strong>Use varied audio sources:</strong> Listen to podcasts, news reports and conversations to familiarise yourself with different accents and contexts. Use past exam recordings or sample tasks when available.</li>
+  </ul>
+  <div class="practice-area">
+    <h3>Practice Idea</h3>
+    <p>Find a short podcast or conversation online. Listen once to get the overall meaning. Listen again and jot down key points or fill in a notes table. Compare your notes with the original recording.</p>
+  </div>
+  <script>
+    // Client-side password protection: prompts for username & password once per session
+    (function() {
+      const sessionKey = 'igcse_esl_authenticated';
+      if (!sessionStorage.getItem(sessionKey)) {
+        const username = prompt('Enter username to access this page');
+        const password = prompt('Enter password');
+        if (username !== 'igcse' || password !== 'esl2026') {
+          alert('Incorrect username or password. Please try again.');
+          window.location.reload();
+        } else {
+          sessionStorage.setItem(sessionKey, 'true');
+        }
+      }
+    })();
+  </script>
+  <!-- GoatCounter analytics -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
