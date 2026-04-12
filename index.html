@@ -18,32 +18,117 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>IGCSE ESL Resource Portal</h1>
+  <h1>Cambridge IGCSE ESL (0511) Exam Portal</h1>
   <div class="notice">
-    <p>This site hosts your IGCSE ESL HTML files. To add new lessons or files, upload them to this repository and update the <code>index.html</code> file when you publish on GitHub Pages.</p>
+    <p>This site hosts a growing collection of resources for the Cambridge IGCSE 0511 English as a Second Language course. Use the interactive panels below to explore materials aligned with the exam structure. New activities will be added over time.</p>
     <p>Visitors must enter the shared username and password provided to you. Analytics are collected using GoatCounter (a privacy‑friendly, open‑source analytics tool).</p>
   </div>
-  <!-- Vocabulary tools section -->
-  <h2>Vocabulary&nbsp;Labs</h2>
-  <ul>
-    <li><a href="interview-vocabulary-lab-branded.html">Interview&nbsp;Vocabulary&nbsp;Lab</a></li>
-    <li><a href="b2_vocab_interview.html">Interview&nbsp;Vocabulary&nbsp;(B2&nbsp;Level)</a></li>
-  </ul>
+  <!-- Exam structure panels -->
+  <div class="exam-container">
+    <!-- Paper 1: Reading & Writing -->
+    <div class="exam-section">
+      <h2 class="section-header">Paper 1 – Reading & Writing</h2>
+      <div class="section-content hidden">
+        <p>Two-hour paper combining reading comprehension and writing tasks. 60 marks (50 % of total grade).</p>
+        <ul>
+          <li><strong>Reading:</strong> comprehension and multiple-matching tasks (coming soon)</li>
+          <li><strong>Writing:</strong>
+            <ul>
+              <li><a href="igcse-0511-report-writer.html">Report Writing</a></li>
+              <li><a href="email-language-dashboard-fixed-v3.html">Email Writing</a></li>
+              <li>Review/Article Writing (coming soon)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Paper 2: Listening -->
+    <div class="exam-section">
+      <h2 class="section-header">Paper 2 – Listening</h2>
+      <div class="section-content hidden">
+        <p>Approximately 50-minute listening paper with various short and long audio texts. 40 marks (25 % of total grade).</p>
+        <ul>
+          <li>Listening practice & resources (coming soon)</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Paper 3: Speaking -->
+    <div class="exam-section">
+      <h2 class="section-header">Paper 3 – Speaking</h2>
+      <div class="section-content hidden">
+        <p>10–15 minute speaking test including an interview, short talk and discussion. 40 marks (25 % of total grade).</p>
+        <ul>
+          <li><a href="igcse-0511-speaking-guide.html">Speaking Exam Guide</a></li>
+          <li><a href="igcse-0511-speaking-guide-mic-practice.html">Speaking Exam Practice (Mic)</a></li>
+          <li>Additional speaking activities (coming soon)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-  <!-- Writing and email tools section -->
-  <h2>Writing&nbsp;&amp;&nbsp;Email Tools</h2>
-  <ul>
-    <li><a href="igcse-0511-report-writer.html">Report&nbsp;Writer&nbsp;(IGCSE&nbsp;0511)</a></li>
-    <li><a href="email-language-dashboard-fixed-v3.html">Email&nbsp;Language&nbsp;Dashboard</a></li>
-  </ul>
+  <style>
+    /* Layout and interactive panel styles */
+    .exam-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .exam-section {
+      background: var(--card, #fff);
+      border-radius: var(--radius-sm, 10px);
+      box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .section-header {
+      margin: 0;
+      padding: 1rem 1.25rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--accent, #6366f1);
+      background: var(--bg-2, #f6f7fb);
+      position: relative;
+    }
+    .section-header::after {
+      content: '▼';
+      font-size: 1rem;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.2s;
+    }
+    .section-header.open::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .section-content {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border, #e2e8f0);
+      background: var(--panel, rgba(255,255,255,0.72));
+    }
+    .hidden {
+      display: none;
+    }
+    ul { list-style-type: none; padding-left: 1.2rem; }
+    li { margin-bottom: 0.5rem; }
+    li ul { margin-top: 0.5rem; }
+  </style>
+  <script>
+    // Toggle open/close for exam sections
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.section-header').forEach(function(header) {
+        header.addEventListener('click', function() {
+          header.classList.toggle('open');
+          var content = header.nextElementSibling;
+          if (content) {
+            content.classList.toggle('hidden');
+          }
+        });
+      });
+    });
+  </script>
 
-  <!-- Speaking practice section -->
-  <h2>Speaking&nbsp;Practice</h2>
-  <ul>
-    <li><a href="igcse-0511-speaking-guide.html">Speaking&nbsp;Exam&nbsp;Guide&nbsp;(IGCSE&nbsp;0511)</a></li>
-    <li><a href="igcse-0511-speaking-guide-mic-practice.html">Speaking&nbsp;Exam&nbsp;Practice&nbsp;(Mic)</a></li>
-  </ul>
-  
   <!-- GoatCounter analytics script -->
   <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
