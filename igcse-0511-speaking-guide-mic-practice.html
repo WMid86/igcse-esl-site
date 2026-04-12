@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGCSE 0511 Speaking Exam Guide</title>
+<!-- Include global styles for unified colour palette -->
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#2563eb;--primary-light:#dbeafe;--primary-dark:#1e40af;
+  --accent:#f59e0b;--accent-light:#fef3c7;
+  --success:#10b981;--success-light:#d1fae5;
+  --danger:#ef4444;--danger-light:#fee2e2;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+  --gray-500:#6b7280;--gray-700:#374151;--gray-900:#111827;
+  --radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.06);
+  --shadow-lg:0 4px 24px rgba(0,0,0,.1);
+  --transition:0.25s ease;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#f8fbff 0%,#f9fafb 18%,#f9fafb 100%);color:var(--gray-900);line-height:1.65}
+
+/* ===== NAV ===== */
+.navbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200);padding:0 1.5rem}
+.nav-inner{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem}
+.nav-brand{font-weight:700;font-size:1.05rem;color:var(--primary-dark);white-space:nowrap}
+.nav-links{display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:.45rem .8rem;border-radius:8px;font-size:.82rem;font-weight:500;color:var(--gray-700);cursor:pointer;white-space:nowrap;transition:var(--transition);border:none;background:none}
+.nav-link:hover,.nav-link.active{background:var(--primary-light);color:var(--primary-dark)}
+.lang-toggle{display:flex;border:2px solid var(--primary);border-radius:8px;overflow:hidden;flex-shrink:0}
+.lang-btn{padding:.35rem .7rem;font-size:.8rem;font-weight:600;border:none;cursor:pointer;transition:var(--transition);background:white;color:var(--primary)}
+.lang-btn.active{background:var(--primary);color:white}
+
+/* ===== LAYOUT ===== */
+.container{max-width:1100px;margin:auto;padding:2rem 1.5rem 4rem}
+.section{display:none;animation:fadeUp .4s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== TYPOGRAPHY ===== */
+h1{font-size:2.2rem;font-weight:800;line-height:1.2;color:var(--gray-900)}
+h2{font-size:1.6rem;font-weight:700;margin-bottom:1rem;color:var(--gray-900)}
+h3{font-size:1.15rem;font-weight:700;margin-bottom:.5rem;color:var(--gray-900)}
+.subtitle{font-size:1.1rem;color:var(--gray-500);margin-top:.5rem;font-weight:400}
+
+/* ===== CARDS ===== */
+.card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;transition:var(--transition)}
+.card:hover{box-shadow:var(--shadow-lg)}
+.card-grid{display:grid;gap:1.25rem}
+.card-grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card-grid-3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card-grid-4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+/* ===== ICON CIRCLES ===== */
+.icon-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.icon-blue{background:var(--primary-light);color:var(--primary)}
+.icon-amber{background:var(--accent-light);color:#b45309}
+.icon-green{background:var(--success-light);color:#047857}
+.icon-red{background:var(--danger-light);color:#b91c1c}
+
+/* ===== BADGES ===== */
+.badge{display:inline-block;padding:.2rem .6rem;border-radius:20px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.badge-green{background:var(--success-light);color:#047857}
+.badge-gray{background:var(--gray-200);color:var(--gray-500)}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border-radius:8px;font-size:.95rem;font-weight:600;border:none;cursor:pointer;transition:var(--transition)}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:var(--primary-dark)}
+
+/* ===== TIMELINE ===== */
+.timeline{position:relative;padding-left:2.5rem}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:3px;background:var(--gray-200);border-radius:3px}
+.timeline-item{position:relative;margin-bottom:1.5rem}
+.timeline-dot{position:absolute;left:-2.5rem;top:.2rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:white;z-index:1}
+.timeline-dot.blue{background:var(--primary)}
+.timeline-dot.amber{background:var(--accent)}
+.timeline-dot.green{background:var(--success)}
+
+/* ===== ACCORDION ===== */
+.accordion{border:1px solid var(--gray-200);border-radius:var(--radius);overflow:hidden;margin-bottom:.75rem;background:white}
+.accordion-header{display:flex;align-items:center;gap:.75rem;padding:1rem 1.25rem;cursor:pointer;font-weight:600;font-size:1rem;transition:var(--transition);user-select:none}
+.accordion-header:hover{background:var(--gray-50)}
+.accordion-arrow{margin-left:auto;transition:transform .25s ease;font-size:.75rem;color:var(--gray-500)}
+.accordion.open .accordion-arrow{transform:rotate(180deg)}
+.accordion-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.accordion.open .accordion-body{max-height:2000px}
+.accordion-content{padding:0 1.25rem 1.25rem}
+
+/* ===== TABS ===== */
+.tab-bar{display:flex;gap:.25rem;border-bottom:2px solid var(--gray-200);margin-bottom:1.25rem;overflow-x:auto}
+.tab-btn{padding:.6rem 1rem;font-size:.85rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--gray-500);border-bottom:2px solid transparent;margin-bottom:-2px;transition:var(--transition);white-space:nowrap}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-pane{display:none;animation:fadeUp .3s ease}
+.tab-pane.active{display:block}
+
+/* ===== PHRASE TABLE ===== */
+.phrase-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.9rem}
+.phrase-table th{background:var(--primary-light);color:var(--primary-dark);padding:.6rem .8rem;text-align:left;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.3px}
+.phrase-table th:first-child{border-radius:8px 0 0 0}
+.phrase-table th:last-child{border-radius:0 8px 0 0}
+.phrase-table td{padding:.55rem .8rem;border-bottom:1px solid var(--gray-100)}
+.phrase-table tr:last-child td{border-bottom:none}
+.phrase-table tr:hover td{background:var(--gray-50)}
+
+/* ===== TWO COL ===== */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+
+/* ===== EXAMPLE ANNOTATION ===== */
+.example-block{background:var(--gray-50);border-left:4px solid var(--primary);border-radius:0 var(--radius) var(--radius) 0;padding:1rem 1.25rem;margin:.75rem 0;font-size:.93rem;line-height:1.7}
+.annotation{display:inline-block;background:var(--accent-light);color:#92400e;font-size:.72rem;font-weight:600;padding:.15rem .45rem;border-radius:4px;margin-left:.3rem;vertical-align:middle}
+
+/* ===== CHECKLIST ===== */
+.checklist{list-style:none}
+.checklist li{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;font-size:.95rem}
+.check-box{width:22px;height:22px;border:2px solid var(--gray-300);border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);margin-top:2px}
+.check-box.checked{background:var(--success);border-color:var(--success);color:white}
+.check-box.checked::after{content:'✓';font-size:.75rem;font-weight:700}
+
+/* ===== ALERT BOXES ===== */
+.alert{padding:1rem 1.25rem;border-radius:var(--radius);font-size:.9rem;display:flex;align-items:flex-start;gap:.75rem;margin:.75rem 0}
+.alert-success{background:var(--success-light);color:#065f46}
+.alert-warning{background:var(--accent-light);color:#92400e}
+.alert-danger{background:var(--danger-light);color:#991b1b}
+.alert-info{background:var(--primary-light);color:var(--primary-dark)}
+
+/* ===== CONFIDENCE PANEL ===== */
+.confidence-panel{background:linear-gradient(135deg,#ede9fe,#dbeafe);border-radius:var(--radius);padding:1.5rem;text-align:center}
+.confidence-panel h3{color:var(--primary-dark)}
+
+/* ===== HERO ===== */
+.hero{text-align:center;padding:3rem 1rem 2rem}
+.hero h1{font-size:2.4rem}
+.hero .subtitle{font-size:1.15rem;max-width:500px;margin:0.5rem auto 0}
+.journey-steps{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:2rem}
+.journey-step{display:flex;align-items:center;gap:.5rem;background:white;padding:.6rem 1rem;border-radius:10px;box-shadow:var(--shadow);font-size:.88rem;font-weight:600}
+.journey-arrow{color:var(--gray-300);font-size:1.2rem}
+
+/* ===== UPGRADE BOX ===== */
+.upgrade-box{background:linear-gradient(135deg,#fef3c7,#fff7ed);border-radius:var(--radius);padding:1.25rem;margin-top:1rem}
+.upgrade-row{display:flex;align-items:center;gap:.75rem;padding:.35rem 0;font-size:.9rem}
+.upgrade-row .arrow{color:var(--accent);font-weight:700}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:860px){
+  .nav-links{display:none}
+  .mobile-menu-btn{display:flex !important}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:white;padding:1rem;border-bottom:1px solid var(--gray-200);box-shadow:var(--shadow)}
+}
+.mobile-menu-btn{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:none;background:none;font-size:1.4rem;cursor:pointer;color:var(--gray-700)}
+
+.hero-shell{position:relative;margin-bottom:2rem}
+.hero-panel{background:linear-gradient(135deg,#eef4ff 0%,#ffffff 42%,#f5f3ff 100%);border:1px solid rgba(37,99,235,.08);border-radius:24px;padding:2.2rem 1.4rem 1.6rem;box-shadow:0 16px 42px rgba(37,99,235,.08);overflow:hidden}
+.hero-panel::before,.hero-panel::after{content:'';position:absolute;border-radius:50%;filter:blur(8px);opacity:.4;pointer-events:none}
+.hero-panel::before{width:180px;height:180px;background:#dbeafe;top:-60px;right:-40px}
+.hero-panel::after{width:150px;height:150px;background:#ede9fe;left:-50px;bottom:-55px}
+.hero-kicker{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .8rem;border-radius:999px;background:white;border:1px solid var(--gray-200);font-size:.84rem;font-weight:700;color:var(--primary-dark);box-shadow:var(--shadow)}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:1.25rem;align-items:stretch;margin-top:1.35rem}
+.stage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.85rem;margin-top:1.35rem}
+.stage-card{background:rgba(255,255,255,.85);backdrop-filter:blur(4px);border:1px solid var(--gray-200);border-radius:16px;padding:1rem;box-shadow:var(--shadow);transition:var(--transition)}
+.stage-card:hover{transform:translateY(-2px)}
+.stage-icon{font-size:1.2rem;margin-bottom:.55rem}
+.stage-title{font-size:.92rem;font-weight:700;margin-bottom:.2rem}
+.stage-meta{font-size:.8rem;color:var(--gray-500)}
+.exam-glance{background:white;border-radius:18px;padding:1.15rem;border:1px solid var(--gray-200);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between}
+.glance-title{font-size:1rem;font-weight:700;margin-bottom:.7rem}
+.glance-list{display:grid;gap:.6rem}
+.glance-item{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.65rem .8rem;border-radius:12px;background:var(--gray-50)}
+.glance-left{display:flex;align-items:center;gap:.65rem;font-size:.92rem;font-weight:600}
+.glance-right{font-size:.78rem;color:var(--gray-500)}
+.quick-help{margin-top:1.1rem;padding:.9rem 1rem;border-radius:14px;background:linear-gradient(135deg,#eff6ff,#ecfeff);border:1px solid #dbeafe}
+.progress-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.progress-pill{display:inline-flex;align-items:center;gap:.45rem;padding:.38rem .75rem;border-radius:999px;background:white;border:1px solid var(--gray-200);font-size:.82rem;font-weight:700;color:var(--gray-700);box-shadow:var(--shadow)}
+.pretty-card{border:1px solid rgba(37,99,235,.07);border-radius:18px;box-shadow:0 10px 30px rgba(17,24,39,.05)}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-panel{padding:1.6rem 1rem 1.2rem}}
+
+
+/* ===== PRACTICE MODE ===== */
+.practice-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin:1rem 0 1.2rem}
+.practice-select{padding:.7rem .9rem;border:1px solid var(--gray-300);border-radius:10px;background:white;font-size:.94rem;color:var(--gray-900);min-width:240px}
+.btn-secondary{background:white;color:var(--primary-dark);border:1px solid var(--gray-300)}
+.btn-secondary:hover{border-color:var(--primary);background:var(--primary-light)}
+.btn-ghost{background:transparent;color:var(--gray-700);border:1px dashed var(--gray-300)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary-dark);background:#fff}
+.practice-stage-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;margin-bottom:1.2rem}
+.practice-stage-btn{padding:.85rem .9rem;border-radius:14px;border:1px solid var(--gray-200);background:white;box-shadow:var(--shadow);cursor:pointer;transition:var(--transition);text-align:left}
+.practice-stage-btn:hover{transform:translateY(-2px);border-color:var(--primary)}
+.practice-stage-btn.active{background:linear-gradient(135deg,#eff6ff,#eef2ff);border-color:var(--primary)}
+.practice-stage-title{font-size:.88rem;font-weight:700}
+.practice-stage-meta{font-size:.76rem;color:var(--gray-500);margin-top:.25rem}
+.practice-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:1.25rem;align-items:start}
+.practice-card{background:white;border-radius:18px;padding:1.35rem;box-shadow:var(--shadow);border:1px solid rgba(37,99,235,.08)}
+.practice-card h3{margin-bottom:.7rem}
+.practice-card ul,.practice-card ol{padding-left:1.2rem}
+.practice-card li{margin:.35rem 0}
+.mock-stage-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .65rem;border-radius:999px;font-size:.72rem;font-weight:700}
+.mock-stage-badge.assessed{background:var(--success-light);color:#047857}
+.mock-stage-badge.not-assessed{background:var(--gray-200);color:var(--gray-700)}
+.mock-question{padding:.9rem 1rem;border-radius:14px;background:var(--gray-50);border:1px solid var(--gray-200);margin:.65rem 0}
+.mock-question-zh{font-size:.85rem;color:var(--gray-500);margin-top:.25rem}
+.mock-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:.9rem 0}
+.mock-option{padding:.85rem 1rem;border-radius:14px;background:linear-gradient(135deg,#f8fbff,#ffffff);border:1px solid var(--gray-200)}
+.mock-option-label{font-size:.74rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:.25rem}
+.practice-side-stack{display:grid;gap:1rem}
+.timer-shell{background:linear-gradient(135deg,#eff6ff,#eef2ff);border-radius:18px;padding:1.1rem;border:1px solid rgba(37,99,235,.12)}
+.timer-display{font-size:2.5rem;line-height:1;font-weight:800;color:var(--primary-dark);margin:.5rem 0 .8rem}
+.timer-subtext{font-size:.86rem;color:var(--gray-500);margin-bottom:.85rem}
+.timer-controls{display:flex;flex-wrap:wrap;gap:.55rem}
+.timer-status{font-size:.82rem;font-weight:700;color:var(--gray-700);margin-top:.75rem}
+.mic-status{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .7rem;border-radius:999px;background:var(--gray-100);font-size:.8rem;font-weight:700;color:var(--gray-700)}
+.mic-status.live{background:var(--danger-light);color:#991b1b}
+.mic-dot{width:9px;height:9px;border-radius:50%;background:currentColor}
+.transcript-shell{background:white;border-radius:18px;padding:1.1rem;border:1px solid var(--gray-200);box-shadow:var(--shadow)}
+.transcript-box{min-height:240px;background:var(--gray-50);border:1px dashed var(--gray-300);border-radius:14px;padding:1rem;white-space:pre-wrap;font-size:.95rem;line-height:1.7}
+.transcript-placeholder{color:var(--gray-500)}
+.transcript-interim{color:var(--primary-dark);opacity:.75}
+.word-count{font-size:.82rem;color:var(--gray-500)}
+.practice-note{margin-top:.85rem;padding:.85rem 1rem;border-radius:14px;background:linear-gradient(135deg,#fff7ed,#fffbeb);border:1px solid #fde68a;font-size:.9rem;color:#92400e}
+.inline-help{font-size:.88rem;color:var(--gray-500)}
+@media(max-width:900px){
+  .practice-layout{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .mock-card-grid{grid-template-columns:1fr}
+  .practice-select{min-width:100%}
+  .practice-toolbar{align-items:stretch}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">📘 IGCSE 0511</div>
+    <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+    <div class="nav-links" id="navLinks"></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('zh')">中文</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<div class="container" id="app"></div>
+
+<script>
+// =====================================================================
+// BILINGUAL CONTENT DATA
+// =====================================================================
+const T = {
+  nav: {
+    en: ['Home','Exam Structure','Master Each Part','Skills & Vocabulary','Examples','Tips & Mistakes','Quick Revision','Mock Practice'],
+    zh: ['首页','考试结构','掌握每个部分','技能与词汇','示例','技巧与常见错误','快速复习','模拟练习']
+  },
+  // ---------- HOME ----------
+  home: {
+    title: { en:'IGCSE 0511 Speaking Exam Guide', zh:'IGCSE 0511 口语考试指南' },
+    subtitle: { en:'Understand the exam. Know what to do. Speak with more confidence.', zh:'了解考试。知道如何应对。更自信地表达。' },
+    steps: {
+      en:['👋 Introduction','🤝 Warm-up','🎤 Part 1: Interview','📋 Part 2: Short Talk','💬 Part 3: Discussion'],
+      zh:['👋 介绍','🤝 热身','🎤 第一部分：面试','📋 第二部分：简短发言','💬 第三部分：讨论']
+    },
+    journey: {
+      en:[
+        'First, there is a short introduction while the recording begins.',
+        'Next, you do a brief warm-up to help you relax. This is not graded.',
+        'Then, the examiner asks you questions on one topic in Part 1.',
+        'After that, you get a card, think for 1 minute without writing notes, and give a short talk.',
+        'Finally, you have a deeper discussion related to your talk.'
+      ],
+      zh:[
+        '首先，录音开始时会有一个简短的介绍。',
+        '接着，进行简短热身帮助你放松。这部分不计分。',
+        '然后，在第一部分中，考官会围绕一个话题提问。',
+        '之后，你会拿到一张卡片，在不能写笔记的情况下思考1分钟，然后进行简短发言。',
+        '最后，就你的发言内容进行更深入的讨论。'
+      ]
+    },
+    startBtn: { en:'Start Learning →', zh:'开始学习 →' }
+  },
+  // ---------- STRUCTURE ----------
+  structure: {
+    title: { en:'Exam Structure', zh:'考试结构' },
+    subtitle: { en:'Step by step — here is exactly what happens in the speaking exam.', zh:'一步一步来——以下是口语考试的完整流程。' },
+    parts: [
+      {
+        label: { en:'Introduction', zh:'介绍' },
+        badge: { en:'NOT GRADED', zh:'不计分' },
+        badgeClass: 'badge-gray',
+        time: { en:'About 1 minute', zh:'约 1 分钟' },
+        desc: { en:'The recording starts. The examiner says their name, your number and your name, and welcomes you. This part is simply the formal start of the test and is not assessed.', zh:'录音开始。考官会说明自己的名字、你的考号和姓名，并欢迎你。这只是考试的正式开始，不计分。' },
+        color: 'blue'
+      },
+      {
+        label: { en:'Warm-up', zh:'热身' },
+        badge: { en:'NOT GRADED', zh:'不计分' },
+        badgeClass: 'badge-gray',
+        time: { en:'1–2 minutes', zh:'1–2 分钟' },
+        desc: { en:'The examiner asks a few simple personal questions to help you relax and get used to speaking. This part is not assessed, so answer naturally and try to settle your nerves.', zh:'考官会问几个简单的个人问题，帮助你放松并适应用英语交流。这部分不计分，所以自然回答，尽量让自己平静下来。' },
+        color: 'amber'
+      },
+      {
+        label: { en:'Part 1 — Interview', zh:'第一部分——面试' },
+        badge: { en:'ASSESSED', zh:'计分' },
+        badgeClass: 'badge-green',
+        time: { en:'2–3 minutes', zh:'2–3 分钟' },
+        desc: { en:'The examiner asks you questions about one topic. You should give developed answers — not just one or two words. Try to give reasons, examples, and opinions. The examiner is looking at your grammar, vocabulary, and how well you develop your ideas.', zh:'考官就一个话题向你提问。你应该展开回答——不要只说一两个词。试着给出原因、例子和观点。考官会关注你的语法、词汇和展开能力。' },
+        color: 'blue'
+      },
+      {
+        label: { en:'Part 2 — Short Talk', zh:'第二部分——简短发言' },
+        badge: { en:'ASSESSED', zh:'计分' },
+        badgeClass: 'badge-green',
+        time: { en:'3–4 minutes (incl. 1 min prep)', zh:'3–4 分钟（含1分钟准备）' },
+        desc: { en:'You receive a card with a topic and two options. You have 1 minute of preparation time to think silently. You cannot make written notes. Then you speak about the topic — comparing the options, giving your opinion, and explaining your reasons. The examiner usually lets you speak on your own until it is time to stop.', zh:'你会收到一张卡片，上面有一个话题和两个选项。你有1分钟的准备时间安静思考，但不能做书面笔记。然后你围绕话题进行发言——比较选项、给出观点、解释原因。通常在时间到之前，考官会让你自己连续表达。' },
+        color: 'green'
+      },
+      {
+        label: { en:'Part 3 — Discussion', zh:'第三部分——讨论' },
+        badge: { en:'ASSESSED', zh:'计分' },
+        badgeClass: 'badge-green',
+        time: { en:'3–4 minutes', zh:'3–4 分钟' },
+        desc: { en:'The examiner asks follow-up questions connected to the Part 2 topic. You should give fuller, more developed answers. Explain your ideas in depth, give reasons, compare, and reflect. This is your chance to show your strongest speaking skills.', zh:'考官会提出与第二部分话题相关的后续问题。你需要给出更完整、更有深度的回答。深入解释你的想法，给出原因，进行比较和反思。这是展示你最强口语能力的机会。' },
+        color: 'blue'
+      }
+    ],
+    total: { en:'Total exam time: approximately 10–15 minutes', zh:'考试总时长：约10–15分钟' },
+    warmupNote: { en:'Remember: The warm-up is NOT graded. It is there to help you feel comfortable before the assessed parts begin.', zh:'记住：热身部分不计分。它的目的是帮助你在正式评估开始前放松下来。' },
+    examinerTitle: { en:'What the Examiner Is Listening For', zh:'考官在关注什么' },
+    examinerItems: {
+      en:['Grammar — accuracy and range of structures','Vocabulary — variety and appropriateness','Development — expanding answers with reasons and examples','Pronunciation — clarity and natural intonation'],
+      zh:['语法——结构的准确性和多样性','词汇——用词的丰富性和恰当性','展开——用原因和例子来扩展回答','发音——清晰度和自然的语调']
+    }
+  },
+  // ---------- MASTER EACH PART ----------
+  master: {
+    title: { en:'How to Master Each Part', zh:'如何掌握每个部分' },
+    subtitle: { en:'Practical strategies and frameworks for every stage of the exam.', zh:'考试每个阶段的实用策略和框架。' },
+    panels: [
+      {
+        heading: { en:'🤝 Warm-up', zh:'🤝 热身' },
+        content: {
+          en:`<p style="margin-bottom:.75rem">The warm-up is <strong>not graded</strong>, so there is no need to worry. It comes after the short introduction and helps you relax and get used to speaking English with the examiner.</p>
+<div class="alert alert-info">💡 <strong>Advice:</strong> Smile, speak naturally, and take your time. Even if the conversation feels simple, it is perfectly fine — just enjoy the chat and let your nerves settle.</div>
+<ul style="padding-left:1.2rem;margin-top:.5rem"><li>Answer in full sentences, not just "yes" or "no."</li><li>If you do not understand a question, it is fine to say "Sorry, could you repeat that?"</li><li>Think of this as a friendly conversation, not a test.</li></ul>`,
+          zh:`<p style="margin-bottom:.75rem">热身环节<strong>不计分</strong>，所以不需要紧张。它在简短介绍之后进行，目的是帮助你放松，适应用英语和考官交流。</p>
+<div class="alert alert-info">💡 <strong>建议：</strong>微笑，自然地说话，慢慢来。即使对话很简单也完全没关系——享受这段聊天，让自己放松下来。</div>
+<ul style="padding-left:1.2rem;margin-top:.5rem"><li>用完整的句子回答，不要只说"是"或"不是"。</li><li>如果没听懂问题，可以说"对不起，能请您再说一遍吗？"</li><li>把这当作友好的对话，不是考试。</li></ul>`
+        }
+      },
+      {
+        heading: { en:'🎤 Part 1 — Interview', zh:'🎤 第一部分——面试' },
+        content: {
+          en:`<p style="margin-bottom:.75rem">The examiner will ask questions about one topic. Your goal is to give <strong>developed answers</strong> — go beyond the basic answer.</p>
+<h3 style="margin:1rem 0 .5rem">Use the A-R-E structure</h3>
+<div class="card" style="margin-bottom:1rem;border-left:4px solid var(--primary)">
+<strong>A</strong>nswer the question → <strong>R</strong>eason (explain why) → <strong>E</strong>xample (give a real-life detail)
+</div>
+<h3>Weak vs Strong Responses</h3>
+<div class="two-col" style="margin-top:.5rem">
+<div class="alert alert-danger">❌ <strong>Weak:</strong> "I like sports."<br><em>— too short, no detail</em></div>
+<div class="alert alert-success">✅ <strong>Strong:</strong> "I enjoy playing basketball because it keeps me active and I love being part of a team. For example, I play with my school team every weekend and we often enter local competitions."<br><em>— answer + reason + example</em></div>
+</div>
+<div class="alert alert-warning" style="margin-top:.75rem">⏰ <strong>Key tip:</strong> If you give a short answer, the examiner may have to ask extra questions. If you develop your answers, the conversation flows naturally and you demonstrate stronger language skills.</div>`,
+          zh:`<p style="margin-bottom:.75rem">考官会就一个话题提问。你的目标是给出<strong>有深度的回答</strong>——不要只回答表面内容。</p>
+<h3 style="margin:1rem 0 .5rem">使用 A-R-E 结构</h3>
+<div class="card" style="margin-bottom:1rem;border-left:4px solid var(--primary)">
+<strong>A</strong>nswer 回答问题 → <strong>R</strong>eason 解释原因 → <strong>E</strong>xample 举出具体例子
+</div>
+<h3>弱回答 vs 强回答</h3>
+<div class="two-col" style="margin-top:.5rem">
+<div class="alert alert-danger">❌ <strong>弱回答：</strong>"I like sports."（我喜欢运动。）<br><em>——太简短，没有细节</em></div>
+<div class="alert alert-success">✅ <strong>强回答：</strong>"I enjoy playing basketball because it keeps me active and I love being part of a team. For example, I play with my school team every weekend and we often enter local competitions."<br><em>——回答 + 原因 + 例子</em></div>
+</div>
+<div class="alert alert-warning" style="margin-top:.75rem">⏰ <strong>关键提示：</strong>如果你的回答太短，考官可能需要追问更多问题。如果你展开回答，对话会更自然，也能展示更强的语言能力。</div>`
+        }
+      },
+      {
+        heading: { en:'📋 Part 2 — Short Talk', zh:'📋 第二部分——简短发言' },
+        content: {
+          en:`<h3>During your 1-minute preparation</h3>
+<div class="alert alert-warning">📝 <strong>No written notes:</strong> use this minute to organise your ideas in your head, not on paper.</div>
+<ol style="padding-left:1.2rem;margin:.5rem 0">
+<li>Read the card carefully — understand both options.</li>
+<li>Think of 1–2 good points for <em>each</em> option.</li>
+<li>Decide which option you prefer.</li>
+<li>Plan your reason for choosing it.</li>
+</ol>
+<h3 style="margin-top:1rem">Speaking Framework</h3>
+<div class="card" style="border-left:4px solid var(--success);margin:.5rem 0 1rem">
+Introduce Option 1 → Explain its advantage/disadvantage → Introduce Option 2 → Compare both → State your choice → Justify why
+</div>
+<div class="alert alert-info">💡 <strong>Filling your time:</strong> If you finish early, add another reason, give an extra example, or explain what other people might think. Avoid just stopping — keep speaking naturally until the examiner signals you to stop.</div>
+<h3 style="margin-top:1rem">Example topic (not a real exam question)</h3>
+<div class="example-block">
+<em>"Your school wants to organise a special activity day. You can choose between a sports day or a science fair. Talk about both options and say which you think is better."</em>
+</div>`,
+          zh:`<h3>1分钟准备时间该怎么做</h3>
+<div class="alert alert-warning">📝 <strong>不能写笔记：</strong>这1分钟要在脑中整理思路，而不是写下来。</div>
+<ol style="padding-left:1.2rem;margin:.5rem 0">
+<li>仔细阅读卡片——理解两个选项。</li>
+<li>为<em>每个</em>选项想1–2个优点。</li>
+<li>决定你更喜欢哪个选项。</li>
+<li>计划你选择的理由。</li>
+</ol>
+<h3 style="margin-top:1rem">发言框架</h3>
+<div class="card" style="border-left:4px solid var(--success);margin:.5rem 0 1rem">
+介绍选项1 → 解释其优缺点 → 介绍选项2 → 比较两者 → 说出你的选择 → 解释原因
+</div>
+<div class="alert alert-info">💡 <strong>如何充分利用时间：</strong>如果你说完了还有时间，可以补充一个理由、多举一个例子，或者说说其他人可能怎么想。不要突然停下来——自然地继续说，直到考官示意你停止。</div>
+<h3 style="margin-top:1rem">示例话题（非真实考题）</h3>
+<div class="example-block">
+<em>"你的学校想组织一个特别活动日。你可以选择运动会或科学展。谈谈这两个选项，说说你认为哪个更好。"</em>
+</div>`
+        }
+      },
+      {
+        heading: { en:'💬 Part 3 — Discussion', zh:'💬 第三部分——讨论' },
+        content: {
+          en:`<p style="margin-bottom:.75rem">Part 3 is a <strong>deeper conversation</strong> related to the Part 2 topic. The examiner asks broader questions and you need to give extended, thoughtful answers.</p>
+<h3>How to expand your answers</h3>
+<ul style="padding-left:1.2rem;margin:.5rem 0 1rem">
+<li><strong>Explain</strong> your idea clearly</li>
+<li><strong>Justify</strong> with reasons</li>
+<li><strong>Compare</strong> different viewpoints</li>
+<li><strong>Reflect</strong> — consider advantages and disadvantages</li>
+<li><strong>Give examples</strong> from daily life</li>
+</ul>
+<h3>Basic → Stronger Answer</h3>
+<div class="two-col" style="margin-top:.5rem">
+<div class="alert alert-danger">❌ <strong>Basic:</strong> "Exercise is good for you."</div>
+<div class="alert alert-success">✅ <strong>Stronger:</strong> "Regular exercise is beneficial because it improves both physical and mental health. For instance, playing a team sport helps people stay fit while also teaching them how to cooperate and communicate with others."</div>
+</div>`,
+          zh:`<p style="margin-bottom:.75rem">第三部分是与第二部分话题相关的<strong>更深入的对话</strong>。考官会提出更广泛的问题，你需要给出更详细、更有思考深度的回答。</p>
+<h3>如何扩展你的回答</h3>
+<ul style="padding-left:1.2rem;margin:.5rem 0 1rem">
+<li><strong>解释</strong>你的想法</li>
+<li><strong>证明</strong>用理由支撑</li>
+<li><strong>比较</strong>不同观点</li>
+<li><strong>反思</strong>——考虑优缺点</li>
+<li><strong>举例</strong>用日常生活中的例子</li>
+</ul>
+<h3>基本回答 → 更强回答</h3>
+<div class="two-col" style="margin-top:.5rem">
+<div class="alert alert-danger">❌ <strong>基本回答：</strong>"Exercise is good for you."（运动对你有好处。）</div>
+<div class="alert alert-success">✅ <strong>更强回答：</strong>"Regular exercise is beneficial because it improves both physical and mental health. For instance, playing a team sport helps people stay fit while also teaching them how to cooperate and communicate with others."</div>
+</div>`
+        }
+      }
+    ]
+  },
+  // ---------- VOCABULARY ----------
+  vocab: {
+    title: { en:'Speaking Skills & Vocabulary', zh:'口语技能与词汇' },
+    subtitle: { en:'A bank of useful phrases organised by category. Learn these and use them naturally in the exam.', zh:'按类别整理的实用短语库。学会这些，在考试中自然使用。' },
+    categories: [
+      {
+        name: { en:'Giving Opinions', zh:'表达观点' },
+        phrases: [
+          { en:'In my opinion, ...', zh:'在我看来，……', ex:{ en:'In my opinion, reading is the best way to improve vocabulary.', zh:'在我看来，阅读是提高词汇量的最好方式。'} },
+          { en:'I believe that ...', zh:'我认为……', ex:{ en:'I believe that teamwork is an important skill for young people.', zh:'我认为团队合作对年轻人来说是一项重要的技能。'} },
+          { en:'From my perspective, ...', zh:'从我的角度来看，……', ex:{ en:'From my perspective, online learning has many advantages.', zh:'从我的角度来看，在线学习有很多优势。'} },
+          { en:'I would say that ...', zh:'我会说……', ex:{ en:'I would say that travelling is a great way to learn about other cultures.', zh:'我会说旅行是了解其他文化的好方式。'} },
+          { en:'Personally, I think ...', zh:'就我个人而言，我认为……', ex:{ en:'Personally, I think students should have more outdoor activities.', zh:'就我个人而言，我认为学生应该有更多的户外活动。'} }
+        ]
+      },
+      {
+        name: { en:'Comparing Options', zh:'比较选项' },
+        phrases: [
+          { en:'Compared with ...', zh:'与……相比，', ex:{ en:'Compared with studying alone, group study can be more motivating.', zh:'与独自学习相比，小组学习更有动力。'} },
+          { en:'On the other hand, ...', zh:'另一方面，……', ex:{ en:'Sports are fun. On the other hand, they can take time away from studying.', zh:'运动很有趣。另一方面，它们可能会占用学习时间。'} },
+          { en:'While ... , ...', zh:'虽然……，但……', ex:{ en:'While both options are good, I prefer the second one.', zh:'虽然两个选项都不错，但我更喜欢第二个。'} },
+          { en:'One key difference is ...', zh:'一个关键区别是……', ex:{ en:'One key difference is that option A is more practical.', zh:'一个关键区别是选项A更实用。'} },
+          { en:'... is more suitable because ...', zh:'……更合适，因为……', ex:{ en:'A science fair is more suitable because it encourages creativity.', zh:'科学展更合适，因为它能激发创造力。'} }
+        ]
+      },
+      {
+        name: { en:'Giving Reasons', zh:'给出原因' },
+        phrases: [
+          { en:'This is because ...', zh:'这是因为……', ex:{ en:'I prefer city life. This is because there are more opportunities.', zh:'我更喜欢城市生活。这是因为有更多的机会。'} },
+          { en:'The main reason is ...', zh:'主要原因是……', ex:{ en:'The main reason is that it helps build confidence.', zh:'主要原因是它有助于建立自信。'} },
+          { en:'One reason for this is ...', zh:'原因之一是……', ex:{ en:'One reason for this is that technology saves time.', zh:'原因之一是科技可以节省时间。'} },
+          { en:'... due to the fact that ...', zh:'……因为……', ex:{ en:'Many students prefer tablets due to the fact that they are lightweight.', zh:'许多学生更喜欢平板电脑，因为它们很轻便。'} }
+        ]
+      },
+      {
+        name: { en:'Adding Ideas', zh:'补充观点' },
+        phrases: [
+          { en:'Furthermore, ...', zh:'此外，……', ex:{ en:'Furthermore, it would help students develop teamwork skills.', zh:'此外，它有助于学生培养团队合作能力。'} },
+          { en:'In addition, ...', zh:'另外，……', ex:{ en:'In addition, outdoor activities are good for mental health.', zh:'另外，户外活动对心理健康有好处。'} },
+          { en:'Another point is ...', zh:'另一点是……', ex:{ en:'Another point is that it is much more affordable.', zh:'另一点是它更实惠。'} },
+          { en:'Not only ... but also ...', zh:'不仅……而且……', ex:{ en:'Not only is it educational, but it is also enjoyable.', zh:'它不仅有教育意义，而且很有趣。'} }
+        ]
+      },
+      {
+        name: { en:'Giving Examples', zh:'举例' },
+        phrases: [
+          { en:'For example, ...', zh:'例如，……', ex:{ en:'For example, many schools now use technology in the classroom.', zh:'例如，许多学校现在在课堂上使用科技。'} },
+          { en:'For instance, ...', zh:'比如，……', ex:{ en:'For instance, volunteering teaches responsibility.', zh:'比如，志愿服务教会人责任感。'} },
+          { en:'A good example of this is ...', zh:'一个很好的例子是……', ex:{ en:'A good example of this is my school, where we have weekly clubs.', zh:'一个很好的例子是我的学校，我们每周都有社团活动。'} },
+          { en:'To illustrate, ...', zh:'举例来说，……', ex:{ en:'To illustrate, my brother improved his English by watching films.', zh:'举例来说，我哥哥通过看电影提高了英语水平。'} }
+        ]
+      },
+      {
+        name: { en:'Advantages & Disadvantages', zh:'优缺点' },
+        phrases: [
+          { en:'One advantage is ...', zh:'一个优点是……', ex:{ en:'One advantage is that students can learn at their own pace.', zh:'一个优点是学生可以按自己的节奏学习。'} },
+          { en:'A drawback is ...', zh:'一个缺点是……', ex:{ en:'A drawback is that it can be quite expensive.', zh:'一个缺点是它可能相当昂贵。'} },
+          { en:'The benefit of this is ...', zh:'这样做的好处是……', ex:{ en:'The benefit of this is that it encourages independent thinking.', zh:'这样做的好处是它鼓励独立思考。'} },
+          { en:'However, one downside is ...', zh:'然而，一个不足之处是……', ex:{ en:'However, one downside is that not everyone has internet access.', zh:'然而，一个不足之处是并非每个人都能上网。'} }
+        ]
+      },
+      {
+        name: { en:'Agreeing & Disagreeing', zh:'同意与反对' },
+        phrases: [
+          { en:'I agree with this because ...', zh:'我同意，因为……', ex:{ en:'I agree with this because it is fair for everyone.', zh:'我同意，因为这对每个人都公平。'} },
+          { en:'I see your point, but ...', zh:'我理解你的观点，但是……', ex:{ en:'I see your point, but I think there are other solutions.', zh:'我理解你的观点，但我认为还有其他解决方案。'} },
+          { en:'That is true, however ...', zh:'这是事实，然而……', ex:{ en:'That is true, however it may not work in every situation.', zh:'这是事实，然而它可能不适用于每种情况。'} }
+        ]
+      },
+      {
+        name: { en:'Speculating', zh:'推测' },
+        phrases: [
+          { en:'I suppose ...', zh:'我猜想……', ex:{ en:'I suppose most students would prefer a longer break.', zh:'我猜想大多数学生会更喜欢更长的休息时间。'} },
+          { en:'It is possible that ...', zh:'有可能……', ex:{ en:'It is possible that technology will change education completely.', zh:'有可能科技将完全改变教育。'} },
+          { en:'I imagine that ...', zh:'我想象……', ex:{ en:'I imagine that in the future, more people will work from home.', zh:'我想象在未来，会有更多人在家工作。'} }
+        ]
+      },
+      {
+        name: { en:'Concluding', zh:'总结' },
+        phrases: [
+          { en:'Overall, ...', zh:'总的来说，……', ex:{ en:'Overall, I think the first option is more practical.', zh:'总的来说，我认为第一个选项更实用。'} },
+          { en:'In conclusion, ...', zh:'总而言之，……', ex:{ en:'In conclusion, both choices have strengths, but I prefer option B.', zh:'总而言之，两个选择都有优点，但我更喜欢选项B。'} },
+          { en:'To sum up, ...', zh:'总结一下，……', ex:{ en:'To sum up, regular exercise is essential for a healthy lifestyle.', zh:'总结一下，经常锻炼对健康的生活方式至关重要。'} },
+          { en:'All things considered, ...', zh:'综合考虑，……', ex:{ en:'All things considered, I would choose the sports day.', zh:'综合考虑，我会选择运动会。'} }
+        ]
+      },
+      {
+        name: { en:'Describing Yourself', zh:'描述自己' },
+        phrases: [
+          { en:'I would describe myself as ...', zh:'我会形容自己是……', ex:{ en:'I would describe myself as a hardworking and curious person.', zh:'我会形容自己是一个勤奋好学的人。'} },
+          { en:'I am quite interested in ...', zh:'我对……很感兴趣', ex:{ en:'I am quite interested in science and technology.', zh:'我对科学和技术很感兴趣。'} },
+          { en:'One thing I enjoy is ...', zh:'我喜欢的一件事是……', ex:{ en:'One thing I enjoy is spending time outdoors with my friends.', zh:'我喜欢的一件事是和朋友们一起在户外活动。'} }
+        ]
+      }
+    ],
+    upgradeTitle: { en:'⬆ Upgrade Your Speaking', zh:'⬆ 提升你的口语' },
+    upgradeDesc: { en:'Move from basic words to stronger, more impressive vocabulary.', zh:'从基础词汇提升到更强、更有说服力的词汇。' },
+    upgrades: [
+      { basic:{ en:'good', zh:'好的' }, better:{ en:'beneficial / useful / effective', zh:'有益的 / 有用的 / 有效的' } },
+      { basic:{ en:'bad', zh:'坏的' }, better:{ en:'harmful / inconvenient / disappointing', zh:'有害的 / 不方便的 / 令人失望的' } },
+      { basic:{ en:'I like it', zh:'我喜欢' }, better:{ en:'I prefer it because ...', zh:'我更喜欢它，因为……' } },
+      { basic:{ en:'It is good', zh:'它很好' }, better:{ en:'It is especially useful because ...', zh:'它特别有用，因为……' } },
+      { basic:{ en:'very important', zh:'非常重要' }, better:{ en:'essential / crucial / vital', zh:'必要的 / 关键的 / 至关重要的' } },
+      { basic:{ en:'many people', zh:'很多人' }, better:{ en:'a significant number of people', zh:'相当多的人' } }
+    ]
+  },
+  // ---------- EXAMPLES ----------
+  examples: {
+    title: { en:'Useful Examples', zh:'实用示例' },
+    subtitle: { en:'See what effective answers look like. These are not real exam questions — they are practice examples to help you learn.', zh:'看看有效的回答是什么样的。这些不是真实的考试题目——而是帮助你学习的练习示例。' },
+    sections: [
+      {
+        heading: { en:'Part 1 — Interview: Good Answer Example', zh:'第一部分——面试：优秀回答示例' },
+        topic: { en:'Topic: Hobbies and Free Time', zh:'话题：爱好和空闲时间' },
+        question: { en:'Examiner: "What do you like to do in your free time?"', zh:'考官："你空闲时间喜欢做什么？"' },
+        answer: {
+          en:'<strong>"In my free time, I usually enjoy reading novels, especially adventure stories.</strong> <span class="annotation">clear answer</span> <strong>I find reading relaxing because it helps me forget about school stress for a while.</strong> <span class="annotation">gives a reason</span> <strong>For example, last month I read a story about a group of teenagers who sailed around the world, and it really inspired me to learn more about different countries.</strong> <span class="annotation">real example + detail</span> <strong>I also like playing badminton with my friends at the weekend because it is a good way to stay active and spend time together.</strong> <span class="annotation">adds a second point</span>"',
+          zh:'<strong>"In my free time, I usually enjoy reading novels, especially adventure stories.</strong> <span class="annotation">清晰的回答</span> <strong>I find reading relaxing because it helps me forget about school stress for a while.</strong> <span class="annotation">给出原因</span> <strong>For example, last month I read a story about a group of teenagers who sailed around the world, and it really inspired me to learn more about different countries.</strong> <span class="annotation">真实例子+细节</span> <strong>I also like playing badminton with my friends at the weekend because it is a good way to stay active and spend time together.</strong> <span class="annotation">补充第二个要点</span>"'
+        }
+      },
+      {
+        heading: { en:'Part 2 — Short Talk: Outline Example', zh:'第二部分——简短发言：提纲示例' },
+        topic: { en:'Topic: Your school wants to improve the lunchtime experience. Option A: A new cafeteria. Option B: Outdoor eating areas with shade.', zh:'话题：你的学校想改善午餐体验。选项A：新食堂。选项B：有遮阳的户外用餐区。' },
+        answer: {
+          en:`<strong>"The first option is to build a new cafeteria.</strong> <span class="annotation">introduces option 1</span> <strong>This would be useful because students would have a comfortable, indoor space to eat, especially on rainy or cold days.</strong> <span class="annotation">advantage + reason</span> <strong>However, building a cafeteria is expensive and might take a long time.</strong> <span class="annotation">disadvantage</span><br><br><strong>The second option is to create outdoor eating areas.</strong> <span class="annotation">introduces option 2</span> <strong>I think this is a nice idea because many students enjoy being outside, and fresh air can help them feel more relaxed after morning lessons.</strong> <span class="annotation">advantage + supporting detail</span> <strong>Compared with a new building, this would be cheaper and quicker to set up.</strong> <span class="annotation">comparison</span><br><br><strong>Overall, I would prefer the outdoor areas</strong> <span class="annotation">clear choice</span> <strong>because they are more practical and would benefit students every day, not just on rainy days.</strong> <span class="annotation">justification</span>"`,
+          zh:`<strong>"The first option is to build a new cafeteria.</strong> <span class="annotation">介绍选项1</span> <strong>This would be useful because students would have a comfortable, indoor space to eat, especially on rainy or cold days.</strong> <span class="annotation">优点+原因</span> <strong>However, building a cafeteria is expensive and might take a long time.</strong> <span class="annotation">缺点</span><br><br><strong>The second option is to create outdoor eating areas.</strong> <span class="annotation">介绍选项2</span> <strong>I think this is a nice idea because many students enjoy being outside, and fresh air can help them feel more relaxed after morning lessons.</strong> <span class="annotation">优点+支撑细节</span> <strong>Compared with a new building, this would be cheaper and quicker to set up.</strong> <span class="annotation">比较</span><br><br><strong>Overall, I would prefer the outdoor areas</strong> <span class="annotation">明确选择</span> <strong>because they are more practical and would benefit students every day, not just on rainy days.</strong> <span class="annotation">理由</span>"`
+        }
+      },
+      {
+        heading: { en:'Part 3 — Discussion: Good Answer Example', zh:'第三部分——讨论：优秀回答示例' },
+        topic: { en:'Broader question: "Do you think schools should focus more on outdoor learning?"', zh:'更广泛的问题："你认为学校应该更注重户外学习吗？"' },
+        answer: {
+          en:'<strong>"I think outdoor learning can be very beneficial for students.</strong> <span class="annotation">clear opinion</span> <strong>The main reason is that being outside helps students concentrate better because they are not stuck in a classroom all day.</strong> <span class="annotation">reason</span> <strong>For instance, science lessons could include nature walks where students observe plants and animals in real life, which is much more engaging than just reading a textbook.</strong> <span class="annotation">specific example</span> <strong>On the other hand, some subjects like maths might be harder to teach outdoors because students need desks and quiet to focus on calculations.</strong> <span class="annotation">considers other side</span> <strong>So I think schools should use a balanced approach — some lessons indoors and some outdoors, depending on the subject.</strong> <span class="annotation">balanced conclusion</span>"',
+          zh:'<strong>"I think outdoor learning can be very beneficial for students.</strong> <span class="annotation">清晰观点</span> <strong>The main reason is that being outside helps students concentrate better because they are not stuck in a classroom all day.</strong> <span class="annotation">原因</span> <strong>For instance, science lessons could include nature walks where students observe plants and animals in real life, which is much more engaging than just reading a textbook.</strong> <span class="annotation">具体例子</span> <strong>On the other hand, some subjects like maths might be harder to teach outdoors because students need desks and quiet to focus on calculations.</strong> <span class="annotation">考虑另一面</span> <strong>So I think schools should use a balanced approach — some lessons indoors and some outdoors, depending on the subject.</strong> <span class="annotation">平衡的结论</span>"'
+        }
+      }
+    ]
+  },
+  // ---------- TIPS ----------
+  tips: {
+    title: { en:'Tips & Common Mistakes', zh:'技巧与常见错误' },
+    subtitle: { en:'Know what to do — and what to avoid.', zh:'知道该做什么——以及该避免什么。' },
+    tipsTitle: { en:'✅ Top Tips', zh:'✅ 最佳技巧' },
+    tipsItems: {
+      en:[
+        'Develop every answer — add reasons and examples',
+        'Use linking phrases to connect your ideas smoothly',
+        'Keep speaking — do not leave long silences',
+        'In Part 2, compare both options clearly before choosing',
+        'Always justify your choice — explain why',
+        'Speak clearly at a natural pace, not too fast',
+        'Use examples from your daily life to make answers real',
+        'Listen carefully to each question before answering',
+        'Stay calm and take a breath if you need a moment to think'
+      ],
+      zh:[
+        '展开每个回答——添加原因和例子',
+        '使用连接短语使你的想法顺畅衔接',
+        '保持说话——不要留下长时间的沉默',
+        '在第二部分中，先清楚地比较两个选项再做选择',
+        '始终解释你的选择——说明原因',
+        '以自然的语速清晰地说话，不要太快',
+        '使用日常生活中的例子使回答更真实',
+        '在回答之前仔细听每个问题',
+        '保持冷静，如果需要时间思考，先深呼吸'
+      ]
+    },
+    mistakesTitle: { en:'❌ Common Mistakes', zh:'❌ 常见错误' },
+    mistakesItems: {
+      en:[
+        'Giving one-word or very short answers',
+        'Stopping too quickly without developing ideas',
+        'Repeating the question back without adding content',
+        'In Part 2, not comparing both options',
+        'Choosing an option without explaining why',
+        'Using very basic vocabulary again and again',
+        'Speaking so quietly that the examiner cannot hear clearly',
+        'Memorising long scripted answers — this sounds unnatural',
+        'Panicking and going silent — it is fine to pause briefly and think'
+      ],
+      zh:[
+        '给出一个词或非常简短的回答',
+        '太快停下来，没有展开想法',
+        '只是重复问题而没有添加内容',
+        '在第二部分中没有比较两个选项',
+        '选择了一个选项但没有解释原因',
+        '反复使用非常基础的词汇',
+        '说话太轻，考官听不清楚',
+        '背诵长篇脚本回答——这听起来不自然',
+        '恐慌并沉默——短暂停顿思考是完全没问题的'
+      ]
+    }
+  },
+  // ---------- PRACTICE ----------
+  practice: {
+    title: { en:'Mock Practice', zh:'模拟练习' },
+    subtitle: { en:'Use your microphone, practise with a mock exam set, and watch your spoken words appear as text.', zh:'使用麦克风，按照模拟考试套题练习，并实时看到你的口语转成文字。' },
+    chooseSet: { en:'Choose a mock set', zh:'选择模拟套题' },
+    randomSet: { en:'Random mock', zh:'随机套题' },
+    nextStage: { en:'Next stage', zh:'下一阶段' },
+    stageFlow: { en:'Practice flow', zh:'练习流程' },
+    timerTitle: { en:'Stage timer', zh:'阶段计时器' },
+    timerHint: { en:'Use the suggested time for the current stage, or reset and try again.', zh:'使用当前阶段的建议时间，或重置后再练一次。' },
+    startTimer: { en:'Start timer', zh:'开始计时' },
+    pauseTimer: { en:'Pause', zh:'暂停' },
+    resetTimer: { en:'Reset', zh:'重置' },
+    timerReady: { en:'Ready to start', zh:'准备开始' },
+    timerRunning: { en:'Timer running', zh:'计时进行中' },
+    timerDone: { en:'Time finished', zh:'时间到' },
+    transcriptTitle: { en:'Live transcript', zh:'实时转写' },
+    transcriptHint: { en:'Your spoken English appears below while the browser listens.', zh:'当浏览器监听时，你说出的英语会显示在下方。' },
+    transcriptPlaceholder: { en:'Press “Start microphone”, then speak. Your transcript will appear here.', zh:'点击“开始麦克风”，然后开口说。你的转写内容会显示在这里。' },
+    startMic: { en:'Start microphone', zh:'开始麦克风' },
+    stopMic: { en:'Stop microphone', zh:'停止麦克风' },
+    clearTranscript: { en:'Clear text', zh:'清空文字' },
+    copyTranscript: { en:'Copy text', zh:'复制文字' },
+    micReady: { en:'Microphone ready', zh:'麦克风已就绪' },
+    micListening: { en:'Listening…', zh:'正在聆听……' },
+    micUnsupported: { en:'Speech recognition is not supported in this browser.', zh:'此浏览器不支持语音识别。' },
+    micPermission: { en:'Allow microphone access when your browser asks.', zh:'当浏览器请求时，请允许使用麦克风。' },
+    copied: { en:'Transcript copied.', zh:'转写内容已复制。' },
+    stagesLabel: {
+      intro: { en:'Introduction', zh:'介绍' },
+      warmup: { en:'Warm-up', zh:'热身' },
+      part1: { en:'Part 1', zh:'第一部分' },
+      part2prep: { en:'Part 2 Prep', zh:'第二部分准备' },
+      part2talk: { en:'Part 2 Talk', zh:'第二部分发言' },
+      part3: { en:'Part 3', zh:'第三部分' }
+    },
+    note: { en:'These are mock practice prompts built in the same general exam format. They are not live confidential exam cards.', zh:'这些是按照相同总体考试形式设计的模拟练习题，不是真实的保密考试卡片。' },
+    wordCount: { en:'Word count', zh:'词数' }
+  },
+  // ---------- REVISION ----------
+  revision: {
+    title: { en:'Quick Revision', zh:'快速复习' },
+    subtitle: { en:'Use this section the day before your exam to feel prepared and confident.', zh:'在考试前一天使用这个部分，让自己做好准备，充满信心。' },
+    mapTitle: { en:'📍 Mini Exam Map', zh:'📍 考试小地图' },
+    mapSteps: {
+      en:['Introduction (not graded)','Warm-up (not graded)','Part 1: Interview (graded)','Part 2: Short Talk (graded)','Part 3: Discussion (graded)'],
+      zh:['介绍（不计分）','热身（不计分）','第一部分：面试（计分）','第二部分：简短发言（计分）','第三部分：讨论（计分）']
+    },
+    checkTitle: { en:'✅ Do You Remember?', zh:'✅ 你还记得吗？' },
+    checkItems: {
+      en:[
+        'I know the order of the exam',
+        'I know which parts are graded',
+        'I can develop my answers with reasons and examples',
+        'I can compare two options clearly',
+        'I can give reasons and justify my choice',
+        'I know useful linking phrases',
+        'I know how to fill my speaking time naturally',
+        'I know what the examiner is listening for',
+        'I feel prepared and ready to do my best'
+      ],
+      zh:[
+        '我知道考试的顺序',
+        '我知道哪些部分是计分的',
+        '我能用原因和例子展开我的回答',
+        '我能清楚地比较两个选项',
+        '我能给出原因并解释我的选择',
+        '我知道有用的连接短语',
+        '我知道如何自然地充分利用发言时间',
+        '我知道考官在关注什么',
+        '我已经准备好了，要全力以赴'
+      ]
+    },
+    confidenceTitle: { en:'💪 You Can Do This!', zh:'💪 你可以做到！' },
+    confidenceText: {
+      en:'You have prepared. You know what to expect. You have useful phrases and strategies ready. Take a deep breath, speak clearly, and show the examiner what you can do. Remember — the examiner wants you to do well. Be yourself, stay calm, and speak with confidence. Good luck!',
+      zh:'你已经做好了准备。你知道会发生什么。你有实用的短语和策略。深呼吸，清晰地说话，向考官展示你的能力。记住——考官希望你表现出色。做自己，保持冷静，自信地说话。祝你好运！'
+    }
+  }
+};
+
+// =====================================================================
+// APP STATE
+// =====================================================================
+let lang = localStorage.getItem('igcse0511lang') || 'en';
+let currentSection = Number(localStorage.getItem('igcse0511section') || 0);
+const checklistState = JSON.parse(localStorage.getItem('igcse0511checklist') || '{}');
+const sectionIds = ['home','structure','master','vocab','examples','tips','revision','practice'];
+
+const PRACTICE_BANK = [
+  {
+    name:{en:'Mock Set 1 — School Life', zh:'模拟套题1——学校生活'},
+    warmup:[
+      {en:'What is your favourite lesson at school?', zh:'你在学校最喜欢哪一门课？'},
+      {en:'How do you usually spend your lunch break?', zh:'你通常怎样度过午休时间？'},
+      {en:'What do you enjoy doing after school?', zh:'放学后你喜欢做什么？'}
+    ],
+    part1:{
+      topic:{en:'School clubs', zh:'学校社团'},
+      questions:[
+        {en:'Can you tell me about the kinds of clubs students can join at school?', zh:'你能谈谈学生在学校可以参加哪些类型的社团吗？'},
+        {en:'Can you describe a club or activity you have enjoyed, and explain why?', zh:'你能描述一个你喜欢的社团或活动，并解释原因吗？'},
+        {en:'Do you think every school should offer more clubs after lessons? Why or why not?', zh:'你认为每所学校都应该在课后提供更多社团吗？为什么或为什么不？'}
+      ]
+    },
+    part2:{
+      title:{en:'Community day', zh:'社区活动日'},
+      situation:{en:'Your school wants to organise a community day. You are considering these two ideas:', zh:'你的学校想组织一个社区活动日。你正在考虑以下两个想法：'},
+      options:[
+        {en:'a tree-planting event', zh:'植树活动'},
+        {en:'a charity concert', zh:'慈善音乐会'}
+      ],
+      task:{en:'Talk about the advantages of each option. Say which option you would choose, and why.', zh:'谈谈每个选项的优点。说说你会选择哪一个，并解释原因。'}
+    },
+    part3:[
+      {en:'Why is it important for young people to help in their communities?', zh:'为什么年轻人帮助社区很重要？'},
+      {en:'What kinds of voluntary work are most useful for schools to organise?', zh:'学校组织哪类志愿活动最有帮助？'},
+      {en:'Do you think students learn more from service projects than from normal lessons?', zh:'你认为学生从服务项目中学到的东西会比普通课堂更多吗？'},
+      {en:'Can social media encourage people to help others in real life?', zh:'社交媒体能鼓励人们在现实生活中帮助他人吗？'}
+    ]
+  },
+  {
+    name:{en:'Mock Set 2 — Healthy Living', zh:'模拟套题2——健康生活'},
+    warmup:[
+      {en:'What do you usually eat for breakfast?', zh:'你早餐通常吃什么？'},
+      {en:'Do you prefer indoor or outdoor activities?', zh:'你更喜欢室内活动还是户外活动？'},
+      {en:'How often do you exercise in a normal week?', zh:'平常一周你锻炼多少次？'}
+    ],
+    part1:{
+      topic:{en:'Healthy habits', zh:'健康习惯'},
+      questions:[
+        {en:'Can you tell me about healthy habits that are popular with teenagers in your country?', zh:'你能谈谈你国家青少年中流行的健康习惯吗？'},
+        {en:'Can you describe a change you made to live more healthily?', zh:'你能描述一下你为了更健康生活做过的一个改变吗？'},
+        {en:'Should schools spend more time teaching students about health? Why or why not?', zh:'学校是否应该花更多时间教育学生健康知识？为什么或为什么不？'}
+      ]
+    },
+    part2:{
+      title:{en:'Learning to cook', zh:'学习做饭'},
+      situation:{en:'A youth centre wants to help teenagers learn basic cooking skills. You are considering these two ideas:', zh:'一个青少年中心想帮助青少年学习基本烹饪技能。你正在考虑以下两个想法：'},
+      options:[
+        {en:'watching short online cooking videos', zh:'观看简短的线上烹饪视频'},
+        {en:'joining a face-to-face cooking workshop', zh:'参加线下烹饪工作坊'}
+      ],
+      task:{en:'Talk about how useful each option would be. Say which option you would choose, and why.', zh:'谈谈每个选项会有多大帮助。说说你会选择哪一个，并解释原因。'}
+    },
+    part3:[
+      {en:'Why do some teenagers find it difficult to live healthily?', zh:'为什么一些青少年觉得保持健康很难？'},
+      {en:'How much influence do families have on young people’s lifestyles?', zh:'家庭对年轻人的生活方式有多大影响？'},
+      {en:'Do apps and technology make healthy living easier or harder?', zh:'应用程序和科技让健康生活更容易还是更难？'},
+      {en:'Should governments do more to encourage exercise and healthy eating?', zh:'政府是否应该做更多事情来鼓励锻炼和健康饮食？'}
+    ]
+  },
+  {
+    name:{en:'Mock Set 3 — Technology and Learning', zh:'模拟套题3——科技与学习'},
+    warmup:[
+      {en:'What piece of technology do you use most often each day?', zh:'你每天最常使用哪一种科技产品？'},
+      {en:'Do you prefer reading on paper or on a screen?', zh:'你更喜欢在纸上阅读还是在屏幕上阅读？'},
+      {en:'What is one website or app you find useful?', zh:'你觉得有用的一个网站或应用是什么？'}
+    ],
+    part1:{
+      topic:{en:'Technology in education', zh:'教育中的科技'},
+      questions:[
+        {en:'Can you tell me how technology is used in classrooms today?', zh:'你能谈谈如今课堂上是如何使用科技的吗？'},
+        {en:'Can you describe a time when technology helped you learn something well?', zh:'你能描述一次科技帮助你很好地学会某样东西的经历吗？'},
+        {en:'Do you think students should sometimes learn without devices? Why or why not?', zh:'你认为学生是否应该有时不用电子设备来学习？为什么或为什么不？'}
+      ]
+    },
+    part2:{
+      title:{en:'Study support', zh:'学习支持'},
+      situation:{en:'Your school wants to help students revise more effectively. You are considering these two ideas:', zh:'你的学校想帮助学生更有效地复习。你正在考虑以下两个想法：'},
+      options:[
+        {en:'an online revision platform', zh:'一个线上复习平台'},
+        {en:'after-school study groups with teachers', zh:'有老师参与的课后学习小组'}
+      ],
+      task:{en:'Talk about the benefits of each option. Say which option you would choose, and why.', zh:'谈谈每个选项的好处。说说你会选择哪一个，并解释原因。'}
+    },
+    part3:[
+      {en:'What makes some students more independent learners than others?', zh:'是什么让一些学生比其他学生更独立地学习？'},
+      {en:'Can online learning ever replace a teacher completely?', zh:'线上学习能完全取代老师吗？'},
+      {en:'How can schools help students avoid distraction when using devices?', zh:'学校怎样帮助学生在使用电子设备时避免分心？'},
+      {en:'What skills will students need most in the future?', zh:'未来学生最需要哪些技能？'}
+    ]
+  },
+  {
+    name:{en:'Mock Set 4 — Travel and Visitors', zh:'模拟套题4——旅行与访客'},
+    warmup:[
+      {en:'Have you ever visited another city for a holiday?', zh:'你有没有去过另一个城市度假？'},
+      {en:'What kind of place would you like to travel to one day?', zh:'将来有一天你想去什么样的地方旅行？'},
+      {en:'Do you enjoy showing visitors around your area?', zh:'你喜欢带访客参观你居住的地方吗？'}
+    ],
+    part1:{
+      topic:{en:'Places to visit', zh:'值得参观的地方'},
+      questions:[
+        {en:'Can you tell me about places tourists like to visit in your country?', zh:'你能谈谈游客喜欢去你国家哪些地方吗？'},
+        {en:'Can you describe a place you visited that left a strong impression on you?', zh:'你能描述一个给你留下深刻印象的地方吗？'},
+        {en:'Should cities do more to make visitors feel welcome? Why or why not?', zh:'城市是否应该做更多事情让访客感到受欢迎？为什么或为什么不？'}
+      ]
+    },
+    part2:{
+      title:{en:'Welcoming visitors', zh:'欢迎访客'},
+      situation:{en:'Some students from another country are coming to your school. You are considering these two first-day activities:', zh:'一些来自其他国家的学生将来到你的学校。你正在考虑第一天的两项活动：'},
+      options:[
+        {en:'a walking tour of the local area', zh:'当地步行参观'},
+        {en:'a cultural afternoon at school with food and music', zh:'在学校举办有食物和音乐的文化下午活动'}
+      ],
+      task:{en:'Talk about how enjoyable each option would be. Say which option you would choose, and why.', zh:'谈谈每个选项会有多么有趣。说说你会选择哪一个，并解释原因。'}
+    },
+    part3:[
+      {en:'Why can travel be educational for young people?', zh:'为什么旅行对年轻人来说具有教育意义？'},
+      {en:'How can schools help international visitors feel comfortable quickly?', zh:'学校怎样帮助国际访客迅速感到自在？'},
+      {en:'Is it better to learn about other cultures online or in person?', zh:'了解其他文化是在线上更好还是面对面更好？'},
+      {en:'Do you think tourism always benefits local communities?', zh:'你认为旅游总是有利于当地社区吗？'}
+    ]
+  }
+];
+
+let practiceState = JSON.parse(localStorage.getItem('igcse0511practiceState') || '{}');
+const practiceStageOrder = ['intro','warmup','part1','part2prep','part2talk','part3'];
+const practiceStageDurations = { intro:60, warmup:120, part1:180, part2prep:60, part2talk:120, part3:240 };
+let practiceTimerInterval = null;
+let practiceRecognition = null;
+practiceState = {
+  setIndex: Number.isInteger(practiceState.setIndex) ? practiceState.setIndex : 0,
+  stageKey: practiceStageOrder.includes(practiceState.stageKey) ? practiceState.stageKey : 'warmup',
+  timerRemaining: typeof practiceState.timerRemaining === 'number' ? practiceState.timerRemaining : null,
+  timerRunning: false,
+  finalTranscript: typeof practiceState.finalTranscript === 'string' ? practiceState.finalTranscript : '',
+  interimTranscript: '',
+  micActive: false,
+  feedback: typeof practiceState.feedback === 'string' ? practiceState.feedback : ''
+};
+
+// =====================================================================
+// LANGUAGE
+// =====================================================================
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('igcse0511lang', l);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === (l==='en'?'EN':'中文')));
+  buildNav();
+  renderSection(currentSection);
+}
+
+// =====================================================================
+// NAVIGATION
+// =====================================================================
+function buildNav() {
+  const c = document.getElementById('navLinks');
+  c.innerHTML = '';
+  T.nav[lang].forEach((label, i) => {
+    const b = document.createElement('button');
+    b.className = 'nav-link' + (i === currentSection ? ' active' : '');
+    b.textContent = label;
+    b.onclick = () => { goTo(i); c.classList.remove('open'); };
+    c.appendChild(b);
+  });
+}
+
+function goTo(i) {
+  currentSection = i;
+  localStorage.setItem('igcse0511section', String(i));
+  buildNav();
+  renderSection(i);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// =====================================================================
+// PRACTICE HELPERS
+// =====================================================================
+function savePracticeState() {
+  localStorage.setItem('igcse0511practiceState', JSON.stringify({
+    setIndex: practiceState.setIndex,
+    stageKey: practiceState.stageKey,
+    timerRemaining: practiceState.timerRemaining,
+    finalTranscript: practiceState.finalTranscript,
+    feedback: practiceState.feedback
+  }));
+}
+function getPracticeSet() {
+  const safeIndex = Math.max(0, Math.min(practiceState.setIndex, PRACTICE_BANK.length - 1));
+  practiceState.setIndex = safeIndex;
+  return PRACTICE_BANK[safeIndex];
+}
+function getStageLabel(stageKey) {
+  return T.practice.stagesLabel[stageKey][lang];
+}
+function getStageDuration(stageKey) {
+  return practiceStageDurations[stageKey] || 60;
+}
+function getPracticeStageData(setObj, stageKey) {
+  if (stageKey === 'intro') {
+    return {
+      title: getStageLabel(stageKey),
+      assessed: false,
+      duration: getStageDuration(stageKey),
+      body: `
+        <p>${lang==='en'
+          ? 'This is the formal beginning of the speaking test. The recording starts, the examiner says the names and candidate details, and then welcomes the candidate.'
+          : '这是口语考试的正式开始。录音会启动，考官会说明姓名和考生信息，然后欢迎考生。'}</p>
+        <div class="practice-note">${lang==='en'
+          ? 'Student goal: sit down calmly, listen carefully, and get ready to speak naturally when the warm-up begins.'
+          : '学生目标：平静坐下，认真听，然后在热身开始时自然开口。'}</div>
+      `
+    };
+  }
+  if (stageKey === 'warmup') {
+    return {
+      title: getStageLabel(stageKey),
+      assessed: false,
+      duration: getStageDuration(stageKey),
+      body: `
+        <p>${lang==='en'
+          ? 'Answer naturally in full sentences. This part is not graded, so use it to settle your nerves.'
+          : '自然地用完整句子回答。这一部分不计分，所以把它当作让自己放松的机会。'}</p>
+        ${setObj.warmup.map((q, idx) => `<div class="mock-question"><div>${idx+1}. ${q.en}</div>${lang==='zh' ? `<div class="mock-question-zh">${q.zh}</div>` : ''}</div>`).join('')}
+      `
+    };
+  }
+  if (stageKey === 'part1') {
+    return {
+      title: `${getStageLabel(stageKey)} — ${setObj.part1.topic[lang]}`,
+      assessed: true,
+      duration: getStageDuration(stageKey),
+      body: `
+        <p>${lang==='en'
+          ? 'Give developed answers. Try to answer, explain why, and add an example.'
+          : '给出展开的回答。尽量做到：回答观点、解释原因、补充例子。'}</p>
+        ${setObj.part1.questions.map((q, idx) => `<div class="mock-question"><div>${idx+1}. ${q.en}</div>${lang==='zh' ? `<div class="mock-question-zh">${q.zh}</div>` : ''}</div>`).join('')}
+      `
+    };
+  }
+  if (stageKey === 'part2prep' || stageKey === 'part2talk') {
+    const prep = stageKey === 'part2prep';
+    return {
+      title: prep ? getStageLabel('part2prep') : getStageLabel('part2talk'),
+      assessed: true,
+      duration: getStageDuration(stageKey),
+      body: `
+        <p>${prep
+          ? (lang==='en'
+              ? 'Read the card carefully. In the real exam, you have up to one minute to prepare and you may not make written notes.'
+              : '仔细阅读卡片。在真实考试中，你最多有1分钟准备时间，而且不能做书面笔记。')
+          : (lang==='en'
+              ? 'Now speak for up to two minutes. Compare both options, then choose one and justify your choice.'
+              : '现在进行最多2分钟的发言。先比较两个选项，再做选择并说明理由。')}</p>
+        <div class="mock-question">
+          <div style="font-weight:700;margin-bottom:.35rem">${setObj.part2.title[lang]}</div>
+          <div>${setObj.part2.situation[lang]}</div>
+        </div>
+        <div class="mock-card-grid">
+          ${setObj.part2.options.map((opt, idx) => `
+            <div class="mock-option">
+              <div class="mock-option-label">${lang==='en' ? `Option ${idx+1}` : `选项 ${idx+1}`}</div>
+              <div>${opt[lang]}</div>
+            </div>`).join('')}
+        </div>
+        <div class="practice-note">${setObj.part2.task[lang]}</div>
+      `
+    };
+  }
+  return {
+    title: getStageLabel('part3'),
+    assessed: true,
+    duration: getStageDuration('part3'),
+    body: `
+      <p>${lang==='en'
+        ? 'This is the deeper discussion stage. Give fuller answers, compare ideas, and use reasons and examples.'
+        : '这是更深入的讨论阶段。给出更完整的回答，比较观点，并使用原因和例子。'}</p>
+      ${setObj.part3.map((q, idx) => `<div class="mock-question"><div>${idx+1}. ${q.en}</div>${lang==='zh' ? `<div class="mock-question-zh">${q.zh}</div>` : ''}</div>`).join('')}
+    `
+  };
+}
+function formatTime(totalSeconds) {
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+}
+function ensurePracticeTimer() {
+  if (practiceState.timerRemaining == null) {
+    practiceState.timerRemaining = getStageDuration(practiceState.stageKey);
+  }
+}
+function updatePracticeTimerUI() {
+  const display = document.getElementById('practiceTimerDisplay');
+  const status = document.getElementById('practiceTimerStatus');
+  const stageHelp = document.getElementById('practiceTimerHelp');
+  if (!display || !status || !stageHelp) return;
+  ensurePracticeTimer();
+  display.textContent = formatTime(Math.max(0, practiceState.timerRemaining));
+  stageHelp.textContent = `${getStageLabel(practiceState.stageKey)} · ${lang==='en' ? 'suggested time' : '建议时间'}`;
+  status.textContent = practiceState.timerRemaining === 0
+    ? T.practice.timerDone[lang]
+    : (practiceState.timerRunning ? T.practice.timerRunning[lang] : T.practice.timerReady[lang]);
+}
+function stopPracticeTimer() {
+  if (practiceTimerInterval) clearInterval(practiceTimerInterval);
+  practiceTimerInterval = null;
+  practiceState.timerRunning = false;
+  savePracticeState();
+  updatePracticeTimerUI();
+}
+function startPracticeTimer() {
+  ensurePracticeTimer();
+  if (practiceTimerInterval) clearInterval(practiceTimerInterval);
+  practiceState.timerRunning = true;
+  updatePracticeTimerUI();
+  savePracticeState();
+  practiceTimerInterval = setInterval(() => {
+    if (practiceState.timerRemaining > 0) {
+      practiceState.timerRemaining -= 1;
+      savePracticeState();
+      updatePracticeTimerUI();
+    } else {
+      stopPracticeTimer();
+    }
+  }, 1000);
+}
+function resetPracticeTimer() {
+  practiceState.timerRemaining = getStageDuration(practiceState.stageKey);
+  practiceState.timerRunning = false;
+  if (practiceTimerInterval) clearInterval(practiceTimerInterval);
+  practiceTimerInterval = null;
+  savePracticeState();
+  updatePracticeTimerUI();
+}
+function setPracticeStage(stageKey) {
+  practiceState.stageKey = stageKey;
+  practiceState.timerRemaining = getStageDuration(stageKey);
+  practiceState.feedback = '';
+  stopPracticeTimer();
+  savePracticeState();
+  renderSection(7);
+}
+function nextPracticeStage() {
+  const currentIndex = practiceStageOrder.indexOf(practiceState.stageKey);
+  const nextKey = practiceStageOrder[Math.min(currentIndex + 1, practiceStageOrder.length - 1)];
+  setPracticeStage(nextKey);
+}
+function setPracticeSet(index) {
+  practiceState.setIndex = Number(index) || 0;
+  practiceState.stageKey = 'warmup';
+  practiceState.timerRemaining = getStageDuration('warmup');
+  practiceState.feedback = '';
+  stopPracticeTimer();
+  savePracticeState();
+  renderSection(7);
+}
+function randomPracticeSet() {
+  const next = Math.floor(Math.random() * PRACTICE_BANK.length);
+  setPracticeSet(next);
+}
+function getSpeechCtor() {
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
+function updatePracticeTranscriptUI() {
+  const transcript = document.getElementById('practiceTranscript');
+  const words = document.getElementById('practiceWordCount');
+  const status = document.getElementById('practiceMicStatus');
+  const feedback = document.getElementById('practiceFeedback');
+  if (transcript) {
+    const combined = [practiceState.finalTranscript, practiceState.interimTranscript].filter(Boolean).join(' ').trim();
+    if (!combined) {
+      transcript.innerHTML = `<span class="transcript-placeholder">${T.practice.transcriptPlaceholder[lang]}</span>`;
+    } else {
+      transcript.innerHTML = `${practiceState.finalTranscript ? practiceState.finalTranscript.replace(/</g,'&lt;') : ''}${practiceState.interimTranscript ? ` <span class="transcript-interim">${practiceState.interimTranscript.replace(/</g,'&lt;')}</span>` : ''}`;
+    }
+  }
+  if (words) {
+    const count = ((practiceState.finalTranscript + ' ' + practiceState.interimTranscript).trim().match(/\b\S+\b/g) || []).length;
+    words.textContent = `${T.practice.wordCount[lang]}: ${count}`;
+  }
+  if (status) {
+    const supported = !!getSpeechCtor();
+    status.className = 'mic-status' + (practiceState.micActive ? ' live' : '');
+    status.innerHTML = `<span class="mic-dot"></span>${supported ? (practiceState.micActive ? T.practice.micListening[lang] : T.practice.micReady[lang]) : T.practice.micUnsupported[lang]}`;
+  }
+  if (feedback) feedback.textContent = practiceState.feedback || T.practice.micPermission[lang];
+}
+function ensureRecognition() {
+  const Ctor = getSpeechCtor();
+  if (!Ctor) return null;
+  if (practiceRecognition) return practiceRecognition;
+  practiceRecognition = new Ctor();
+  practiceRecognition.continuous = true;
+  practiceRecognition.interimResults = true;
+  practiceRecognition.lang = 'en-US';
+  practiceRecognition.onresult = (event) => {
+    let finalText = '';
+    let interimText = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) finalText += `${t} `;
+      else interimText += t;
+    }
+    if (finalText) {
+      practiceState.finalTranscript = `${practiceState.finalTranscript} ${finalText}`.replace(/\s+/g, ' ').trim();
+    }
+    practiceState.interimTranscript = interimText.trim();
+    practiceState.feedback = T.practice.micPermission[lang];
+    savePracticeState();
+    updatePracticeTranscriptUI();
+  };
+  practiceRecognition.onstart = () => {
+    practiceState.micActive = true;
+    practiceState.feedback = T.practice.micListening[lang];
+    updatePracticeTranscriptUI();
+    savePracticeState();
+  };
+  practiceRecognition.onerror = (event) => {
+    practiceState.micActive = false;
+    practiceState.feedback = `${lang==='en' ? 'Microphone issue' : '麦克风问题'}: ${event.error}`;
+    practiceState.interimTranscript = '';
+    updatePracticeTranscriptUI();
+    savePracticeState();
+  };
+  practiceRecognition.onend = () => {
+    practiceState.micActive = false;
+    practiceState.interimTranscript = '';
+    updatePracticeTranscriptUI();
+    savePracticeState();
+  };
+  return practiceRecognition;
+}
+function startPracticeMic() {
+  const rec = ensureRecognition();
+  if (!rec) {
+    practiceState.feedback = T.practice.micUnsupported[lang];
+    updatePracticeTranscriptUI();
+    return;
+  }
+  practiceState.feedback = T.practice.micPermission[lang];
+  try { rec.start(); } catch (err) { practiceState.feedback = err.message || String(err); }
+  updatePracticeTranscriptUI();
+}
+function stopPracticeMic() {
+  if (practiceRecognition) {
+    try { practiceRecognition.stop(); } catch (err) {}
+  }
+  practiceState.micActive = false;
+  practiceState.interimTranscript = '';
+  updatePracticeTranscriptUI();
+  savePracticeState();
+}
+function clearPracticeTranscript() {
+  practiceState.finalTranscript = '';
+  practiceState.interimTranscript = '';
+  practiceState.feedback = '';
+  savePracticeState();
+  updatePracticeTranscriptUI();
+}
+async function copyPracticeTranscript() {
+  const text = [practiceState.finalTranscript, practiceState.interimTranscript].filter(Boolean).join(' ').trim();
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+    practiceState.feedback = T.practice.copied[lang];
+  } catch (err) {
+    practiceState.feedback = lang==='en' ? 'Copy failed in this browser.' : '此浏览器中复制失败。';
+  }
+  updatePracticeTranscriptUI();
+}
+// =====================================================================
+// RENDER SECTIONS
+// =====================================================================
+function renderSection(idx) {
+  const app = document.getElementById('app');
+  const renderers = [renderHome, renderStructure, renderMaster, renderVocab, renderExamples, renderTips, renderRevision, renderPractice];
+  app.innerHTML = '<div class="section active">' + renderers[idx]() + '</div>';
+  // re-bind interactive elements
+  bindAccordions();
+  bindTabs();
+  bindChecklist();
+  bindPractice();
+}
+
+// ---------- HOME ----------
+function renderHome() {
+  const d = T.home;
+  const stageMeta = [
+    {icon:'👋', title: lang==='en'?'Introduction':'介绍', meta: lang==='en'?'about 1 min · not graded':'约1分钟 · 不计分'},
+    {icon:'🤝', title: lang==='en'?'Warm-up':'热身', meta: lang==='en'?'1–2 mins · not graded':'1–2分钟 · 不计分'},
+    {icon:'🎤', title: lang==='en'?'Interview':'面试', meta: lang==='en'?'2–3 mins · graded':'2–3分钟 · 计分'},
+    {icon:'📋', title: lang==='en'?'Short Talk':'简短发言', meta: lang==='en'?'1 min prep + up to 2 mins speaking':'1分钟准备 + 最多2分钟发言'},
+    {icon:'💬', title: lang==='en'?'Discussion':'讨论', meta: lang==='en'?'3–4 mins · graded':'3–4分钟 · 计分'}
+  ];
+  const stageCards = stageMeta.map(s => `
+    <div class="stage-card">
+      <div class="stage-icon">${s.icon}</div>
+      <div class="stage-title">${s.title}</div>
+      <div class="stage-meta">${s.meta}</div>
+    </div>
+  `).join('');
+  const journeyHTML = d.journey[lang].map((j,i) =>
+    `<div style="display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.55rem"><span style="color:var(--primary);font-weight:700;font-size:1.05rem">${i+1}.</span><span>${j}</span></div>`
+  ).join('');
+  const glanceRows = [
+    [lang==='en'?'Assessed parts':'计分部分', lang==='en'?'Part 1, Part 2, Part 3':'第一、二、三部分'],
+    [lang==='en'?'Not assessed':'不计分', lang==='en'?'Introduction + Warm-up':'介绍 + 热身'],
+    [lang==='en'?'Total test time':'总时长', lang==='en'?'about 10–15 minutes':'约10–15分钟'],
+    [lang==='en'?'Part 2 prep':'第二部分准备', lang==='en'?'1 minute, no writing':'1分钟，不能写笔记']
+  ].map(r => `
+      <div class="glance-item">
+        <div class="glance-left"><span>•</span><span>${r[0]}</span></div>
+        <div class="glance-right">${r[1]}</div>
+      </div>
+  `).join('');
+  return `
+    <div class="progress-row">
+      <span class="progress-pill">${lang==='en'?'Section 1 of 8':'第 1 / 8 部分'}</span>
+    </div>
+    <div class="hero-shell">
+      <div class="hero-panel">
+        <div class="hero">
+          <span class="hero-kicker">🎯 ${lang==='en'?'Student speaking dashboard':'学生口语仪表盘'}</span>
+          <h1>${d.title[lang]}</h1>
+          <p class="subtitle">${d.subtitle[lang]}</p>
+        </div>
+        <div class="hero-grid">
+          <div>
+            <div class="card pretty-card" style="background:rgba(255,255,255,.78)">
+              <h3 style="margin-bottom:.85rem">${lang==='en'?'Your exam journey':'你的考试流程'}</h3>
+              ${journeyHTML}
+              <div class="quick-help">
+                <div style="font-weight:700;margin-bottom:.25rem">${lang==='en'?'If you get nervous…':'如果你紧张……'}</div>
+                <div style="font-size:.92rem">${lang==='en'?'Take a breath, give one clear idea, then add a reason or example.':'先深呼吸，先说一个清晰的观点，再补充原因或例子。'}</div>
+              </div>
+            </div>
+          </div>
+          <div class="exam-glance">
+            <div>
+              <div class="glance-title">${lang==='en'?'Exam at a glance':'考试一览'}</div>
+              <div class="glance-list">${glanceRows}</div>
+            </div>
+            <div style="text-align:center;margin-top:1rem">
+              <button class="btn btn-primary" onclick="goTo(1)">${d.startBtn[lang]}</button>
+            </div>
+          </div>
+        </div>
+        <div class="stage-grid">${stageCards}</div>
+      </div>
+    </div>`;
+}
+
+// ---------- STRUCTURE ----------
+function renderStructure() {
+  const d = T.structure;
+  const timelineHTML = d.parts.map((p,i) => `
+    <div class="timeline-item">
+      <div class="timeline-dot ${p.color}">${i+1}</div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.5rem">
+          <h3 style="margin:0">${p.label[lang]}</h3>
+          <span class="badge ${p.badgeClass}">${p.badge[lang]}</span>
+          <span style="margin-left:auto;font-size:.82rem;color:var(--gray-500)">⏱ ${p.time[lang]}</span>
+        </div>
+        <p style="font-size:.93rem">${p.desc[lang]}</p>
+      </div>
+    </div>
+  `).join('');
+  const examinerHTML = d.examinerItems[lang].map(item => `<li style="padding:.3rem 0">${item}</li>`).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 2 of 8':'第 2 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">${d.subtitle[lang]}</p>
+    <div class="timeline">${timelineHTML}</div>
+    <div class="alert alert-info" style="margin-top:1rem">⏱ ${d.total[lang]}</div>
+    <div class="alert alert-warning" style="margin-top:.5rem">📌 ${d.warmupNote[lang]}</div>
+    <div class="card" style="margin-top:1.25rem;border-left:4px solid var(--primary)">
+      <h3>🎧 ${d.examinerTitle[lang]}</h3>
+      <ul style="padding-left:1.2rem;margin-top:.5rem">${examinerHTML}</ul>
+    </div>`;
+}
+
+// ---------- MASTER EACH PART ----------
+function renderMaster() {
+  const d = T.master;
+  const panels = d.panels.map((p, i) => `
+    <div class="accordion${i===0?' open':''}">
+      <div class="accordion-header">
+        <span>${p.heading[lang]}</span>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-body"><div class="accordion-content">${p.content[lang]}</div></div>
+    </div>
+  `).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 3 of 8':'第 3 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">${d.subtitle[lang]}</p>
+    ${panels}`;
+}
+
+// ---------- VOCABULARY ----------
+function renderVocab() {
+  const d = T.vocab;
+  const tabBtns = d.categories.map((cat, i) =>
+    `<button class="tab-btn${i===0?' active':''}" data-tab="vtab${i}">${cat.name[lang]}</button>`
+  ).join('');
+  const tabPanes = d.categories.map((cat, i) => {
+    const rows = cat.phrases.map(p => `
+      <tr>
+        <td style="font-weight:600">${p[lang==='en'?'en':'en']}</td>
+        <td>${lang==='zh'? p.zh : ''}</td>
+        <td style="font-size:.85rem;color:var(--gray-500)">${p.ex[lang]}</td>
+      </tr>
+    `).join('');
+    const thPhrase = lang==='en'?'Phrase':'短语';
+    const thTrans = lang==='en'?'Chinese':'中文';
+    const thEx = lang==='en'?'Example':'示例';
+    return `<div class="tab-pane${i===0?' active':''}" data-tab="vtab${i}">
+      <table class="phrase-table">
+        <thead><tr><th>${thPhrase}</th>${lang==='zh'?`<th>${thTrans}</th>`:`<th>${thTrans}</th>`}<th>${thEx}</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
+  const upgradeRows = d.upgrades.map(u => `
+    <div class="upgrade-row">
+      <span style="min-width:120px"><s>${u.basic[lang]}</s></span>
+      <span class="arrow">→</span>
+      <span style="font-weight:600;color:var(--primary-dark)">${u.better[lang]}</span>
+    </div>
+  `).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 4 of 8':'第 4 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1.25rem">${d.subtitle[lang]}</p>
+    <div class="tab-bar">${tabBtns}</div>
+    ${tabPanes}
+    <div class="upgrade-box" style="margin-top:1.5rem">
+      <h3>${d.upgradeTitle[lang]}</h3>
+      <p style="font-size:.88rem;color:var(--gray-700);margin-bottom:.5rem">${d.upgradeDesc[lang]}</p>
+      ${upgradeRows}
+    </div>`;
+}
+
+// ---------- EXAMPLES ----------
+function renderExamples() {
+  const d = T.examples;
+  const sects = d.sections.map(s => `
+    <div class="card" style="margin-bottom:1.25rem">
+      <h3>${s.heading[lang]}</h3>
+      <p style="font-size:.88rem;color:var(--gray-500);margin-bottom:.75rem">${s.topic[lang]}</p>
+      ${s.question ? `<div class="alert alert-info" style="margin-bottom:.75rem">${s.question[lang]}</div>` : ""}
+      <div class="example-block">${s.answer[lang]}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 5 of 8':'第 5 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1.25rem">${d.subtitle[lang]}</p>
+    ${sects}`;
+}
+
+// ---------- TIPS ----------
+function renderTips() {
+  const d = T.tips;
+  const tipsList = d.tipsItems[lang].map(t => `<li style="padding:.35rem 0;display:flex;gap:.5rem;align-items:flex-start"><span style="color:var(--success)">✓</span>${t}</li>`).join('');
+  const mistakesList = d.mistakesItems[lang].map(t => `<li style="padding:.35rem 0;display:flex;gap:.5rem;align-items:flex-start"><span style="color:var(--danger)">✗</span>${t}</li>`).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 6 of 8':'第 6 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1.25rem">${d.subtitle[lang]}</p>
+    <div class="two-col">
+      <div class="card" style="border-top:4px solid var(--success)">
+        <h3>${d.tipsTitle[lang]}</h3>
+        <ul style="list-style:none;margin-top:.5rem">${tipsList}</ul>
+      </div>
+      <div class="card" style="border-top:4px solid var(--danger)">
+        <h3>${d.mistakesTitle[lang]}</h3>
+        <ul style="list-style:none;margin-top:.5rem">${mistakesList}</ul>
+      </div>
+    </div>`;
+}
+
+// ---------- REVISION ----------
+function renderRevision() {
+  const d = T.revision;
+  const mapHTML = d.mapSteps[lang].map((s,i) =>
+    `<div style="display:flex;align-items:center;gap:.6rem;padding:.4rem 0"><span style="background:var(--primary);color:white;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0">${i+1}</span><span>${s}</span></div>`
+  ).join('');
+  const checkHTML = d.checkItems[lang].map((item, i) =>
+    `<li><span class="check-box" data-idx="${i}"></span><span>${item}</span></li>`
+  ).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 7 of 8':'第 7 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1.25rem">${d.subtitle[lang]}</p>
+    <div class="card" style="margin-bottom:1.25rem">
+      <h3>${d.mapTitle[lang]}</h3>
+      <div style="margin-top:.5rem">${mapHTML}</div>
+    </div>
+    <div class="card" style="margin-bottom:1.25rem">
+      <h3>${d.checkTitle[lang]}</h3>
+      <ul class="checklist" style="margin-top:.5rem">${checkHTML}</ul>
+    </div>
+    <div class="confidence-panel">
+      <h3>${d.confidenceTitle[lang]}</h3>
+      <p style="margin-top:.5rem;font-size:.95rem;max-width:600px;margin-left:auto;margin-right:auto">${d.confidenceText[lang]}</p>
+    </div>`;
+}
+
+
+// ---------- PRACTICE ----------
+function renderPractice() {
+  const d = T.practice;
+  const setObj = getPracticeSet();
+  ensurePracticeTimer();
+  const stageData = getPracticeStageData(setObj, practiceState.stageKey);
+  const options = PRACTICE_BANK.map((setObj, idx) => `<option value="${idx}" ${idx===practiceState.setIndex?'selected':''}>${setObj.name[lang]}</option>`).join('');
+  const stageButtons = practiceStageOrder.map(key => `
+    <button class="practice-stage-btn${practiceState.stageKey===key?' active':''}" data-stage="${key}">
+      <div class="practice-stage-title">${getStageLabel(key)}</div>
+      <div class="practice-stage-meta">${formatTime(getStageDuration(key))}</div>
+    </button>
+  `).join('');
+  return `
+    <div class="progress-row"><span class="progress-pill">${lang==='en'?'Section 8 of 8':'第 8 / 8 部分'}</span></div>
+    <h2>${d.title[lang]}</h2>
+    <p class="subtitle" style="margin-bottom:1rem">${d.subtitle[lang]}</p>
+
+    <div class="practice-toolbar">
+      <label class="inline-help" for="practiceSetSelect">${d.chooseSet[lang]}</label>
+      <select id="practiceSetSelect" class="practice-select">${options}</select>
+      <button class="btn btn-secondary" id="practiceRandomBtn">${d.randomSet[lang]}</button>
+      <button class="btn btn-ghost" id="practiceNextStageBtn">${d.nextStage[lang]}</button>
+    </div>
+
+    <div class="practice-note">${d.note[lang]}</div>
+
+    <h3 style="margin:1rem 0 .8rem">${d.stageFlow[lang]}</h3>
+    <div class="practice-stage-strip">${stageButtons}</div>
+
+    <div class="practice-layout">
+      <div class="practice-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.85rem">
+          <h3 style="margin:0">${stageData.title}</h3>
+          <span class="mock-stage-badge ${stageData.assessed ? 'assessed' : 'not-assessed'}">${stageData.assessed ? (lang==='en'?'Assessed':'计分') : (lang==='en'?'Not assessed':'不计分')}</span>
+        </div>
+        ${stageData.body}
+      </div>
+
+      <div class="practice-side-stack">
+        <div class="timer-shell">
+          <h3>${d.timerTitle[lang]}</h3>
+          <div id="practiceTimerHelp" class="timer-subtext"></div>
+          <div id="practiceTimerDisplay" class="timer-display">${formatTime(Math.max(0, practiceState.timerRemaining || getStageDuration(practiceState.stageKey)))}</div>
+          <div class="timer-controls">
+            <button class="btn btn-primary" id="practiceStartTimerBtn">${d.startTimer[lang]}</button>
+            <button class="btn btn-secondary" id="practicePauseTimerBtn">${d.pauseTimer[lang]}</button>
+            <button class="btn btn-ghost" id="practiceResetTimerBtn">${d.resetTimer[lang]}</button>
+          </div>
+          <div id="practiceTimerStatus" class="timer-status">${d.timerReady[lang]}</div>
+        </div>
+
+        <div class="transcript-shell">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <h3 style="margin:0">${d.transcriptTitle[lang]}</h3>
+            <span id="practiceMicStatus" class="mic-status"><span class="mic-dot"></span>${d.micReady[lang]}</span>
+          </div>
+          <div class="inline-help" style="margin-bottom:.75rem">${d.transcriptHint[lang]}</div>
+          <div class="timer-controls" style="margin-bottom:.75rem">
+            <button class="btn btn-primary" id="practiceStartMicBtn">${d.startMic[lang]}</button>
+            <button class="btn btn-secondary" id="practiceStopMicBtn">${d.stopMic[lang]}</button>
+            <button class="btn btn-ghost" id="practiceClearTranscriptBtn">${d.clearTranscript[lang]}</button>
+            <button class="btn btn-ghost" id="practiceCopyTranscriptBtn">${d.copyTranscript[lang]}</button>
+          </div>
+          <div id="practiceTranscript" class="transcript-box"><span class="transcript-placeholder">${d.transcriptPlaceholder[lang]}</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:.7rem">
+            <div id="practiceWordCount" class="word-count">${d.wordCount[lang]}: 0</div>
+            <div id="practiceFeedback" class="inline-help">${d.micPermission[lang]}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+// =====================================================================
+// INTERACTIVE BINDINGS
+// =====================================================================
+function bindAccordions() {
+  document.querySelectorAll('.accordion-header').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+  });
+}
+function bindTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.tab;
+      btn.closest('.section').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      btn.closest('.section').querySelectorAll('.tab-pane').forEach(p=>p.classList.toggle('active', p.dataset.tab===id));
+    });
+  });
+}
+function bindChecklist() {
+  document.querySelectorAll('.check-box').forEach(box => {
+    const key = `${lang}-${box.dataset.idx}`;
+    box.classList.toggle('checked', !!checklistState[key]);
+    box.addEventListener('click', () => {
+      box.classList.toggle('checked');
+      checklistState[key] = box.classList.contains('checked');
+      localStorage.setItem('igcse0511checklist', JSON.stringify(checklistState));
+    });
+  });
+}
+function bindPractice() {
+  const setSelect = document.getElementById('practiceSetSelect');
+  if (!setSelect) return;
+  setSelect.addEventListener('change', (e) => setPracticeSet(e.target.value));
+  document.getElementById('practiceRandomBtn')?.addEventListener('click', randomPracticeSet);
+  document.getElementById('practiceNextStageBtn')?.addEventListener('click', nextPracticeStage);
+  document.querySelectorAll('.practice-stage-btn').forEach(btn => {
+    btn.addEventListener('click', () => setPracticeStage(btn.dataset.stage));
+  });
+  document.getElementById('practiceStartTimerBtn')?.addEventListener('click', startPracticeTimer);
+  document.getElementById('practicePauseTimerBtn')?.addEventListener('click', stopPracticeTimer);
+  document.getElementById('practiceResetTimerBtn')?.addEventListener('click', resetPracticeTimer);
+  document.getElementById('practiceStartMicBtn')?.addEventListener('click', startPracticeMic);
+  document.getElementById('practiceStopMicBtn')?.addEventListener('click', stopPracticeMic);
+  document.getElementById('practiceClearTranscriptBtn')?.addEventListener('click', clearPracticeTranscript);
+  document.getElementById('practiceCopyTranscriptBtn')?.addEventListener('click', copyPracticeTranscript);
+  updatePracticeTimerUI();
+  updatePracticeTranscriptUI();
+}
+
+// =====================================================================
+// INIT
+// =====================================================================
+currentSection = Math.max(0, Math.min(currentSection, 7));
+window.addEventListener('resize', () => { if (window.innerWidth > 860) document.getElementById('navLinks').classList.remove('open'); });
+buildNav();
+renderSection(currentSection);
+</script>
+  <!-- GoatCounter analytics script -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <!-- Simple client-side password protection -->
+  <script>
+    (function () {
+      const correctUsername = "igcse";
+      const correctPassword = "esl2026";
+      function promptForCredentials() {
+        const username = window.prompt("Enter username:");
+        const password = window.prompt("Enter password:");
+        if (username === correctUsername && password === correctPassword) {
+          sessionStorage.setItem("igcse_esl_authenticated", "true");
+        } else {
+          alert("Incorrect credentials. Please try again.");
+          promptForCredentials();
+        }
+      }
+      if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+        promptForCredentials();
+      }
+    })();
+  </script>
+</body>
+</html>
