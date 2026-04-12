@@ -1,0 +1,26 @@
+/*
+ * Global style variables for the IGCSE ESL portal.
+ *
+ * This file defines a set of CSS custom properties (variables) that are shared
+ * across all pages in the repository. By unifying these values here, all
+ * pages that include this stylesheet will use a cohesive colour palette and
+ * spacing system. If you wish to tweak the look and feel of the entire
+ * site, adjust the variables below and the changes will propagate
+ * automatically to each HTML document.
+ */
+
+:root {
+  /* Base colours */
+  --bg: #f4f6fb;            /* light background for pages */
+  --card: #ffffff;          /* white cards and panels */
+  --primary: #6366f1;       /* primary brand colour (indigo) */
+  --primary-light: #eef2ff; /* lighter tint of primary */
+  --primary-dark: #4f46e5;  /* darker shade for emphasis */
+  --accent: #3b82f6;        /* secondary accent colour (blue) */
+  --accent-light: #dbeafe;  /* lighter tint of the accent */
+  --text: #1e293b;          /* default text colour (slate) */
+  --text-light: #64748b;    /* muted text */
+  --border: #e2e8f0;        /* light border for cards and separators */
+  --radius: 10px;           /* consistent border radius for elements */
+  --shadow: 0 2px 8px rgba(0,0,0,.07); /* subtle shadow for depth */
+}
