@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper 1 Reading Strategies – IGCSE ESL</title>
+  <!-- Import global styles for colour palette and layout -->
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem 1rem 2rem;
+      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-top: 1rem;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+    .tips-list {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .practice-area {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-2);
+      border-radius: var(--radius);
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    .language-switcher {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin: 0 0.25rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Language switcher for English/Chinese versions -->
+  <nav class="language-switcher">
+    <a href="paper1-reading-tips.html" class="active">EN</a> | <a href="paper1-reading-tips-zh.html">中文</a>
+  </nav>
+  <h1>Reading Strategies for Paper 1 (0511)</h1>
+  <p>This guide offers strategies for each reading exercise in Paper 1 of the Cambridge IGCSE ESL exam. Use these tips to improve your comprehension and perform confidently on exam day.</p>
+  <h2>Exercise 1 – Skimming and Scanning</h2>
+  <ul class="tips-list">
+    <li><strong>Skim first:</strong> quickly read the title, headings and first lines of paragraphs to get the gist of the passage. Note any obvious topic words.</li>
+    <li><strong>Scan for keywords:</strong> before answering each question, underline important words in the question. Then scan the passage for those keywords or synonyms to locate the answer.</li>
+    <li><strong>Read around the answer:</strong> once you find the relevant section, read the sentence before and after to understand the context.</li>
+    <li><strong>Keep answers concise:</strong> use short phrases or a couple of words as instructed. Avoid copying large chunks of text.</li>
+  </ul>
+  <h2>Exercise 2 – Multiple Matching</h2>
+  <ul class="tips-list">
+    <li><strong>Read all the options first:</strong> familiarise yourself with the list of statements or headings before reading the text.</li>
+    <li><strong>Identify main ideas:</strong> each paragraph usually focuses on a single idea. Match it with the statement that best summarizes it.</li>
+    <li><strong>Underline evidence:</strong> mark words or phrases that support your chosen match. This helps if you need to reconsider.</li>
+    <li><strong>Eliminate wrong choices:</strong> cross out options once used to narrow down the remaining possibilities.</li>
+  </ul>
+  <h2>Exercise 3 – Note‑Taking</h2>
+  <ul class="tips-list">
+    <li><strong>Read the headings:</strong> the note‑taking task provides headings and subheadings. Quickly scan them so you know what to listen for.</li>
+    <li><strong>Use bullet points:</strong> write notes as brief points or phrases. Full sentences are unnecessary.</li>
+    <li><strong>Paraphrase:</strong> use your own words. You don’t have to change every word, but avoid copying whole sentences.</li>
+    <li><strong>Stick to word limits:</strong> if the question specifies a maximum number of words per note, do not exceed it.</li>
+  </ul>
+  <div class="practice-area">
+    <h2>Practice Activity</h2>
+    <p>Choose a short article (from your textbook or a news site) and practise skimming, scanning and note‑taking. Use the text box below to record your notes or answers.</p>
+    <textarea placeholder="Write your notes or answer practice questions here..."></textarea>
+  </div>
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script>
+    // Client-side password protection
+    (function() {
+      const correctUsername = "igcse";
+      const correctPassword = "esl2026";
+      function ensureAuthenticated() {
+        if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+          const username = window.prompt("Please enter the username:");
+          const password = window.prompt("Please enter the password:");
+          if (username === correctUsername && password === correctPassword) {
+            sessionStorage.setItem("igcse_esl_authenticated", "true");
+          } else {
+            alert("Incorrect credentials. Please reload the page and try again.");
+            ensureAuthenticated();
+          }
+        }
+      }
+      ensureAuthenticated();
+    })();
+  </script>
+</body>
+</html>
