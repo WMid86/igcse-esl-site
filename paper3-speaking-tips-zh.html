@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>试卷三口语策略 – 剑桥IGCSE ESL</title>
+  <!-- 全局样式 -->
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem 1rem 2rem;
+      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      text-align: center;
+      margin-top: 1rem;
+    }
+    h2 {
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+    .tips-list {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .practice-area {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-2);
+      border-radius: var(--radius);
+    }
+    .language-switcher {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin-left: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- 语言切换器 -->
+  <nav class="language-switcher">
+    <a href="paper3-speaking-tips.html">EN</a> |
+    <a href="paper3-speaking-tips-zh.html" class="active">中文</a>
+  </nav>
+  <h1>试卷三口语策略</h1>
+  <p>本页提供IGCSE ESL口语测试的指导。通过这些策略提升你的自信和流利度。</p>
+  <h2>口语技巧</h2>
+  <ul class="tips-list">
+    <li><strong>经常参加对话：</strong>与朋友、家人和老师讨论各种话题，练习越多，流利度越好【52116344114370†L1836-L1841】。</li>
+    <li><strong>快速组织思路：</strong>练习用三分钟不记笔记构思某个话题的内容，这有助于你在第二部分自信地回答【52116344114370†L1842-L1845】。</li>
+    <li><strong>参与延伸讨论：</strong>挑选一个有趣的话题，与另一位朋友讨论6–9分钟，提高持续对话的能力【52116344114370†L1847-L1849】。</li>
+    <li><strong>录音并自我评估：</strong>记录谈话并思考自己的发音、词汇量、细节、观点展开和流利度，找出需要改进的地方【52116344114370†L1853-L1864】。</li>
+  </ul>
+  <div class="practice-area">
+    <h3>练习建议</h3>
+    <p>选择你感兴趣的话题（如科技、环境、音乐），用三分钟思考可以说什么。然后录音两分钟谈论该话题，之后回听并记录你的优点和可改进之处。</p>
+  </div>
+  <script>
+    // 密码保护（中文提示）
+    (function() {
+      const sessionKey = 'igcse_esl_authenticated';
+      if (!sessionStorage.getItem(sessionKey)) {
+        const username = prompt('请输入用户名以访问此页面');
+        const password = prompt('请输入密码');
+        if (username !== 'igcse' || password !== 'esl2026') {
+          alert('用户名或密码错误，请重新输入。');
+          window.location.reload();
+        } else {
+          sessionStorage.setItem(sessionKey, 'true');
+        }
+      }
+    })();
+  </script>
+  <!-- GoatCounter访问统计 -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
