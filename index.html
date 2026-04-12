@@ -51,6 +51,49 @@
       font-size: 1.1rem;
       color: var(--text-light);
     }
+    /* Icon row under the hero for quick navigation */
+    .icon-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .icon-row a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: var(--radius-sm, 10px);
+      text-decoration: none;
+      color: var(--accent);
+      transition: background 0.2s, transform 0.1s;
+    }
+    .icon-row a:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+    .icon {
+      font-size: 2rem;
+    }
+    .label {
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+    /* Language switcher styles */
+    .language-switcher {
+      text-align: right;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin: 0 0.25rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
     /* Additional spacing for exam container */
     .exam-container {
       margin-top: 1rem;
@@ -62,10 +105,34 @@
 </head>
 <body>
   <!-- Hero banner with colourful illustration and tagline -->
+  <!-- Simple language switcher for English/Chinese versions -->
+  <nav class="language-switcher">
+    <a href="index.html" class="active">EN</a> | <a href="index-zh.html">中文</a>
+  </nav>
+
   <section class="hero">
     <img src="hero-image.png" alt="Colourful abstract illustration" class="hero-img" />
     <h1 class="hero-title">Cambridge IGCSE ESL (0511)</h1>
     <p class="hero-tagline">Dive into quizzes, labs and guides designed to make your English learning fun and effective.</p>
+    <!-- Interactive icon row linking to each exam paper and vocabulary labs -->
+    <div class="icon-row">
+      <a href="#paper1" title="Paper 1 – Reading &amp; Writing">
+        <span class="icon">📖</span>
+        <span class="label">Reading &amp; Writing</span>
+      </a>
+      <a href="#paper2" title="Paper 2 – Listening">
+        <span class="icon">🎧</span>
+        <span class="label">Listening</span>
+      </a>
+      <a href="#paper3" title="Paper 3 – Speaking">
+        <span class="icon">🎤</span>
+        <span class="label">Speaking</span>
+      </a>
+      <a href="#vocab" title="Vocabulary Labs">
+        <span class="icon">📚</span>
+        <span class="label">Vocabulary</span>
+      </a>
+    </div>
   </section>
 
   <div class="notice">
@@ -75,7 +142,7 @@
   <!-- Exam structure panels -->
   <div class="exam-container">
     <!-- Paper 1: Reading & Writing -->
-    <div class="exam-section">
+    <div id="paper1" class="exam-section">
       <!-- Include a friendly icon to make the section more inviting -->
       <h2 class="section-header">📖 Paper 1 – Reading &amp; Writing</h2>
       <div class="section-content hidden">
@@ -94,7 +161,7 @@
       </div>
     </div>
     <!-- Paper 2: Listening -->
-    <div class="exam-section">
+    <div id="paper2" class="exam-section">
       <!-- Headphones icon to symbolise listening tasks -->
       <h2 class="section-header">🎧 Paper 2 – Listening</h2>
       <div class="section-content hidden">
@@ -105,7 +172,7 @@
       </div>
     </div>
     <!-- Paper 3: Speaking -->
-    <div class="exam-section">
+    <div id="paper3" class="exam-section">
       <!-- Microphone icon to symbolise speaking tasks -->
       <h2 class="section-header">🎤 Paper 3 – Speaking</h2>
       <div class="section-content hidden">
@@ -119,14 +186,14 @@
     </div>
 
     <!-- Vocabulary Labs & Units -->
-    <div class="exam-section">
+    <div id="vocab" class="exam-section">
       <!-- Books icon to represent vocabulary labs -->
       <h2 class="section-header">📚 Vocabulary Labs</h2>
       <div class="section-content hidden">
         <p>Interactive vocabulary labs to strengthen your lexical range. Practice using words in context and discover idiomatic expressions.</p>
         <ul>
-          <li><a href="interview-vocabulary-lab-branded.html">Interview Vocabulary Lab (Unit 6)</a></li>
-          <li><a href="b2_vocab_interview.html">B2 Interview Vocabulary</a></li>
+          <li><a href="interview-vocabulary-lab-branded.html">Unit 6: Interview Vocabulary Lab</a></li>
+          <li><a href="b2_vocab_interview.html">Unit 6: Interview Vocabulary (B2)</a></li>
           <li>More unit vocabulary labs coming soon</li>
         </ul>
       </div>

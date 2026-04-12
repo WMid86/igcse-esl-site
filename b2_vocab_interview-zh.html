@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>第6单元：面试词汇（B2）(中文版本)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .language-switcher {
+      text-align: right;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin: 0 0.25rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <nav class="language-switcher">
+    <a href="b2_vocab_interview.html">EN</a> | <a href="b2_vocab_interview-zh.html" class="active">中文</a>
+  </nav>
+  <h1>第6单元：面试词汇（B2）（中文版本）</h1>
+  <p>我们正在准备该页面的中文翻译，请查看英文版本，敬请期待！</p>
+  <p>英文版本：<a href="b2_vocab_interview.html">点击这里</a></p>
+  <!-- Analytics and password -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script>
+    (function () {
+      const correctUsername = "igcse";
+      const correctPassword = "esl2026";
+      function promptForCredentials() {
+        const username = window.prompt("请输入用户名 (username):");
+        const password = window.prompt("请输入密码 (password):");
+        if (username === correctUsername && password === correctPassword) {
+          sessionStorage.setItem("igcse_esl_authenticated", "true");
+        } else {
+          alert("用户名或密码错误，请重试。");
+          promptForCredentials();
+        }
+      }
+      if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+        promptForCredentials();
+      }
+    })();
+  </script>
+</body>
+</html>

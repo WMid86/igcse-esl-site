@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>剑桥IGCSE英语第二语言课程资源 (0511)</title>
+  <style>
+    /* 页面局部样式。颜色和布局变量在 styles.css 中定义。
+       这里主要调整布局并加入彩色横幅。 */
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 1rem 3rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .notice {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: var(--radius);
+    }
+    /* 横幅样式 */
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .hero-img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-height: 350px;
+      object-fit: cover;
+    }
+    .hero-title {
+      font-size: 2rem;
+      margin-top: 1rem;
+      color: var(--primary);
+    }
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+    /* 图标导航行 */
+    .icon-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .icon-row a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: var(--radius-sm, 10px);
+      text-decoration: none;
+      color: var(--accent);
+      transition: background 0.2s, transform 0.1s;
+    }
+    .icon-row a:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+    .icon {
+      font-size: 2rem;
+    }
+    .label {
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+    /* 语言切换器样式 */
+    .language-switcher {
+      text-align: right;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin: 0 0.25rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+    /* 章节面板布局 */
+    .exam-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .exam-section {
+      background: var(--card, #fff);
+      border-radius: var(--radius-sm, 10px);
+      box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .section-header {
+      margin: 0;
+      padding: 1rem 1.25rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--accent, #6366f1);
+      background: var(--bg-2, #f6f7fb);
+      position: relative;
+    }
+    .section-header::after {
+      content: '▼';
+      font-size: 1rem;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.2s;
+    }
+    .section-header.open::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .section-content {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border, #e2e8f0);
+      background: var(--panel, rgba(255,255,255,0.72));
+    }
+    .hidden {
+      display: none;
+    }
+    ul { list-style-type: none; padding-left: 1.2rem; }
+    li { margin-bottom: 0.5rem; }
+    li ul { margin-top: 0.5rem; }
+  </style>
+  <!-- 引入全局配色和布局变量 -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 语言切换器，当前为中文版本 -->
+  <nav class="language-switcher">
+    <a href="index.html">EN</a> | <a href="index-zh.html" class="active">中文</a>
+  </nav>
+  <section class="hero">
+    <img src="hero-image.png" alt="彩色抽象插图" class="hero-img" />
+    <h1 class="hero-title">剑桥IGCSE英语第二语言 (0511)</h1>
+    <p class="hero-tagline">通过测验、实验室和指南，让你的英语学习既有趣又有效。</p>
+    <div class="icon-row">
+      <a href="#paper1" title="试卷一 – 阅读与写作">
+        <span class="icon">📖</span>
+        <span class="label">阅读与写作</span>
+      </a>
+      <a href="#paper2" title="试卷二 – 听力">
+        <span class="icon">🎧</span>
+        <span class="label">听力</span>
+      </a>
+      <a href="#paper3" title="试卷三 – 口语">
+        <span class="icon">🎤</span>
+        <span class="label">口语</span>
+      </a>
+      <a href="#vocab" title="词汇实验室">
+        <span class="icon">📚</span>
+        <span class="label">词汇</span>
+      </a>
+    </div>
+  </section>
+  <div class="notice">
+    <p>本网站提供剑桥IGCSE&nbsp;0511英语第二语言课程的学习资源集合。使用下面的互动面板，按照考试结构探索材料。未来会不断添加新的活动。</p>
+    <p>访问者必须输入提供给你的共享用户名和密码。我们使用GoatCounter（一个注重隐私的开源统计工具）收集统计数据。</p>
+  </div>
+  <div class="exam-container">
+    <div id="paper1" class="exam-section">
+      <h2 class="section-header">📖 试卷一 – 阅读与写作</h2>
+      <div class="section-content hidden">
+        <p>两小时的试卷，包含阅读理解和写作任务。总分60，占总成绩50%。</p>
+        <ul>
+          <li><strong>阅读：</strong> 理解题和多重匹配任务（即将上线）</li>
+          <li><strong>写作：</strong>
+            <ul>
+              <li><a href="igcse-0511-report-writer.html">报告写作</a></li>
+              <li><a href="email-language-dashboard-fixed-v3.html">电子邮件写作</a></li>
+              <li><a href="writing-assistant.html">写作助手（语法和风格检查）</a></li>
+              <li>评论/文章写作（即将上线）</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="paper2" class="exam-section">
+      <h2 class="section-header">🎧 试卷二 – 听力</h2>
+      <div class="section-content hidden">
+        <p>大约50分钟的听力试卷，包含各种短篇和长篇音频文本。总分40，占总成绩25%。</p>
+        <ul>
+          <li>听力练习与资源（即将上线）</li>
+        </ul>
+      </div>
+    </div>
+    <div id="paper3" class="exam-section">
+      <h2 class="section-header">🎤 试卷三 – 口语</h2>
+      <div class="section-content hidden">
+        <p>10–15分钟的口语测试，包括面试、简短演讲和讨论。总分40，占总成绩25%。</p>
+        <ul>
+          <li><a href="igcse-0511-speaking-guide.html">口语考试指南</a></li>
+          <li><a href="igcse-0511-speaking-guide-mic-practice.html">口语考试练习（麦克）</a></li>
+          <li>更多口语活动（即将上线）</li>
+        </ul>
+      </div>
+    </div>
+    <div id="vocab" class="exam-section">
+      <h2 class="section-header">📚 词汇实验室</h2>
+      <div class="section-content hidden">
+        <p>互动词汇实验室，帮助你扩大词汇量，练习在语境中使用词语，发现习语表达。</p>
+        <ul>
+          <li><a href="interview-vocabulary-lab-branded.html">第6单元：面试词汇实验室</a></li>
+          <li><a href="b2_vocab_interview.html">第6单元：面试词汇（B2）</a></li>
+          <li>更多单元词汇实验室即将上线</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    // 面板展开/收起功能
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.section-header').forEach(function(header) {
+        header.addEventListener('click', function() {
+          header.classList.toggle('open');
+          var content = header.nextElementSibling;
+          if (content) {
+            content.classList.toggle('hidden');
+          }
+        });
+      });
+    });
+  </script>
+  <!-- GoatCounter 统计脚本 -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <!-- 简单的前端密码保护脚本 -->
+  <script>
+    (function () {
+      const correctUsername = "igcse";
+      const correctPassword = "esl2026";
+      function promptForCredentials() {
+        const username = window.prompt("请输入用户名 (username):");
+        const password = window.prompt("请输入密码 (password):");
+        if (username === correctUsername && password === correctPassword) {
+          sessionStorage.setItem("igcse_esl_authenticated", "true");
+        } else {
+          alert("用户名或密码错误，请重试。");
+          promptForCredentials();
+        }
+      }
+      if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+        promptForCredentials();
+      }
+    })();
+  </script>
+</body>
+</html>
