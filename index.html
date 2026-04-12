@@ -5,20 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Igcse ESL Resources</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; }
-    h1 { color: #333; }
-    ul { list-style-type: none; padding: 0; }
-    li { margin: 0.5rem 0; }
-    a { color: #0066cc; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .notice { background-color: #f9f9f9; border-left: 4px solid #ccc; padding: 1rem; margin-bottom: 1rem; }
+    /* Local styles for the home page.  The global palette and layout variables
+       are defined in styles.css; this file simply adjusts layout and adds a
+       colourful hero section. */
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 1rem 3rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .notice {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-radius: var(--radius);
+    }
+    /* Hero section styling */
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .hero-img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-height: 350px;
+      object-fit: cover;
+    }
+    .hero-title {
+      font-size: 2rem;
+      margin-top: 1rem;
+      color: var(--primary);
+    }
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+    /* Additional spacing for exam container */
+    .exam-container {
+      margin-top: 1rem;
+    }
   </style>
 
   <!-- Import shared colour palette and layout variables -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Cambridge IGCSE ESL (0511) Exam Portal</h1>
+  <!-- Hero banner with colourful illustration and tagline -->
+  <section class="hero">
+    <img src="hero-image.png" alt="Colourful abstract illustration" class="hero-img" />
+    <h1 class="hero-title">Cambridge IGCSE ESL (0511)</h1>
+    <p class="hero-tagline">Dive into quizzes, labs and guides designed to make your English learning fun and effective.</p>
+  </section>
+
   <div class="notice">
     <p>This site hosts a growing collection of resources for the Cambridge IGCSE 0511 English as a Second Language course. Use the interactive panels below to explore materials aligned with the exam structure. New activities will be added over time.</p>
     <p>Visitors must enter the shared username and password provided to you. Analytics are collected using GoatCounter (a privacy‑friendly, open‑source analytics tool).</p>
@@ -27,7 +76,8 @@
   <div class="exam-container">
     <!-- Paper 1: Reading & Writing -->
     <div class="exam-section">
-      <h2 class="section-header">Paper 1 – Reading & Writing</h2>
+      <!-- Include a friendly icon to make the section more inviting -->
+      <h2 class="section-header">📖 Paper 1 – Reading &amp; Writing</h2>
       <div class="section-content hidden">
         <p>Two-hour paper combining reading comprehension and writing tasks. 60 marks (50 % of total grade).</p>
         <ul>
@@ -45,7 +95,8 @@
     </div>
     <!-- Paper 2: Listening -->
     <div class="exam-section">
-      <h2 class="section-header">Paper 2 – Listening</h2>
+      <!-- Headphones icon to symbolise listening tasks -->
+      <h2 class="section-header">🎧 Paper 2 – Listening</h2>
       <div class="section-content hidden">
         <p>Approximately 50-minute listening paper with various short and long audio texts. 40 marks (25 % of total grade).</p>
         <ul>
@@ -55,13 +106,28 @@
     </div>
     <!-- Paper 3: Speaking -->
     <div class="exam-section">
-      <h2 class="section-header">Paper 3 – Speaking</h2>
+      <!-- Microphone icon to symbolise speaking tasks -->
+      <h2 class="section-header">🎤 Paper 3 – Speaking</h2>
       <div class="section-content hidden">
         <p>10–15 minute speaking test including an interview, short talk and discussion. 40 marks (25 % of total grade).</p>
         <ul>
           <li><a href="igcse-0511-speaking-guide.html">Speaking Exam Guide</a></li>
           <li><a href="igcse-0511-speaking-guide-mic-practice.html">Speaking Exam Practice (Mic)</a></li>
           <li>Additional speaking activities (coming soon)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Vocabulary Labs & Units -->
+    <div class="exam-section">
+      <!-- Books icon to represent vocabulary labs -->
+      <h2 class="section-header">📚 Vocabulary Labs</h2>
+      <div class="section-content hidden">
+        <p>Interactive vocabulary labs to strengthen your lexical range. Practice using words in context and discover idiomatic expressions.</p>
+        <ul>
+          <li><a href="interview-vocabulary-lab-branded.html">Interview Vocabulary Lab (Unit 6)</a></li>
+          <li><a href="b2_vocab_interview.html">B2 Interview Vocabulary</a></li>
+          <li>More unit vocabulary labs coming soon</li>
         </ul>
       </div>
     </div>
