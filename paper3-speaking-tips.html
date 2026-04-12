@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper 3 Speaking Strategies – IGCSE ESL</title>
+  <!-- Import global styles -->
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem 1rem 2rem;
+      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      text-align: center;
+      margin-top: 1rem;
+    }
+    h2 {
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+    .tips-list {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .practice-area {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-2);
+      border-radius: var(--radius);
+    }
+    .language-switcher {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin-left: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Language switcher -->
+  <nav class="language-switcher">
+    <a href="paper3-speaking-tips.html" class="active">EN</a> |
+    <a href="paper3-speaking-tips-zh.html">中文</a>
+  </nav>
+  <h1>Paper 3 Speaking Strategies</h1>
+  <p>This page provides guidance for the IGCSE ESL speaking test. Use these strategies to become more confident and fluent when you speak.</p>
+  <h2>Speaking Tips</h2>
+  <ul class="tips-list">
+    <li><strong>Engage in conversations regularly:</strong> Speak with friends, family members and teachers about a variety of topics. The more you practise, the better your fluency【52116344114370†L1836-L1841】.</li>
+    <li><strong>Prepare ideas quickly:</strong> Practise spending three minutes brainstorming ideas on a topic without making notes. This will help you respond confidently in Part 2 of the test【52116344114370†L1842-L1845】.</li>
+    <li><strong>Participate in extended discussions:</strong> Practise talking about an interesting topic for 6–9 minutes with another person to develop your ability to sustain conversation【52116344114370†L1847-L1849】.</li>
+    <li><strong>Record and evaluate yourself:</strong> Record conversations and reflect on your pronunciation, vocabulary range, detail, development of ideas and fluency. Identify areas for improvement【52116344114370†L1853-L1864】.</li>
+  </ul>
+  <div class="practice-area">
+    <h3>Practice Idea</h3>
+    <p>Choose a topic that interests you (e.g. technology, environment, music). Spend three minutes thinking about what you could say. Then speak about the topic for two minutes while recording yourself. Listen back and note what you did well and what could be improved.</p>
+  </div>
+  <script>
+    // Password protection script
+    (function() {
+      const sessionKey = 'igcse_esl_authenticated';
+      if (!sessionStorage.getItem(sessionKey)) {
+        const username = prompt('Enter username to access this page');
+        const password = prompt('Enter password');
+        if (username !== 'igcse' || password !== 'esl2026') {
+          alert('Incorrect username or password. Please try again.');
+          window.location.reload();
+        } else {
+          sessionStorage.setItem(sessionKey, 'true');
+        }
+      }
+    })();
+  </script>
+  <!-- GoatCounter analytics -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
