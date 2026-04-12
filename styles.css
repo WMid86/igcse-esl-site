@@ -25,3 +25,67 @@
   --radius: 10px;           /* consistent border radius for elements */
   --shadow: 0 2px 8px rgba(0,0,0,.08); /* subtle shadow for depth */
 }
+
+/* --------------------------------------------------------- */
+/*  Global navigation and language switcher styles
+ *
+ *  These classes provide a consistent look for the language
+ *  selector and navigation links across all pages. Adding
+ *  them here means individual HTML files can simply include
+ *  the appropriate nav markup without redefining styles.
+ */
+
+.language-switcher {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.language-switcher a {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+.language-switcher a.active {
+  font-weight: bold;
+}
+
+/* Navigation links (Back/Home) */
+.nav-links {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+.nav-links a {
+  margin-right: 0.75rem;
+  color: var(--primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Page information tags
+ * Use this class to display a small label at the top of a page
+ * describing the type of text (e.g. formal report, review). The
+ * icon and text can be customised per page. */
+.page-info {
+  align-self: flex-end;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.page-info .icon {
+  font-size: 1.1rem;
+}
