@@ -38,8 +38,10 @@
       width: 100%;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      max-height: 350px;
-      object-fit: cover;
+      /* 允许横幅图完整显示，不被裁剪 */
+      max-height: none;
+      height: auto;
+      object-fit: contain;
     }
     .hero-title {
       font-size: 2rem;
@@ -153,21 +155,27 @@
     <h1 class="hero-title">剑桥IGCSE英语第二语言 (0511)</h1>
     <p class="hero-tagline">通过测验、实验室和指南，让你的英语学习既有趣又有效。</p>
     <div class="icon-row">
+      <!-- 更新图标：铅笔代表阅读与写作，耳朵代表听力，讲话脸代表口语，
+           对话气泡代表词汇实验室，封面书代表课本单元 -->
       <a href="#paper1" title="试卷一 – 阅读与写作">
-        <span class="icon">📖</span>
+        <span class="icon">📝</span>
         <span class="label">阅读与写作</span>
       </a>
       <a href="#paper2" title="试卷二 – 听力">
-        <span class="icon">🎧</span>
+        <span class="icon">👂</span>
         <span class="label">听力</span>
       </a>
       <a href="#paper3" title="试卷三 – 口语">
-        <span class="icon">🎤</span>
+        <span class="icon">🗣</span>
         <span class="label">口语</span>
       </a>
       <a href="#vocab" title="词汇实验室">
-        <span class="icon">📚</span>
+        <span class="icon">💬</span>
         <span class="label">词汇</span>
+      </a>
+      <a href="#units" title="课本单元">
+        <span class="icon">📘</span>
+        <span class="label">课本单元</span>
       </a>
     </div>
   </section>
@@ -177,7 +185,7 @@
   </div>
   <div class="exam-container">
     <div id="paper1" class="exam-section">
-      <h2 class="section-header">📖 试卷一 – 阅读与写作</h2>
+      <h2 class="section-header">📝 试卷一 – 阅读与写作</h2>
       <div class="section-content hidden">
         <p>两小时的试卷，包含阅读理解和写作任务。总分60，占总成绩50%。</p>
         <ul>
@@ -194,7 +202,7 @@
       </div>
     </div>
     <div id="paper2" class="exam-section">
-      <h2 class="section-header">🎧 试卷二 – 听力</h2>
+      <h2 class="section-header">👂 试卷二 – 听力</h2>
       <div class="section-content hidden">
         <p>大约50分钟的听力试卷，包含各种短篇和长篇音频文本。总分40，占总成绩25%。</p>
         <ul>
@@ -203,7 +211,7 @@
       </div>
     </div>
     <div id="paper3" class="exam-section">
-      <h2 class="section-header">🎤 试卷三 – 口语</h2>
+      <h2 class="section-header">🗣 试卷三 – 口语</h2>
       <div class="section-content hidden">
         <p>10–15分钟的口语测试，包括面试、简短演讲和讨论。总分40，占总成绩25%。</p>
         <ul>
@@ -214,13 +222,25 @@
       </div>
     </div>
     <div id="vocab" class="exam-section">
-      <h2 class="section-header">📚 词汇实验室</h2>
+      <h2 class="section-header">💬 词汇实验室</h2>
       <div class="section-content hidden">
         <p>互动词汇实验室，帮助你扩大词汇量，练习在语境中使用词语，发现习语表达。</p>
         <ul>
           <li><a href="interview-vocabulary-lab-branded.html">第6单元：面试词汇实验室</a></li>
           <li><a href="b2_vocab_interview.html">第6单元：面试词汇（B2）</a></li>
           <li>更多单元词汇实验室即将上线</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 课本单元：根据教材单元导航资源 -->
+    <div id="units" class="exam-section">
+      <h2 class="section-header">📘 课本单元</h2>
+      <div class="section-content hidden">
+        <p>按照教材单元浏览 Cambridge IGCSE ESL 资源。当前仅提供第6单元。</p>
+        <ul>
+          <li><a href="#vocab">第6单元：面试</a>（见词汇实验室）</li>
+          <li>第1–5单元 &amp; 第7–10单元（即将上线）</li>
         </ul>
       </div>
     </div>
