@@ -1,0 +1,411 @@
+
+<!-- Include global styles for unified colour palette -->
+<link rel="stylesheet" href="styles.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .page { padding: 1.5rem 0; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin: 2rem 0 1rem;
+  }
+  .section-title {
+    font-size: 18px; font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  .badge {
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px; letter-spacing: 0.04em;
+  }
+  .badge-vocab { background: #E6F1FB; color: #0C447C; }
+  .badge-idiom { background: #EEEDFE; color: #3C3489; }
+  .count-badge {
+    font-size: 12px; color: var(--color-text-secondary);
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 20px; padding: 2px 10px;
+  }
+  .level-pill {
+    font-size: 11px; font-weight: 500; padding: 3px 12px;
+    border-radius: 20px; background: #EAF3DE; color: #27500A;
+    margin-left: auto;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .card:hover {
+    border-color: var(--color-border-secondary);
+  }
+  .card-top { display: flex; align-items: baseline; gap: 10px; }
+  .word {
+    font-size: 15px; font-weight: 500;
+    color: var(--color-text-primary);
+  }
+  .pos {
+    font-size: 11px; color: var(--color-text-tertiary);
+    font-style: italic;
+  }
+  .zh {
+    font-size: 13px; font-weight: 500;
+    color: #185FA5;
+  }
+  .example {
+    font-size: 12px; color: var(--color-text-secondary);
+    line-height: 1.5;
+    border-left: 2px solid var(--color-border-secondary);
+    padding-left: 8px;
+    margin-top: 2px;
+  }
+  .idiom-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .idiom-card:hover { border-color: var(--color-border-secondary); }
+  .idiom-phrase {
+    font-size: 14px; font-weight: 500;
+    color: #3C3489;
+  }
+  .idiom-zh {
+    font-size: 12px; color: #185FA5; font-weight: 500;
+  }
+  .idiom-meaning {
+    font-size: 12px; color: var(--color-text-secondary);
+    font-style: italic;
+  }
+  .idiom-example {
+    font-size: 12px; color: var(--color-text-secondary);
+    line-height: 1.5;
+    border-left: 2px solid #AFA9EC;
+    padding-left: 8px;
+    margin-top: 2px;
+  }
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    margin: 2rem 0 0;
+  }
+  .tip-box {
+    margin-top: 1.5rem;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 12px 16px;
+    font-size: 12px; color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+  .tip-box strong { color: var(--color-text-primary); font-weight: 500; }
+</style>
+
+<div class="page">
+
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:0.5rem;">
+    <span class="section-title" style="font-size:22px;">Interview Vocabulary</span>
+    <span class="level-pill">B2 Level</span>
+  </div>
+  <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:0.5rem;">English · 中文 · Example sentences for interview contexts</p>
+
+  <div class="section-header">
+    <span class="section-title">Vocabulary</span>
+    <span class="badge badge-vocab">Words &amp; Phrases</span>
+    <span class="count-badge">30 entries</span>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-top"><span class="word">accomplish</span><span class="pos">v.</span></div>
+      <div class="zh">完成；实现</div>
+      <div class="example">"I was proud to accomplish the project ahead of schedule."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">adaptable</span><span class="pos">adj.</span></div>
+      <div class="zh">适应能力强的</div>
+      <div class="example">"Being adaptable helped me thrive in a fast-changing team."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">assertive</span><span class="pos">adj.</span></div>
+      <div class="zh">自信果断的</div>
+      <div class="example">"She remained assertive during the negotiation without being aggressive."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">collaborate</span><span class="pos">v.</span></div>
+      <div class="zh">合作；协作</div>
+      <div class="example">"We collaborated closely with the design team to meet the deadline."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">competence</span><span class="pos">n.</span></div>
+      <div class="zh">能力；胜任</div>
+      <div class="example">"His technical competence made him the ideal candidate for the role."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">concise</span><span class="pos">adj.</span></div>
+      <div class="zh">简洁的；简明的</div>
+      <div class="example">"Keep your answers concise and relevant during the interview."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">constructive</span><span class="pos">adj.</span></div>
+      <div class="zh">建设性的</div>
+      <div class="example">"She responded to criticism with constructive suggestions."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">contribute</span><span class="pos">v.</span></div>
+      <div class="zh">贡献；有助于</div>
+      <div class="example">"I contributed significantly to the company's revenue growth last year."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">deadline</span><span class="pos">n.</span></div>
+      <div class="zh">截止日期</div>
+      <div class="example">"I always prioritise tasks to ensure I meet every deadline."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">delegate</span><span class="pos">v.</span></div>
+      <div class="zh">委派；授权</div>
+      <div class="example">"A good manager knows how to delegate tasks effectively."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">demonstrate</span><span class="pos">v.</span></div>
+      <div class="zh">展示；证明</div>
+      <div class="example">"I demonstrated leadership by guiding the team through a difficult period."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">determined</span><span class="pos">adj.</span></div>
+      <div class="zh">坚定的；有决心的</div>
+      <div class="example">"I am determined to keep improving my professional skills."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">efficiency</span><span class="pos">n.</span></div>
+      <div class="zh">效率</div>
+      <div class="example">"The new software improved our team's overall efficiency by 30%."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">entrepreneurial</span><span class="pos">adj.</span></div>
+      <div class="zh">有创业精神的</div>
+      <div class="example">"She brought an entrepreneurial mindset to every project she led."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">enthusiasm</span><span class="pos">n.</span></div>
+      <div class="zh">热情；积极性</div>
+      <div class="example">"My enthusiasm for data analysis sets me apart from other candidates."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">implement</span><span class="pos">v.</span></div>
+      <div class="zh">实施；执行</div>
+      <div class="example">"We implemented a new strategy that reduced costs by 15%."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">initiative</span><span class="pos">n.</span></div>
+      <div class="zh">主动性；倡议</div>
+      <div class="example">"Taking initiative is something I value in both myself and my colleagues."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">innovative</span><span class="pos">adj.</span></div>
+      <div class="zh">创新的</div>
+      <div class="example">"We need innovative thinkers who can solve problems creatively."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">integrity</span><span class="pos">n.</span></div>
+      <div class="zh">诚信；正直</div>
+      <div class="example">"Acting with integrity is central to my approach in the workplace."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">leadership</span><span class="pos">n.</span></div>
+      <div class="zh">领导力；领导能力</div>
+      <div class="example">"Strong leadership was key to completing the project successfully."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">meticulous</span><span class="pos">adj.</span></div>
+      <div class="zh">一丝不苟的；细心的</div>
+      <div class="example">"She is meticulous about checking data before submitting any report."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">motivated</span><span class="pos">adj.</span></div>
+      <div class="zh">积极进取的；有动力的</div>
+      <div class="example">"I am highly motivated by challenges that require creative problem-solving."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">negotiate</span><span class="pos">v.</span></div>
+      <div class="zh">谈判；协商</div>
+      <div class="example">"I successfully negotiated a contract that benefited both parties."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">objective</span><span class="pos">n. / adj.</span></div>
+      <div class="zh">目标；客观的</div>
+      <div class="example">"My main objective is to add real value to your organisation."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">perseverance</span><span class="pos">n.</span></div>
+      <div class="zh">坚持不懈；毅力</div>
+      <div class="example">"Perseverance helped me overcome several major setbacks in my career."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">proactive</span><span class="pos">adj.</span></div>
+      <div class="zh">积极主动的</div>
+      <div class="example">"I try to be proactive by anticipating problems before they arise."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">proficient</span><span class="pos">adj.</span></div>
+      <div class="zh">熟练的；精通的</div>
+      <div class="example">"I am proficient in both Python and data visualisation tools."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">resilient</span><span class="pos">adj.</span></div>
+      <div class="zh">有韧性的；能快速恢复的</div>
+      <div class="example">"Resilient employees adapt quickly when company priorities change."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">strategic</span><span class="pos">adj.</span></div>
+      <div class="zh">战略性的；有策略的</div>
+      <div class="example">"I take a strategic approach when planning long-term projects."</div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="word">versatile</span><span class="pos">adj.</span></div>
+      <div class="zh">多才多艺的；通用的</div>
+      <div class="example">"Being versatile allows me to switch between different roles when needed."</div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-header">
+    <span class="section-title">Interview Idioms</span>
+    <span class="badge badge-idiom">Fixed Expressions</span>
+    <span class="count-badge">9 idioms</span>
+  </div>
+
+  <div class="grid">
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to hit the ground running</div>
+      <div class="idiom-zh">立即投入工作；迅速上手</div>
+      <div class="idiom-meaning">To start a new job quickly and energetically, without needing much time to settle in.</div>
+      <div class="idiom-example">"I'm confident I can hit the ground running from day one."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to think outside the box</div>
+      <div class="idiom-zh">跳出固有思维；创新思考</div>
+      <div class="idiom-meaning">To approach problems in creative or unconventional ways.</div>
+      <div class="idiom-example">"I was asked to think outside the box to find a solution for the client."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to go the extra mile</div>
+      <div class="idiom-zh">付出额外努力；做得更多</div>
+      <div class="idiom-meaning">To put in more effort than is strictly required.</div>
+      <div class="idiom-example">"I always go the extra mile to ensure clients are fully satisfied."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to be a team player</div>
+      <div class="idiom-zh">善于团队合作</div>
+      <div class="idiom-meaning">To work cooperatively and contribute to a shared goal.</div>
+      <div class="idiom-example">"I consider myself a strong team player who supports colleagues when needed."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to wear many hats</div>
+      <div class="idiom-zh">身兼数职；一人多能</div>
+      <div class="idiom-meaning">To take on multiple roles or responsibilities.</div>
+      <div class="idiom-example">"In my last role, I wore many hats — from project manager to client liaison."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to bring something to the table</div>
+      <div class="idiom-zh">贡献某种价值或技能</div>
+      <div class="idiom-meaning">To offer a specific skill, idea, or value to a team or organisation.</div>
+      <div class="idiom-example">"I believe I bring strong analytical skills to the table."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to learn the ropes</div>
+      <div class="idiom-zh">熟悉工作；学习基本知识</div>
+      <div class="idiom-meaning">To learn the basics of a new job or situation.</div>
+      <div class="idiom-example">"It took a few weeks to learn the ropes, but I quickly became independent."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to be on the same page</div>
+      <div class="idiom-zh">达成共识；看法一致</div>
+      <div class="idiom-meaning">To have a shared understanding or agreement with others.</div>
+      <div class="idiom-example">"I always make sure the whole team is on the same page before starting a project."</div>
+    </div>
+
+    <div class="idiom-card">
+      <div class="idiom-phrase">to rise to the challenge</div>
+      <div class="idiom-zh">迎难而上；应对挑战</div>
+      <div class="idiom-meaning">To successfully deal with a difficult situation or demanding task.</div>
+      <div class="idiom-example">"When the team leader left unexpectedly, I rose to the challenge and stepped up."</div>
+    </div>
+
+  </div>
+
+  <div class="tip-box">
+    <strong>Study tip:</strong> For the best results in an interview, practise using these words and idioms naturally in full sentences — not just memorising their meanings. Try recording yourself answering common interview questions using at least 3–5 words or idioms from each section.
+  </div>
+
+</div>
+
+<!-- GoatCounter analytics script -->
+<script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Simple client-side password protection -->
+<script>
+  (function () {
+    const correctUsername = "igcse";
+    const correctPassword = "esl2026";
+    function promptForCredentials() {
+      const username = window.prompt("Enter username:");
+      const password = window.prompt("Enter password:");
+      if (username === correctUsername && password === correctPassword) {
+        sessionStorage.setItem("igcse_esl_authenticated", "true");
+      } else {
+        alert("Incorrect credentials. Please try again.");
+        promptForCredentials();
+      }
+    }
+    if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+      promptForCredentials();
+    }
+  })();
+</script>
