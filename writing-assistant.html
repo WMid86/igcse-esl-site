@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing Assistant – Grammar &amp; Register Checker</title>
+  <!-- Import the shared palette and layout variables -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Import Harper grammar checker library from CDN. Harper runs locally in the browser. -->
+  <script type="module">
+    import { binaryInlined, WorkerLinter } from 'https://unpkg.com/harper.js@1.12.0/dist/harper.js';
+    // Instantiate the Web Worker-based linter. This uses the inlined binary so no network requests are made.
+    const linter = new WorkerLinter({ binary: binaryInlined });
+
+    // Bank of informal idioms and formal words. These are used to give style suggestions
+    // depending on the selected writing context. Idioms are encouraged in informal pieces
+    // but discouraged in formal reports. Formal words are appropriate in reports but
+    // can sound stiff in informal e‑mails or reviews.
+    const idioms = [
+      'piece of cake',
+      'hit the books',
+      'break the ice',
+      'blow off steam',
+      'under the weather'
+    ];
+    const formalWords = [
+      'furthermore',
+      'moreover',
+      'subsequently',
+      'therefore'
+    ];
+
+    /**
+     * Process the current text in the textarea. Generate two lists: one for
+     * grammar issues returned by Harper, and one for style suggestions based on
+     * the selected context (informal, formal or neutral). The lists are shown
+     * in the page below the textarea.
+     */
+    async function processText() {
+      const text = document.getElementById('writingInput').value;
+      const context = document.getElementById('contextSelect').value;
+
+      // Grammar suggestions
+      const grammarList = document.getElementById('grammarSuggestions');
+      grammarList.innerHTML = '<li><em>Checking…</em></li>';
+      const lints = await linter.lint(text);
+      grammarList.innerHTML = '';
+      if (lints.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'No grammar issues found.';
+        grammarList.appendChild(li);
+      } else {
+        lints.forEach(lint => {
+          const li = document.createElement('li');
+          li.textContent = lint.message();
+          grammarList.appendChild(li);
+        });
+      }
+
+      // Style suggestions (register/idioms). We'll scan the text for words/phrases
+      // defined above and produce messages based on the context.
+      const styleList = document.getElementById('styleSuggestions');
+      styleList.innerHTML = '';
+      const lower = text.toLowerCase();
+      // Helper to add a suggestion item
+      const addSuggestion = (message) => {
+        const li = document.createElement('li');
+        li.textContent = message;
+        styleList.appendChild(li);
+      };
+      // Check idioms
+      idioms.forEach(phrase => {
+        if (lower.includes(phrase)) {
+          if (context === 'informal') {
+            addSuggestion(`Great use of idiom “${phrase}” – idioms add colour to informal writing.`);
+          } else if (context === 'formal') {
+            addSuggestion(`Avoid idiom “${phrase}” in formal writing; use neutral vocabulary instead.`);
+          } else {
+            addSuggestion(`Consider whether idiom “${phrase}” suits your audience and task.`);
+          }
+        }
+      });
+      // Check formal words
+      formalWords.forEach(word => {
+        const pattern = new RegExp(`\\b${word}\\b`, 'i');
+        if (pattern.test(lower)) {
+          if (context === 'informal') {
+            addSuggestion(`The word “${word}” sounds formal. It may feel stiff in an email or review.`);
+          } else if (context === 'formal') {
+            addSuggestion(`Good use of formal connector “${word}”.`);
+          } else {
+            addSuggestion(`Ensure the word “${word}” fits your tone and audience.`);
+          }
+        }
+      });
+      // If no style suggestions found
+      if (!styleList.children.length) {
+        const li = document.createElement('li');
+        li.textContent = 'No register issues detected.';
+        styleList.appendChild(li);
+      }
+    }
+
+    // Attach event listeners when the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      const inputField = document.getElementById('writingInput');
+      const contextSelect = document.getElementById('contextSelect');
+      inputField.addEventListener('input', processText);
+      contextSelect.addEventListener('change', processText);
+      // Process default content on load
+      processText();
+    });
+  </script>
+
+  <style>
+    /* Additional styling for this page using CSS variables from styles.css */
+    .assistant-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: var(--card);
+      border-radius: var(--radius-md, 10px);
+      box-shadow: var(--shadow-md, 0 2px 8px rgba(0,0,0,0.1));
+      padding: 1.5rem;
+    }
+    .assistant-container h1 {
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 0.75rem;
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: var(--radius-sm, 5px);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    select {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: var(--radius-sm, 5px);
+    }
+    ul {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    li + li {
+      margin-top: 0.5rem;
+    }
+    .suggestions {
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="assistant-container">
+    <h1>Writing Assistant</h1>
+    <p>Use this tool to check your writing for grammatical errors and ensure your language matches the register required by the task. Choose the context to receive targeted feedback.</p>
+    <label for="contextSelect">Writing Context</label>
+    <select id="contextSelect">
+      <option value="informal">Informal Email / Review</option>
+      <option value="formal">Formal Report</option>
+      <option value="neutral" selected>Neutral / Academic</option>
+    </select>
+    <label for="writingInput">Your Text</label>
+    <textarea id="writingInput" placeholder="Type or paste your text here..."></textarea>
+
+    <div class="suggestions">
+      <h2>Grammar Suggestions</h2>
+      <ul id="grammarSuggestions">
+        <li>Start typing to see grammar suggestions…</li>
+      </ul>
+    </div>
+    <div class="suggestions">
+      <h2>Register &amp; Style Suggestions</h2>
+      <ul id="styleSuggestions">
+        <li>Start typing to see style suggestions…</li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- GoatCounter analytics script -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <!-- Simple client-side password protection. Requires correct username & password to access the page. -->
+  <script>
+    (function() {
+      function authenticate() {
+        if (!sessionStorage.getItem('igcse_esl_authenticated')) {
+          var user = prompt('Enter username:');
+          var pass = prompt('Enter password:');
+          if (user === 'igcse' && pass === 'esl2026') {
+            sessionStorage.setItem('igcse_esl_authenticated', 'true');
+          } else {
+            alert('Incorrect credentials.');
+            window.location.href = 'index.html';
+          }
+        }
+      }
+      authenticate();
+    })();
+  </script>
+</body>
+</html>
