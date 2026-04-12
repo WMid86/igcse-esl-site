@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>试卷二听力策略 – 剑桥IGCSE ESL</title>
+  <!-- 引入全局样式表 -->
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem 1rem 2rem;
+      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-top: 1rem;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+    .tips-list {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .practice-area {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-2);
+      border-radius: var(--radius);
+    }
+    .language-switcher {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+    .language-switcher a {
+      margin-left: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .language-switcher a.active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- 语言切换器：当前为中文页面 -->
+  <nav class="language-switcher">
+    <a href="paper2-listening-tips.html">EN</a> |
+    <a href="paper2-listening-tips-zh.html" class="active">中文</a>
+  </nav>
+  <h1>试卷二听力策略</h1>
+  <p>本页面提供IGCSE ESL听力部分的备考建议，帮助你提高听力技能，更好地准备考试。</p>
+  <h2>听力技巧</h2>
+  <ul class="tips-list">
+    <li><strong>广泛且经常地听：</strong>多听不同人的讲话和不同主题。听得越多，你的理解能力会越强【52116344114370†L1744-L1752】。</li>
+    <li><strong>练习听关键词或短语：</strong>尝试预测某个词或短语什么时候会出现，并集中注意力【52116344114370†L1815-L1826】。</li>
+    <li><strong>听的同时做笔记：</strong>考试中需要根据听力填空。练习一边听一边用单词或短语记录要点【52116344114370†L1828-L1834】。</li>
+    <li><strong>使用多样的音频资源：</strong>听播客、新闻报道和谈话，熟悉不同口音和背景。有条件的话，可使用往届考试音频或模拟任务练习。</li>
+  </ul>
+  <div class="practice-area">
+    <h3>练习建议</h3>
+    <p>找一段短的播客或对话，先整体听一遍掌握大意，再听一遍时记录关键点或填写笔记表格。然后将你的笔记与原音频进行对照。</p>
+  </div>
+  <script>
+    // 客户端密码保护（中文提示）
+    (function() {
+      const sessionKey = 'igcse_esl_authenticated';
+      if (!sessionStorage.getItem(sessionKey)) {
+        const username = prompt('请输入用户名以访问本页面');
+        const password = prompt('请输入密码');
+        if (username !== 'igcse' || password !== 'esl2026') {
+          alert('用户名或密码错误，请重试。');
+          window.location.reload();
+        } else {
+          sessionStorage.setItem(sessionKey, 'true');
+        }
+      }
+    })();
+  </script>
+  <!-- GoatCounter访问统计 -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
