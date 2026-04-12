@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Language Lab — Informal Email Writing Dashboard</title>
+<style>
+/* ===== CSS RESET & VARIABLES ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f6fb;--sidebar-bg:#1e293b;--sidebar-text:#cbd5e1;--sidebar-active:#6366f1;
+  --card:#fff;--card-border:#e2e8f0;--text:#1e293b;--text-light:#64748b;
+  --accent:#6366f1;--accent-light:#818cf8;--accent-bg:#eef2ff;
+  --green:#10b981;--green-bg:#ecfdf5;--red:#ef4444;--red-bg:#fef2f2;
+  --orange:#f59e0b;--orange-bg:#fffbeb;--blue:#3b82f6;--blue-bg:#eff6ff;
+  --pink:#ec4899;--pink-bg:#fdf2f8;--teal:#14b8a6;--teal-bg:#f0fdfa;
+  --radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:0 4px 12px rgba(0,0,0,.1);--transition:all .2s ease;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+/* ===== DARK MODE ===== */
+[data-theme="dark"]{
+  --bg:#0f172a;--sidebar-bg:#0b1120;--sidebar-text:#94a3b8;
+  --card:#1e293b;--card-border:#334155;--text:#e2e8f0;--text-light:#94a3b8;
+  --accent:#818cf8;--accent-light:#a5b4fc;--accent-bg:#1e1b4b;
+  --green-bg:#064e3b;--red-bg:#450a0a;--orange-bg:#451a03;--blue-bg:#172554;
+  --pink-bg:#500724;--teal-bg:#042f2e;
+  --shadow:0 1px 3px rgba(0,0,0,.3);--shadow-lg:0 4px 12px rgba(0,0,0,.4);
+}
+[data-theme="dark"] .wb-item-example{background:#1a2332}
+[data-theme="dark"] input,[data-theme="dark"] select,[data-theme="dark"] textarea{background:var(--card);color:var(--text);border-color:var(--card-border)}
+[data-theme="dark"] .quiz-option{background:var(--card)}
+[data-theme="dark"] .btn-secondary{background:var(--card-border);color:var(--text)}
+[data-theme="dark"] .btn-icon{background:var(--card-border);color:var(--text-light)}
+[data-theme="dark"] .tone-badge{background:#334155;color:#94a3b8}
+[data-theme="dark"] .sb-preview{background:#1a2332;border-color:var(--card-border)}
+
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;min-height:100vh;transition:background .3s,color .3s}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:240px;background:var(--sidebar-bg);color:var(--sidebar-text);padding:24px 16px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s ease}
+.sidebar-brand{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.sidebar-brand span{font-size:1.4rem}
+.sidebar-sub{font-size:.72rem;color:var(--sidebar-text);opacity:.6;margin-bottom:20px}
+.sidebar nav{flex:1}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:var(--radius-sm);cursor:pointer;font-size:.87rem;transition:var(--transition);margin-bottom:3px;color:var(--sidebar-text)}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:var(--sidebar-active);color:#fff;font-weight:600}
+.nav-icon{width:20px;text-align:center;font-size:1rem}
+.sidebar-footer{font-size:.68rem;opacity:.4;text-align:center;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+.theme-toggle{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:var(--radius-sm);cursor:pointer;font-size:.82rem;color:var(--sidebar-text);margin-bottom:6px;transition:var(--transition);border:none;background:none;width:100%;text-align:left}
+.theme-toggle:hover{background:rgba(255,255,255,.08);color:#fff}
+.menu-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--sidebar-bg);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 12px;font-size:1.2rem;cursor:pointer}
+
+/* ===== MAIN CONTENT ===== */
+.main{margin-left:240px;flex:1;padding:28px 32px;min-height:100vh;transition:background .3s}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-size:1.55rem;font-weight:700;margin-bottom:6px}
+.page-subtitle{color:var(--text-light);font-size:.88rem;margin-bottom:22px}
+
+/* ===== CARDS ===== */
+.card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);transition:var(--transition)}
+.card:hover{box-shadow:var(--shadow-lg)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat-number{font-size:1.8rem;font-weight:700;color:var(--accent)}
+.stat-label{font-size:.75rem;color:var(--text-light);margin-top:3px}
+
+/* ===== BADGES / TAGS ===== */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.badge-vocab{background:#dbeafe;color:#1d4ed8}
+.badge-collocation{background:#fce7f3;color:#be185d}
+.badge-idiom{background:#fef3c7;color:#92400e}
+.badge-phrase{background:#d1fae5;color:#065f46}
+.badge-stem{background:#ede9fe;color:#5b21b6}
+.badge-b1{background:#dbeafe;color:#1e40af}
+.badge-b1plus{background:#fef3c7;color:#92400e}
+.badge-b2{background:#fce7f3;color:#9d174d}
+.tone-badge{display:inline-block;padding:2px 7px;border-radius:12px;font-size:.64rem;font-weight:600;background:#f1f5f9;color:var(--text-light);margin-right:3px;margin-bottom:3px}
+.func-badge{display:inline-block;padding:2px 7px;border-radius:12px;font-size:.64rem;font-weight:600;background:var(--accent-bg);color:var(--accent);margin-right:3px;margin-bottom:3px}
+.srs-badge{display:inline-block;padding:2px 7px;border-radius:12px;font-size:.64rem;font-weight:700;margin-left:4px}
+.srs-new{background:#dbeafe;color:#1d4ed8}
+.srs-learning{background:#fef3c7;color:#92400e}
+.srs-review{background:#d1fae5;color:#065f46}
+.srs-mastered{background:#ede9fe;color:#5b21b6}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--radius-sm);font-size:.84rem;font-weight:600;border:none;cursor:pointer;transition:var(--transition);font-family:var(--font)}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-light)}
+.btn-secondary{background:#f1f5f9;color:var(--text)}.btn-secondary:hover{background:#e2e8f0}
+.btn-success{background:var(--green);color:#fff}.btn-success:hover{opacity:.9}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{opacity:.9}
+.btn-sm{padding:6px 12px;font-size:.76rem}
+.btn-icon{width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:none;cursor:pointer;transition:var(--transition);background:#f1f5f9;color:var(--text-light);font-size:.85rem}
+.btn-icon:hover{background:#e2e8f0;color:var(--text)}
+.btn-icon.active{background:var(--orange-bg);color:var(--orange)}
+.btn-audio{width:28px;height:28px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:none;cursor:pointer;background:var(--accent-bg);color:var(--accent);font-size:.78rem;transition:var(--transition)}
+.btn-audio:hover{background:var(--accent);color:#fff}
+
+/* ===== FORMS ===== */
+input,select,textarea{font-family:var(--font);font-size:.86rem;padding:9px 13px;border:1px solid var(--card-border);border-radius:var(--radius-sm);outline:none;transition:var(--transition);width:100%;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+select{cursor:pointer}
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:center}
+.filter-bar input,.filter-bar select{width:auto;min-width:130px;flex:1;max-width:200px}
+.search-box{position:relative;flex:2;min-width:180px;max-width:340px}
+.search-box input{padding-left:34px}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:.85rem}
+
+/* ===== WORD BANK ITEMS ===== */
+.wb-item{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:15px 17px;box-shadow:var(--shadow);transition:var(--transition);position:relative}
+.wb-item:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.wb-item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;gap:8px}
+.wb-item-text{font-size:1.02rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.wb-item-meaning{color:var(--text-light);font-size:.82rem;margin-bottom:7px;line-height:1.45}
+.wb-item-example{background:#f8fafc;border-left:3px solid var(--accent);padding:7px 11px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.8rem;color:var(--text);margin-bottom:7px;font-style:italic;line-height:1.5}
+.wb-item-mistake{background:var(--red-bg);border-left:3px solid var(--red);padding:5px 9px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.76rem;color:#991b1b;margin-bottom:7px;line-height:1.4}
+[data-theme="dark"] .wb-item-mistake{color:#fca5a5}
+.wb-item-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.wb-actions{display:flex;gap:5px;flex-shrink:0}
+.pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;flex-wrap:wrap}
+.pagination button{min-width:36px;height:36px}
+.page-info{font-size:.82rem;color:var(--text-light)}
+
+/* ===== FLASHCARD ===== */
+.flashcard-container{max-width:520px;margin:0 auto}
+.flashcard{perspective:1000px;height:260px;cursor:pointer;margin-bottom:18px}
+.flashcard-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;box-shadow:var(--shadow-lg)}
+.flashcard-front{background:linear-gradient(135deg,var(--accent),var(--accent-light));color:#fff}
+.flashcard-back{background:var(--card);border:2px solid var(--accent);transform:rotateY(180deg);color:var(--text)}
+.flashcard-front h2{font-size:1.5rem;margin-bottom:8px}
+.flashcard-front .flashcard-hint{font-size:.8rem;opacity:.7;margin-top:12px}
+.flashcard-back h3{font-size:1.05rem;margin-bottom:10px;color:var(--accent)}
+.flashcard-back p{font-size:.88rem;line-height:1.5;color:var(--text-light)}
+.flashcard-back .fc-example{font-style:italic;margin-top:10px;font-size:.82rem;padding:8px 12px;background:var(--accent-bg);border-radius:var(--radius-sm)}
+.srs-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.srs-btn{padding:10px 20px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-weight:600;font-size:.84rem;transition:var(--transition);font-family:var(--font)}
+.srs-btn.again{background:var(--red);color:#fff}
+.srs-btn.hard{background:var(--orange);color:#fff}
+.srs-btn.good{background:var(--green);color:#fff}
+.srs-btn.easy{background:var(--accent);color:#fff}
+.srs-btn:hover{opacity:.85;transform:translateY(-1px)}
+.srs-info{text-align:center;font-size:.78rem;color:var(--text-light);margin-top:10px}
+
+/* ===== QUIZ ===== */
+.quiz-setup{max-width:600px}
+.quiz-question{max-width:700px}
+.quiz-prompt{font-size:1.1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-options{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.quiz-option{padding:13px 17px;border:2px solid var(--card-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);font-size:.9rem;line-height:1.4;background:var(--card)}
+.quiz-option:hover{border-color:var(--accent);background:var(--accent-bg)}
+.quiz-option.selected{border-color:var(--accent);background:var(--accent-bg)}
+.quiz-option.correct{border-color:var(--green);background:var(--green-bg)}
+.quiz-option.incorrect{border-color:var(--red);background:var(--red-bg)}
+.quiz-option.reveal-correct{border-color:var(--green);background:var(--green-bg)}
+.quiz-feedback{padding:16px;border-radius:var(--radius);margin-top:12px;line-height:1.6;font-size:.86rem}
+.quiz-feedback.correct-fb{background:var(--green-bg);border:1px solid #a7f3d0}
+.quiz-feedback.incorrect-fb{background:var(--red-bg);border:1px solid #fecaca}
+[data-theme="dark"] .quiz-feedback.correct-fb{border-color:#065f46}
+[data-theme="dark"] .quiz-feedback.incorrect-fb{border-color:#450a0a}
+.quiz-feedback h4{margin-bottom:5px;font-size:.92rem}
+.quiz-feedback p{margin-bottom:5px}
+.quiz-score-bar{height:7px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin-bottom:10px}
+[data-theme="dark"] .quiz-score-bar{background:#334155}
+.quiz-score-fill{height:100%;background:var(--green);border-radius:20px;transition:width .4s ease}
+.quiz-counter{font-size:.78rem;color:var(--text-light);margin-bottom:14px}
+
+/* ===== SENTENCE BUILDER ===== */
+.sb-slots{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.sb-slot{flex:1;min-width:170px}
+.sb-slot label{display:block;font-size:.76rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.sb-preview{background:#f8fafc;border:2px dashed var(--card-border);border-radius:var(--radius);padding:16px;min-height:56px;font-size:.95rem;line-height:1.6;margin-bottom:14px;transition:var(--transition)}
+.sb-preview.filled{border-style:solid;border-color:var(--accent);background:var(--accent-bg)}
+.sb-result{padding:14px;border-radius:var(--radius);font-size:.86rem;line-height:1.6}
+.sb-result.natural{background:var(--green-bg);border:1px solid #a7f3d0}
+.sb-result.awkward{background:var(--orange-bg);border:1px solid #fde68a}
+.sb-result.poor{background:var(--red-bg);border:1px solid #fecaca}
+
+/* ===== PATTERN TRAINER ===== */
+.pattern-group{margin-bottom:22px}
+.pattern-group-title{font-size:.95rem;font-weight:700;margin-bottom:10px;color:var(--accent);display:flex;align-items:center;gap:8px}
+.pattern-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:13px 16px;margin-bottom:9px;cursor:pointer;transition:var(--transition)}
+.pattern-card:hover{box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.pattern-card.expanded{border-color:var(--accent)}
+.pattern-text{font-weight:600;font-size:.92rem;margin-bottom:3px}
+.pattern-examples{margin-top:9px;padding-top:9px;border-top:1px solid var(--card-border)}
+.pattern-example{background:#f8fafc;padding:7px 11px;border-radius:var(--radius-sm);margin-bottom:5px;font-size:.82rem;font-style:italic;line-height:1.45}
+[data-theme="dark"] .pattern-example{background:#1a2332}
+.pattern-practice{margin-top:9px;padding:10px;background:var(--accent-bg);border-radius:var(--radius-sm);font-size:.82rem;line-height:1.5}
+
+/* ===== PROGRESS ===== */
+.progress-bar{height:9px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin-top:5px}
+[data-theme="dark"] .progress-bar{background:#334155}
+.progress-fill{height:100%;border-radius:20px;transition:width .5s ease}
+.progress-fill.green{background:var(--green)}
+.progress-fill.accent{background:var(--accent)}
+.progress-fill.orange{background:var(--orange)}
+.revision-list{max-height:280px;overflow-y:auto}
+.revision-item{padding:9px 13px;border-bottom:1px solid var(--card-border);font-size:.83rem;display:flex;justify-content:space-between;align-items:center}
+.sparkline-container{padding:10px 0}
+.sparkline-container svg{width:100%;height:60px}
+
+/* ===== TEACHER MODE ===== */
+.teacher-form{max-width:640px}
+.form-group{margin-bottom:13px}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--text-light);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.teacher-item-list{max-height:400px;overflow-y:auto;border:1px solid var(--card-border);border-radius:var(--radius);margin-bottom:14px}
+.teacher-item{padding:9px 13px;border-bottom:1px solid var(--card-border);display:flex;justify-content:space-between;align-items:center;font-size:.83rem}
+.teacher-item:last-child{border-bottom:none}
+.teacher-item:hover{background:rgba(99,102,241,.04)}
+
+/* ===== MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);padding:28px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--sidebar-bg);color:#fff;padding:12px 20px;border-radius:var(--radius-sm);font-size:.84rem;z-index:600;transform:translateY(80px);opacity:0;transition:all .3s ease;max-width:360px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ===== BACKUP BANNER ===== */
+.backup-banner{background:var(--accent-bg);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:16px;font-size:.82rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+[data-theme="dark"]::-webkit-scrollbar-thumb{background:#475569}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .menu-toggle{display:block}.main{margin-left:0;padding:18px 14px;padding-top:54px}
+  .filter-bar{flex-direction:column}.filter-bar input,.filter-bar select{max-width:100%;min-width:100%}
+  .search-box{max-width:100%;min-width:100%}.sb-slots{flex-direction:column}.form-row{grid-template-columns:1fr}
+  .flashcard{height:220px}
+}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="sidebar-brand"><span>&#9993;</span> Email Language Lab</div>
+  <div class="sidebar-sub">Informal Email Writing Skills</div>
+  <nav>
+    <div class="nav-item active" data-page="dashboard"><span class="nav-icon">&#128202;</span> Dashboard</div>
+    <div class="nav-item" data-page="wordbank"><span class="nav-icon">&#128218;</span> Word Bank</div>
+    <div class="nav-item" data-page="flashcards"><span class="nav-icon">&#127183;</span> Flashcard Review</div>
+    <div class="nav-item" data-page="quiz"><span class="nav-icon">&#129513;</span> Quiz Mode</div>
+    <div class="nav-item" data-page="patterns"><span class="nav-icon">&#9999;</span> Sentence Patterns</div>
+    <div class="nav-item" data-page="builder"><span class="nav-icon">&#128295;</span> Sentence Builder</div>
+    <div class="nav-item" data-page="progress"><span class="nav-icon">&#128200;</span> My Progress</div>
+    <div class="nav-item" data-page="teacher"><span class="nav-icon">&#127891;</span> Teacher Mode</div>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()"><span id="theme-icon">&#127769;</span> <span id="theme-label">Dark Mode</span></button>
+  <div class="sidebar-footer">Built for B1+ / B2 learners<br>Works offline &middot; No backend needed</div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <h1 class="page-title">Welcome to Email Language Lab</h1>
+    <p class="page-subtitle">Your interactive toolkit for writing great informal emails in English.</p>
+    <div id="dash-backup"></div>
+    <div class="stat-grid" id="dash-stats"></div>
+    <div class="card-grid">
+      <div class="card" style="cursor:pointer" onclick="navigateTo('wordbank')"><h3>&#128218; Word Bank</h3><p style="color:var(--text-light);font-size:.86rem;margin-top:5px">Browse and study useful email language with search, filters, and audio.</p></div>
+      <div class="card" style="cursor:pointer" onclick="navigateTo('flashcards')"><h3>&#127183; Flashcard Review</h3><p style="color:var(--text-light);font-size:.86rem;margin-top:5px">Study with flip cards and spaced repetition. Items resurface at the right time.</p></div>
+      <div class="card" style="cursor:pointer" onclick="navigateTo('quiz')"><h3>&#129513; Quiz Mode</h3><p style="color:var(--text-light);font-size:.86rem;margin-top:5px">Test yourself with seven quiz types and hand-crafted distractors.</p></div>
+      <div class="card" style="cursor:pointer" onclick="navigateTo('patterns')"><h3>&#9999; Sentence Patterns</h3><p style="color:var(--text-light);font-size:.86rem;margin-top:5px">Study sentence models grouped by purpose, with examples and practice tasks.</p></div>
+      <div class="card" style="cursor:pointer" onclick="navigateTo('builder')"><h3>&#128295; Sentence Builder</h3><p style="color:var(--text-light);font-size:.86rem;margin-top:5px">Build email sentences from chunks and get feedback on naturalness.</p></div>
+    </div>
+    <div class="card" style="margin-top:8px" id="dash-due-card"></div>
+  </div>
+
+  <!-- WORD BANK -->
+  <div class="page" id="page-wordbank">
+    <h1 class="page-title">Word Bank</h1>
+    <p class="page-subtitle">Explore <span id="wb-count">0</span> language items for informal emails. <span style="font-size:.78rem;color:var(--text-light)">Click &#128264; to hear pronunciation.</span></p>
+    <div class="filter-bar">
+      <div class="search-box"><span class="search-icon">&#128269;</span><input type="text" id="wb-search" placeholder="Search items..."></div>
+      <select id="wb-cat"><option value="">All categories</option><option value="vocabulary">Vocabulary</option><option value="collocation">Collocation</option><option value="idiom">Idiom</option><option value="phrase">Phrase</option><option value="sentence stem">Sentence stem</option></select>
+      <select id="wb-tone"><option value="">All tones</option></select>
+      <select id="wb-func"><option value="">All functions</option></select>
+      <select id="wb-level"><option value="">All levels</option><option value="B1">B1</option><option value="B1+">B1+</option><option value="B2">B2</option></select>
+      <select id="wb-status"><option value="">All items</option><option value="fav">Favourites</option><option value="diff">Difficult</option><option value="mastered">Mastered</option><option value="unmastered">Not mastered</option><option value="due">Due for review</option></select>
+    </div>
+    <div class="card-grid" id="wb-grid"></div>
+    <p id="wb-empty" style="display:none;color:var(--text-light);text-align:center;padding:36px 0;font-size:.92rem">No items match your filters. Try broadening your search.</p>
+    <div class="pagination" id="wb-pagination"></div>
+  </div>
+
+  <!-- FLASHCARD REVIEW -->
+  <div class="page" id="page-flashcards">
+    <h1 class="page-title">Flashcard Review</h1>
+    <p class="page-subtitle">Spaced repetition helps you remember. Cards resurface when they are due.</p>
+    <div id="fc-area"></div>
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div class="page" id="page-quiz">
+    <h1 class="page-title">Quiz Mode</h1>
+    <p class="page-subtitle">Test your informal email language skills.</p>
+    <div id="quiz-setup" class="quiz-setup">
+      <div class="card">
+        <h3 style="margin-bottom:12px">Choose your quiz</h3>
+        <div class="form-group"><label>Quiz type</label>
+          <select id="quiz-type-select">
+            <option value="fill">A. Best word for the sentence</option>
+            <option value="purpose">B. Best phrase for the purpose</option>
+            <option value="tone">C. Best sentence for the tone</option>
+            <option value="collocation">D. Collocation match</option>
+            <option value="meaning">E. Meaning match</option>
+            <option value="error">F. Error awareness</option>
+            <option value="function">G. Function choice</option>
+            <option value="mixed" selected>Mixed (random types)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Number of questions</label><select id="quiz-num"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option></select></div>
+          <div class="form-group"><label>Level</label><select id="quiz-level"><option value="">All levels</option><option value="B1">B1</option><option value="B1+">B1+</option><option value="B2">B2</option></select></div>
+        </div>
+        <div class="form-group"><label style="display:flex;align-items:center;gap:6px;text-transform:none;font-size:.84rem"><input type="checkbox" id="quiz-srs-priority" checked style="width:auto"> Prioritise items due for SRS review</label></div>
+        <button class="btn btn-primary" onclick="startQuiz()">Start Quiz</button>
+      </div>
+    </div>
+    <div id="quiz-area" style="display:none"></div>
+  </div>
+
+  <!-- SENTENCE PATTERNS -->
+  <div class="page" id="page-patterns">
+    <h1 class="page-title">Sentence Pattern Trainer</h1>
+    <p class="page-subtitle">Study useful sentence models for different parts of an informal email.</p>
+    <div id="patterns-content"></div>
+  </div>
+
+  <!-- SENTENCE BUILDER -->
+  <div class="page" id="page-builder">
+    <h1 class="page-title">Sentence Builder</h1>
+    <p class="page-subtitle">Build email sentences from chunks and check if they sound natural.</p>
+    <div class="card">
+      <div class="sb-slots">
+        <div class="sb-slot"><label>Opening</label><select id="sb-opening"><option value="">Choose...</option></select></div>
+        <div class="sb-slot"><label>Linking</label><select id="sb-linking"><option value="">Choose...</option></select></div>
+        <div class="sb-slot"><label>Feeling / Reaction</label><select id="sb-feeling"><option value="">Choose...</option></select></div>
+        <div class="sb-slot"><label>Key Content</label><select id="sb-content"><option value="">Choose...</option></select></div>
+        <div class="sb-slot"><label>Closing</label><select id="sb-closing"><option value="">Choose...</option></select></div>
+      </div>
+      <h4 style="font-size:.8rem;color:var(--text-light);margin-bottom:7px">YOUR SENTENCE:</h4>
+      <div class="sb-preview" id="sb-preview">Select chunks above to build a sentence...</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="checkSentence()">Check Sentence</button>
+        <button class="btn btn-secondary" onclick="resetBuilder()">Reset</button>
+        <button class="btn btn-secondary" onclick="randomBuilder()">Random Fill</button>
+      </div>
+      <div id="sb-result"></div>
+    </div>
+  </div>
+
+  <!-- MY PROGRESS -->
+  <div class="page" id="page-progress">
+    <h1 class="page-title">My Progress</h1>
+    <p class="page-subtitle">Track your learning journey.</p>
+    <div class="stat-grid" id="progress-stats"></div>
+    <div class="card-grid">
+      <div class="card"><h3 style="margin-bottom:10px">Accuracy Over Time</h3><div class="sparkline-container" id="sparkline-area"></div></div>
+      <div class="card"><h3 style="margin-bottom:10px">SRS Status</h3><div id="srs-summary"></div></div>
+    </div>
+    <div class="card-grid" style="margin-top:4px">
+      <div class="card"><h3 style="margin-bottom:10px">Accuracy by Category</h3><div id="prog-cat-bars"></div></div>
+      <div class="card"><h3 style="margin-bottom:10px">Accuracy by Function</h3><div id="prog-func-bars"></div></div>
+    </div>
+    <div class="card" style="margin-top:4px"><h3 style="margin-bottom:10px">Recommended Revision Items</h3><div class="revision-list" id="revision-list"></div></div>
+  </div>
+
+  <!-- TEACHER MODE -->
+  <div class="page" id="page-teacher">
+    <h1 class="page-title">Teacher Mode</h1>
+    <p class="page-subtitle">Add, edit, delete items, and manage the language bank.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+      <button class="btn btn-primary" onclick="showAddForm()">+ Add Item</button>
+      <button class="btn btn-secondary" onclick="exportBank()">Export JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">Import JSON</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBank(event)">
+      <button class="btn btn-secondary btn-sm" onclick="exportBackup()">Full Backup</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('restore-file').click()">Restore Backup</button>
+      <input type="file" id="restore-file" accept=".json" style="display:none" onchange="restoreBackup(event)">
+      <button class="btn btn-danger btn-sm" onclick="resetProgress()">Reset Progress</button>
+      <button class="btn btn-danger btn-sm" onclick="resetToDefault()">Reset to Default Bank</button>
+    </div>
+    <div class="filter-bar">
+      <div class="search-box"><span class="search-icon">&#128269;</span><input type="text" id="teacher-search" placeholder="Search items..." oninput="renderTeacherList()"></div>
+      <select id="teacher-cat-filter" onchange="renderTeacherList()"><option value="">All categories</option><option value="vocabulary">Vocabulary</option><option value="collocation">Collocation</option><option value="idiom">Idiom</option><option value="phrase">Phrase</option><option value="sentence stem">Sentence stem</option></select>
+    </div>
+    <div class="teacher-item-list" id="teacher-list"></div>
+    <div id="teacher-form-area" style="display:none">
+      <div class="card teacher-form">
+        <h3 id="teacher-form-title" style="margin-bottom:14px">Add New Item</h3>
+        <div class="form-group"><label>Item text</label><input type="text" id="tf-text"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Category</label><select id="tf-category"><option value="vocabulary">Vocabulary</option><option value="collocation">Collocation</option><option value="idiom">Idiom</option><option value="phrase">Phrase</option><option value="sentence stem">Sentence stem</option></select></div>
+          <div class="form-group"><label>Level</label><select id="tf-level"><option value="B1">B1</option><option value="B1+">B1+</option><option value="B2">B2</option></select></div>
+        </div>
+        <div class="form-group"><label>Meaning</label><input type="text" id="tf-meaning"></div>
+        <div class="form-group"><label>Example sentence</label><textarea id="tf-example" rows="2"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Tone</label><select id="tf-tone"><option value="casual">Casual</option><option value="warm">Warm</option><option value="reassuring">Reassuring</option><option value="excited">Excited</option><option value="apologetic">Apologetic</option><option value="helpful">Helpful</option><option value="reflective">Reflective</option></select></div>
+          <div class="form-group"><label>Function</label><select id="tf-function"><option value="greeting">Greeting</option><option value="opening">Opening</option><option value="explaining">Explaining</option><option value="reacting">Reacting</option><option value="advising">Advising</option><option value="suggesting">Suggesting</option><option value="inviting">Inviting</option><option value="apologising">Apologising</option><option value="closing">Closing</option></select></div>
+        </div>
+        <div class="form-group"><label>Keywords (comma separated)</label><input type="text" id="tf-keywords"></div>
+        <div class="form-group"><label>Common mistake (optional)</label><input type="text" id="tf-mistake"></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary" onclick="saveItem()">Save</button>
+          <button class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   EMAIL LANGUAGE LAB v2 — ENHANCED WITH SRS, FLASHCARDS, AUDIO & MORE
+   =====================================================================
+   TEACHER NOTES — HOW TO ADD ITEMS:
+   Edit the STARTER_DATA array below. Each item needs:
+     text       - the language item (string)
+     category   - vocabulary | collocation | idiom | phrase | sentence stem
+     meaning    - a short, learner-friendly explanation
+     example    - an example sentence suitable for an email to a friend
+     tone       - casual | warm | reassuring | excited | apologetic | helpful | reflective
+     func       - greeting | opening | explaining | reacting | advising | suggesting | inviting | apologising | closing
+     level      - B1 | B1+ | B2
+     keywords   - array of keyword strings for search
+     mistake    - (optional) a common mistake note
+   ===================================================================== */
+
+const STARTER_DATA = [
+  // ===== VOCABULARY (30 items) =====
+  {text:"catch up",category:"vocabulary",meaning:"To talk with someone after not seeing them for a while, to exchange news.",example:"It was so nice to catch up with you last weekend — we should do it more often!",tone:"warm",func:"opening",level:"B1",keywords:["meet","talk","news"],mistake:"Don't say 'catch up with your news' — say 'catch up on your news' or just 'catch up'."},
+  {text:"grateful",category:"vocabulary",meaning:"Feeling thankful for something someone did.",example:"I'm really grateful for all your help with the move — I couldn't have done it without you.",tone:"warm",func:"reacting",level:"B1",keywords:["thankful","appreciate"],mistake:""},
+  {text:"thrilled",category:"vocabulary",meaning:"Extremely happy and excited about something.",example:"I was absolutely thrilled when I heard you got the job — congratulations!",tone:"excited",func:"reacting",level:"B1+",keywords:["happy","excited","delighted"],mistake:"'Thrilled' is stronger than 'happy'. Don't overuse it for small things."},
+  {text:"relieved",category:"vocabulary",meaning:"Feeling glad because something stressful has ended or didn't happen.",example:"I was so relieved when the exam results came out — I actually passed!",tone:"reassuring",func:"reacting",level:"B1+",keywords:["relief","stress","glad"],mistake:""},
+  {text:"hesitant",category:"vocabulary",meaning:"Feeling unsure or slow to act because you are nervous or uncertain.",example:"I was a bit hesitant at first, but I'm really glad I signed up for the course.",tone:"reflective",func:"explaining",level:"B2",keywords:["unsure","nervous","doubtful"],mistake:"Don't confuse 'hesitant' (adjective) with 'hesitate' (verb)."},
+  {text:"overwhelmed",category:"vocabulary",meaning:"Having too many things to deal with, or feeling strong emotions.",example:"To be honest, I've been feeling a bit overwhelmed with work lately, but things are getting better.",tone:"reflective",func:"explaining",level:"B2",keywords:["stress","busy","emotions"],mistake:""},
+  {text:"devastated",category:"vocabulary",meaning:"Extremely upset and shocked.",example:"I was devastated when I found out the concert was cancelled — I'd been looking forward to it for months.",tone:"reflective",func:"reacting",level:"B2",keywords:["upset","shocked","sad"],mistake:"Too strong for small disappointments. Use 'disappointed' for minor things."},
+  {text:"keen",category:"vocabulary",meaning:"Very interested and enthusiastic about something.",example:"I'm really keen to try that new restaurant you mentioned — shall we go this weekend?",tone:"excited",func:"suggesting",level:"B1+",keywords:["interested","enthusiastic","eager"],mistake:"In British English: 'keen on' + noun/gerund. 'I'm keen on hiking.'"},
+  {text:"tricky",category:"vocabulary",meaning:"Difficult in a complicated way.",example:"The instructions were a bit tricky, but I figured it out in the end.",tone:"casual",func:"explaining",level:"B1",keywords:["difficult","hard","complicated"],mistake:""},
+  {text:"handy",category:"vocabulary",meaning:"Useful and convenient.",example:"That app you recommended was really handy — it saved me so much time.",tone:"casual",func:"reacting",level:"B1",keywords:["useful","convenient","practical"],mistake:""},
+  {text:"nightmare",category:"vocabulary",meaning:"(informal) A very unpleasant or difficult experience.",example:"Getting to the airport was an absolute nightmare — the traffic was terrible!",tone:"casual",func:"explaining",level:"B1+",keywords:["terrible","awful","disaster"],mistake:"Used informally to mean 'very bad experience', not a bad dream."},
+  {text:"gorgeous",category:"vocabulary",meaning:"Extremely beautiful or attractive.",example:"The hotel was gorgeous — you would have loved it!",tone:"excited",func:"reacting",level:"B1",keywords:["beautiful","lovely","stunning"],mistake:""},
+  {text:"loads of",category:"vocabulary",meaning:"(informal) A lot of; many.",example:"There were loads of fun activities at the festival, so we never got bored.",tone:"casual",func:"explaining",level:"B1",keywords:["many","lots","plenty"],mistake:"Informal — don't use in formal writing. Fine for emails to friends."},
+  {text:"a shame",category:"vocabulary",meaning:"Something disappointing or unfortunate.",example:"It's such a shame you couldn't come to the party — everyone was asking about you!",tone:"warm",func:"reacting",level:"B1",keywords:["pity","disappointing","unfortunate"],mistake:""},
+  {text:"odd",category:"vocabulary",meaning:"Strange or unusual.",example:"Something odd happened at school today — you won't believe it!",tone:"casual",func:"opening",level:"B1",keywords:["strange","unusual","weird"],mistake:""},
+  {text:"apparently",category:"vocabulary",meaning:"According to what you have heard, though not certain.",example:"Apparently, they're opening a new swimming pool near us — that would be great!",tone:"casual",func:"explaining",level:"B1+",keywords:["rumour","heard","seems"],mistake:""},
+  {text:"brilliant",category:"vocabulary",meaning:"Extremely good or impressive.",example:"The show was absolutely brilliant — I'd definitely go and see it again.",tone:"excited",func:"reacting",level:"B1",keywords:["great","amazing","fantastic"],mistake:""},
+  {text:"awkward",category:"vocabulary",meaning:"Making you feel embarrassed or uncomfortable.",example:"It was a bit awkward when I forgot his name, but he was really nice about it.",tone:"casual",func:"explaining",level:"B1+",keywords:["embarrassing","uncomfortable"],mistake:""},
+  {text:"hectic",category:"vocabulary",meaning:"Very busy and full of activity.",example:"Things have been really hectic at work this month, but they should calm down soon.",tone:"casual",func:"explaining",level:"B1+",keywords:["busy","crazy","intense"],mistake:""},
+  {text:"worth",category:"vocabulary",meaning:"Having value; deserving of time or effort.",example:"The museum is definitely worth a visit if you're ever in the city.",tone:"helpful",func:"advising",level:"B1",keywords:["value","deserve","recommend"],mistake:"'Worth' + gerund or noun: 'worth visiting', 'worth a try'. NOT 'worth to visit'."},
+  {text:"massive",category:"vocabulary",meaning:"Extremely large or important.",example:"It was a massive surprise when she walked in — I had no idea she was coming!",tone:"excited",func:"reacting",level:"B1",keywords:["huge","big","enormous"],mistake:""},
+  {text:"stunning",category:"vocabulary",meaning:"Extremely beautiful or impressive.",example:"The views from the hotel were stunning — I took about a hundred photos!",tone:"excited",func:"reacting",level:"B1+",keywords:["beautiful","amazing","impressive"],mistake:""},
+  {text:"rough",category:"vocabulary",meaning:"Difficult or unpleasant (informal).",example:"I've had a bit of a rough week, but talking to you always cheers me up.",tone:"reflective",func:"explaining",level:"B1+",keywords:["difficult","hard","tough"],mistake:""},
+  {text:"spot on",category:"vocabulary",meaning:"Exactly right or accurate.",example:"Your recommendation was spot on — the restaurant was amazing!",tone:"casual",func:"reacting",level:"B1+",keywords:["correct","right","accurate"],mistake:""},
+  {text:"get-together",category:"vocabulary",meaning:"An informal social gathering.",example:"We're having a little get-together at my place on Friday — you should come!",tone:"casual",func:"inviting",level:"B1",keywords:["party","gathering","social"],mistake:"Hyphenated as a noun. Verb form: 'get together' (no hyphen)."},
+  {text:"downside",category:"vocabulary",meaning:"A disadvantage or negative aspect.",example:"The only downside of the apartment is that it's quite far from the centre.",tone:"casual",func:"explaining",level:"B1+",keywords:["negative","disadvantage","problem"],mistake:""},
+  {text:"hands down",category:"vocabulary",meaning:"Without any doubt; clearly the best.",example:"That was hands down the best meal I've ever had!",tone:"excited",func:"reacting",level:"B2",keywords:["definitely","clearly","best"],mistake:""},
+  {text:"gutted",category:"vocabulary",meaning:"(British informal) Very disappointed.",example:"I was absolutely gutted when the match was cancelled — I'd been looking forward to it all week.",tone:"reflective",func:"reacting",level:"B1+",keywords:["disappointed","upset","sad"],mistake:"Very informal British English."},
+  {text:"dodgy",category:"vocabulary",meaning:"(British informal) Suspicious or of poor quality.",example:"We went to this dodgy-looking cafe, but the food was actually delicious!",tone:"casual",func:"explaining",level:"B2",keywords:["suspicious","bad","unreliable"],mistake:""},
+  {text:"chuffed",category:"vocabulary",meaning:"(British informal) Very pleased and happy.",example:"I'm dead chuffed with my exam results — all that revision paid off!",tone:"excited",func:"reacting",level:"B2",keywords:["happy","pleased","proud"],mistake:""},
+
+  // ===== COLLOCATIONS (26 items) =====
+  {text:"make a big difference",category:"collocation",meaning:"To have an important positive effect.",example:"Your advice really made a big difference — I felt much more confident after talking to you.",tone:"warm",func:"reacting",level:"B1",keywords:["impact","effect","help"],mistake:"Don't say 'do a big difference' — the verb is always 'make'."},
+  {text:"have a great time",category:"collocation",meaning:"To enjoy an experience very much.",example:"We had a great time at the beach — the weather was perfect!",tone:"excited",func:"explaining",level:"B1",keywords:["enjoy","fun","experience"],mistake:"Don't say 'make a great time'. Always 'have' a great time."},
+  {text:"give it a try",category:"collocation",meaning:"To attempt something, especially something new.",example:"I know you're nervous about the dance class, but you should give it a try — you might love it!",tone:"helpful",func:"advising",level:"B1",keywords:["attempt","try","experiment"],mistake:""},
+  {text:"take your time",category:"collocation",meaning:"To do something without hurrying.",example:"Take your time deciding — there's no rush at all.",tone:"reassuring",func:"advising",level:"B1",keywords:["slow","patient","relax"],mistake:""},
+  {text:"keep in touch",category:"collocation",meaning:"To stay in contact with someone.",example:"It was lovely seeing you — let's keep in touch!",tone:"warm",func:"closing",level:"B1",keywords:["contact","stay connected","write"],mistake:""},
+  {text:"get the hang of",category:"collocation",meaning:"To learn how to do something after some practice.",example:"I found the guitar really hard at first, but I'm starting to get the hang of it.",tone:"casual",func:"explaining",level:"B1+",keywords:["learn","improve","understand"],mistake:"Always 'get the hang of' — not 'get the hang on'."},
+  {text:"come across",category:"collocation",meaning:"To find something or meet someone by chance.",example:"I came across this amazing cafe near the river — we should go there together!",tone:"casual",func:"explaining",level:"B1+",keywords:["find","discover","encounter"],mistake:"Also means 'to give an impression': 'She comes across as friendly.'"},
+  {text:"look on the bright side",category:"collocation",meaning:"To focus on the positive aspects of a difficult situation.",example:"I know you didn't get the first prize, but look on the bright side — you still made it to the final!",tone:"reassuring",func:"advising",level:"B2",keywords:["positive","optimistic","hopeful"],mistake:""},
+  {text:"burst out laughing",category:"collocation",meaning:"To suddenly start laughing loudly.",example:"When he told us what happened, we all burst out laughing — it was hilarious!",tone:"excited",func:"reacting",level:"B1+",keywords:["laugh","funny","hilarious"],mistake:"Don't say 'burst in laughing'. It's 'burst out laughing'."},
+  {text:"lost track of time",category:"collocation",meaning:"To not notice how much time has passed.",example:"Sorry for not replying sooner — I completely lost track of time this week.",tone:"apologetic",func:"apologising",level:"B1+",keywords:["time","forgot","busy"],mistake:""},
+  {text:"make up your mind",category:"collocation",meaning:"To finally decide something.",example:"I still haven't made up my mind about the holiday — there are too many options!",tone:"casual",func:"explaining",level:"B1+",keywords:["decide","choose","decision"],mistake:""},
+  {text:"come in handy",category:"collocation",meaning:"To be useful at some point.",example:"That phrasebook you gave me really came in handy during the trip.",tone:"warm",func:"reacting",level:"B1+",keywords:["useful","helpful","practical"],mistake:""},
+  {text:"get along with",category:"collocation",meaning:"To have a friendly relationship with someone.",example:"I get along really well with my new flatmate — she's so easy to talk to.",tone:"casual",func:"explaining",level:"B1",keywords:["relationship","friendly","like"],mistake:""},
+  {text:"sort out",category:"collocation",meaning:"To organise or solve something.",example:"Don't worry — I'm sure we can sort out the travel arrangements this weekend.",tone:"reassuring",func:"advising",level:"B1",keywords:["organise","fix","solve"],mistake:""},
+  {text:"run into",category:"collocation",meaning:"To meet someone unexpectedly.",example:"You'll never guess who I ran into at the supermarket — our old teacher!",tone:"excited",func:"explaining",level:"B1+",keywords:["meet","unexpected","surprise"],mistake:"Don't say 'run into with someone'. Just 'run into someone'."},
+  {text:"feel like",category:"collocation",meaning:"To want to do something.",example:"I don't really feel like going out tonight — do you fancy a movie at home instead?",tone:"casual",func:"suggesting",level:"B1",keywords:["want","desire","mood"],mistake:"'Feel like' + gerund: 'feel like going', NOT 'feel like to go'."},
+  {text:"end up",category:"collocation",meaning:"To finally be in a situation, often unexpectedly.",example:"We got lost and ended up in this tiny village, but it was actually beautiful!",tone:"casual",func:"explaining",level:"B1+",keywords:["result","finally","happen"],mistake:"'End up' + gerund: 'ended up staying', NOT 'ended up to stay'."},
+  {text:"look forward to",category:"collocation",meaning:"To feel excited about something that is going to happen.",example:"I'm really looking forward to your visit next month!",tone:"excited",func:"closing",level:"B1",keywords:["excited","anticipate","wait"],mistake:"'Look forward to' + noun/gerund: 'looking forward to seeing you', NOT 'to see you'."},
+  {text:"turn out",category:"collocation",meaning:"To happen in a particular way, especially unexpectedly.",example:"I was worried about the interview, but it turned out really well in the end!",tone:"reassuring",func:"explaining",level:"B1+",keywords:["result","happen","end"],mistake:""},
+  {text:"put off",category:"collocation",meaning:"To delay or postpone something.",example:"I keep putting off tidying my room, but I really need to do it this weekend!",tone:"casual",func:"explaining",level:"B1+",keywords:["delay","postpone","avoid"],mistake:"'Put off' + gerund: 'put off doing', NOT 'put off to do'."},
+  {text:"in the end",category:"collocation",meaning:"Finally; after everything.",example:"In the end, we decided to stay at home and have a barbecue instead.",tone:"casual",func:"explaining",level:"B1",keywords:["finally","result","conclusion"],mistake:"'In the end' = after a process. 'At the end' = at the final point (e.g. at the end of the film)."},
+  {text:"on top of that",category:"collocation",meaning:"In addition to something already mentioned.",example:"The flight was delayed, and on top of that, they lost my luggage!",tone:"casual",func:"explaining",level:"B1+",keywords:["addition","also","moreover"],mistake:""},
+  {text:"as far as I know",category:"collocation",meaning:"Based on what I know; to the best of my knowledge.",example:"As far as I know, the meeting is still on for Friday.",tone:"casual",func:"explaining",level:"B1+",keywords:["knowledge","believe","think"],mistake:""},
+  {text:"at the last minute",category:"collocation",meaning:"At the latest possible time; very late.",example:"They changed the venue at the last minute, which was really annoying.",tone:"casual",func:"explaining",level:"B1",keywords:["late","sudden","change"],mistake:""},
+  {text:"make the most of",category:"collocation",meaning:"To use an opportunity as well as possible.",example:"The weather was amazing, so we made the most of it and spent the whole day outdoors.",tone:"excited",func:"advising",level:"B1+",keywords:["opportunity","enjoy","maximise"],mistake:""},
+  {text:"come to think of it",category:"collocation",meaning:"Now that I consider it; upon reflection.",example:"Come to think of it, I think I did see her at the station that morning.",tone:"reflective",func:"explaining",level:"B2",keywords:["reflection","remember","consider"],mistake:""},
+
+  // ===== IDIOMS (13 items) =====
+  {text:"over the moon",category:"idiom",meaning:"Extremely happy.",example:"I was over the moon when I found out I'd been accepted onto the programme!",tone:"excited",func:"reacting",level:"B1+",keywords:["happy","delighted","thrilled"],mistake:"Don't say 'on the moon'. The idiom is 'over the moon'."},
+  {text:"a piece of cake",category:"idiom",meaning:"Something very easy to do.",example:"The first part of the test was a piece of cake, but the second part was much harder.",tone:"casual",func:"explaining",level:"B1",keywords:["easy","simple","no problem"],mistake:""},
+  {text:"once in a blue moon",category:"idiom",meaning:"Very rarely.",example:"I only go to the cinema once in a blue moon, but I really enjoyed the film we saw.",tone:"casual",func:"explaining",level:"B2",keywords:["rarely","seldom","infrequent"],mistake:""},
+  {text:"under the weather",category:"idiom",meaning:"Feeling slightly ill.",example:"I've been a bit under the weather this week, so I've been staying at home.",tone:"casual",func:"explaining",level:"B1+",keywords:["ill","sick","unwell"],mistake:""},
+  {text:"on the same page",category:"idiom",meaning:"In agreement; understanding each other.",example:"I'm glad we're on the same page about the trip — it's going to be great!",tone:"warm",func:"reacting",level:"B2",keywords:["agree","understand","alignment"],mistake:""},
+  {text:"the last straw",category:"idiom",meaning:"The final problem that makes you lose patience.",example:"When they cancelled the event again, it was the last straw — I decided to find a different group.",tone:"reflective",func:"explaining",level:"B2",keywords:["frustrated","patience","limit"],mistake:""},
+  {text:"get cold feet",category:"idiom",meaning:"To become nervous and uncertain about doing something.",example:"I nearly got cold feet before the presentation, but it actually went really well!",tone:"reflective",func:"explaining",level:"B2",keywords:["nervous","scared","doubt"],mistake:""},
+  {text:"in the same boat",category:"idiom",meaning:"In the same difficult situation as someone else.",example:"Don't worry about the homework — we're all in the same boat!",tone:"reassuring",func:"advising",level:"B1+",keywords:["situation","together","shared"],mistake:""},
+  {text:"ring a bell",category:"idiom",meaning:"To sound slightly familiar.",example:"The name rings a bell, but I can't remember where I've heard it before.",tone:"casual",func:"explaining",level:"B1+",keywords:["familiar","remember","recall"],mistake:""},
+  {text:"hit it off",category:"idiom",meaning:"To quickly become good friends with someone.",example:"I met this girl at the party and we really hit it off — we have so much in common!",tone:"excited",func:"explaining",level:"B2",keywords:["friends","connect","bond"],mistake:""},
+  {text:"sleep on it",category:"idiom",meaning:"To wait until the next day before making a decision.",example:"I'm not sure about the offer yet — I think I'll sleep on it and let you know tomorrow.",tone:"reflective",func:"advising",level:"B1+",keywords:["decide","wait","think"],mistake:""},
+  {text:"break the ice",category:"idiom",meaning:"To make people feel comfortable in a social situation.",example:"The teacher played a game to break the ice on the first day, which really helped.",tone:"casual",func:"explaining",level:"B1+",keywords:["social","comfortable","start"],mistake:""},
+  {text:"a blessing in disguise",category:"idiom",meaning:"Something bad that turns out to have a good result.",example:"Losing that job was a blessing in disguise because it led me to something much better.",tone:"reflective",func:"explaining",level:"B2",keywords:["positive","unexpected","outcome"],mistake:""},
+
+  // ===== PHRASES (46 items) =====
+  {text:"sorry for not replying sooner",category:"phrase",meaning:"An apology for taking a long time to respond.",example:"Sorry for not replying sooner — things have been really hectic at work.",tone:"apologetic",func:"opening",level:"B1",keywords:["apology","late","reply"],mistake:"Use the gerund: 'not replying', NOT 'not reply'."},
+  {text:"thanks a lot for",category:"phrase",meaning:"A warm way to express gratitude.",example:"Thanks a lot for sending me those photos — they really brought back great memories!",tone:"warm",func:"opening",level:"B1",keywords:["thank","grateful","appreciate"],mistake:""},
+  {text:"I thought I'd let you know",category:"phrase",meaning:"A friendly way to share news or information.",example:"I thought I'd let you know that I've finally booked the tickets for the concert!",tone:"casual",func:"opening",level:"B1+",keywords:["inform","share","news"],mistake:""},
+  {text:"I couldn't stop laughing",category:"phrase",meaning:"Something was extremely funny.",example:"When you sent me that video, I couldn't stop laughing — it was hilarious!",tone:"excited",func:"reacting",level:"B1",keywords:["funny","hilarious","laugh"],mistake:""},
+  {text:"it was such a relief",category:"phrase",meaning:"Expresses gladness that something stressful is over.",example:"It was such a relief to finally finish all the exams — I feel so much lighter now.",tone:"reassuring",func:"reacting",level:"B1+",keywords:["relief","glad","stress"],mistake:""},
+  {text:"let me know what you think",category:"phrase",meaning:"Asking for someone's opinion.",example:"I've attached the photos from the trip — let me know what you think!",tone:"casual",func:"closing",level:"B1",keywords:["opinion","feedback","thoughts"],mistake:""},
+  {text:"can't wait to hear from you",category:"phrase",meaning:"An enthusiastic way to end an email and encourage a reply.",example:"Anyway, I'd better go now. Can't wait to hear from you!",tone:"excited",func:"closing",level:"B1",keywords:["reply","excited","ending"],mistake:""},
+  {text:"write back when you can",category:"phrase",meaning:"A relaxed way to ask someone to reply.",example:"No rush at all — just write back when you can!",tone:"warm",func:"closing",level:"B1",keywords:["reply","relax","ending"],mistake:""},
+  {text:"I just wanted to say",category:"phrase",meaning:"A gentle way to introduce a message or feeling.",example:"I just wanted to say how much I enjoyed our chat last week.",tone:"warm",func:"opening",level:"B1",keywords:["introduce","share","feeling"],mistake:""},
+  {text:"guess what",category:"phrase",meaning:"Used to introduce exciting or surprising news.",example:"Guess what! I finally passed my driving test!",tone:"excited",func:"opening",level:"B1",keywords:["news","surprise","exciting"],mistake:"Very informal. Great for close friends."},
+  {text:"that reminds me",category:"phrase",meaning:"Used to introduce a new topic connected to what was said.",example:"Oh, that reminds me — did you ever find that book I lent you?",tone:"casual",func:"opening",level:"B1+",keywords:["topic","connected","remember"],mistake:""},
+  {text:"I know what you mean",category:"phrase",meaning:"Showing that you understand someone's feelings.",example:"I know what you mean about the weather — it's been awful here too!",tone:"warm",func:"reacting",level:"B1",keywords:["understand","empathy","agree"],mistake:""},
+  {text:"I was wondering if",category:"phrase",meaning:"A polite way to ask a question or make a request.",example:"I was wondering if you'd like to come to the festival with us next weekend.",tone:"warm",func:"inviting",level:"B1+",keywords:["ask","question","polite"],mistake:"Softer than 'I want to know if'."},
+  {text:"you should definitely",category:"phrase",meaning:"A strong recommendation.",example:"If you get the chance, you should definitely visit the old town — it's beautiful.",tone:"helpful",func:"advising",level:"B1",keywords:["recommend","advise","must"],mistake:""},
+  {text:"the thing is",category:"phrase",meaning:"Used to introduce an explanation or excuse.",example:"The thing is, I've already made plans for Saturday, so I can't make it to the party.",tone:"casual",func:"explaining",level:"B1+",keywords:["explain","reason","because"],mistake:""},
+  {text:"by the way",category:"phrase",meaning:"Used to introduce a new topic you just thought of.",example:"By the way, have you heard about the new Italian place that opened near us?",tone:"casual",func:"opening",level:"B1",keywords:["addition","topic","new"],mistake:""},
+  {text:"I'd love to",category:"phrase",meaning:"An enthusiastic way to accept an invitation.",example:"I'd love to come to your birthday dinner — thanks so much for inviting me!",tone:"excited",func:"reacting",level:"B1",keywords:["accept","invitation","yes"],mistake:"Often + 'but' when declining: 'I'd love to, but I can't make it.'"},
+  {text:"it's been ages since",category:"phrase",meaning:"A long time has passed since something happened.",example:"It's been ages since we last met — we really need to get together soon!",tone:"warm",func:"opening",level:"B1+",keywords:["time","long","miss"],mistake:""},
+  {text:"I hope everything is going well",category:"phrase",meaning:"A kind way to start an email.",example:"Hi! I hope everything is going well with you and the family.",tone:"warm",func:"greeting",level:"B1",keywords:["greeting","wellbeing","start"],mistake:""},
+  {text:"anyway, I should probably go now",category:"phrase",meaning:"A natural way to start closing an informal email.",example:"Anyway, I should probably go now — I've got an early start tomorrow.",tone:"casual",func:"closing",level:"B1+",keywords:["ending","close","goodbye"],mistake:""},
+  {text:"do you fancy",category:"phrase",meaning:"(British informal) Would you like to...",example:"Do you fancy going for a coffee sometime this week?",tone:"casual",func:"inviting",level:"B1+",keywords:["invite","suggest","want"],mistake:"More British than American."},
+  {text:"I have to admit",category:"phrase",meaning:"Used to introduce something honest that might be surprising.",example:"I have to admit, I was a bit nervous about starting the new school, but it's been great!",tone:"reflective",func:"explaining",level:"B1+",keywords:["honest","confess","truth"],mistake:""},
+  {text:"I'm sorry to hear that",category:"phrase",meaning:"Expressing sympathy when someone shares bad news.",example:"I'm sorry to hear that you've been unwell — I hope you're feeling better now.",tone:"warm",func:"reacting",level:"B1",keywords:["sympathy","sad","empathy"],mistake:""},
+  {text:"it really meant a lot to me",category:"phrase",meaning:"Expressing that something was very important and appreciated.",example:"Thanks for coming to my performance — it really meant a lot to me that you were there.",tone:"warm",func:"reacting",level:"B1+",keywords:["appreciate","important","grateful"],mistake:""},
+  {text:"I'll keep you posted",category:"phrase",meaning:"I'll give you updates.",example:"I'm still waiting for their answer, but I'll keep you posted!",tone:"casual",func:"closing",level:"B1+",keywords:["update","inform","news"],mistake:""},
+  {text:"drop me a line",category:"phrase",meaning:"Send me a message or email.",example:"If you need anything at all, just drop me a line and I'll help.",tone:"casual",func:"closing",level:"B1+",keywords:["message","write","contact"],mistake:""},
+  {text:"I couldn't agree more",category:"phrase",meaning:"I completely agree with you.",example:"I couldn't agree more — that was the best holiday we've ever had!",tone:"warm",func:"reacting",level:"B1+",keywords:["agree","support","same"],mistake:""},
+  {text:"it totally slipped my mind",category:"phrase",meaning:"I completely forgot about it.",example:"I'm so sorry — your birthday totally slipped my mind! Happy belated birthday!",tone:"apologetic",func:"apologising",level:"B1+",keywords:["forgot","memory","slip"],mistake:""},
+  {text:"I've got some exciting news",category:"phrase",meaning:"Used to introduce happy or positive news.",example:"I've got some exciting news — I've been offered a place at the university!",tone:"excited",func:"opening",level:"B1",keywords:["news","exciting","share"],mistake:""},
+  {text:"it was worth the wait",category:"phrase",meaning:"The result justified the time spent waiting.",example:"We queued for an hour, but the food was incredible — it was definitely worth the wait.",tone:"casual",func:"reacting",level:"B1+",keywords:["patience","reward","result"],mistake:""},
+  {text:"I owe you one",category:"phrase",meaning:"I am grateful and will return the favour.",example:"Thanks so much for picking up my parcel — I owe you one!",tone:"warm",func:"reacting",level:"B1+",keywords:["thanks","favour","return"],mistake:""},
+  {text:"long story short",category:"phrase",meaning:"To summarise a long story briefly.",example:"Long story short, we missed the bus but ended up having the best day ever!",tone:"casual",func:"explaining",level:"B1+",keywords:["summary","brief","short"],mistake:""},
+  {text:"it goes without saying",category:"phrase",meaning:"It is so obvious that it doesn't need to be mentioned.",example:"It goes without saying that you're always welcome to stay at my place.",tone:"warm",func:"closing",level:"B2",keywords:["obvious","clear","certain"],mistake:""},
+  {text:"for what it's worth",category:"phrase",meaning:"Used before giving an opinion, suggesting it may not be important.",example:"For what it's worth, I think you made the right decision.",tone:"reflective",func:"advising",level:"B2",keywords:["opinion","humble","advice"],mistake:""},
+  {text:"that's the thing",category:"phrase",meaning:"Used to highlight a complication or important point.",example:"I'd love to come, but that's the thing — I've already booked a flight for that weekend.",tone:"casual",func:"explaining",level:"B1+",keywords:["problem","issue","point"],mistake:""},
+  {text:"I know how you feel",category:"phrase",meaning:"Showing empathy and understanding.",example:"I know how you feel — I went through the same thing last year and it was tough.",tone:"warm",func:"reacting",level:"B1",keywords:["empathy","understand","support"],mistake:""},
+  {text:"fingers crossed",category:"phrase",meaning:"Hoping for a good outcome.",example:"I have my interview tomorrow — fingers crossed it goes well!",tone:"casual",func:"closing",level:"B1",keywords:["hope","luck","wish"],mistake:""},
+  {text:"that sounds amazing",category:"phrase",meaning:"Reacting enthusiastically to news or plans.",example:"A trip to Japan? That sounds amazing — you're going to love it!",tone:"excited",func:"reacting",level:"B1",keywords:["react","positive","enthusiastic"],mistake:""},
+  {text:"I'm not going to lie",category:"phrase",meaning:"Used to introduce an honest comment.",example:"I'm not going to lie, the first week at the new school was pretty hard.",tone:"reflective",func:"explaining",level:"B1+",keywords:["honest","truth","frank"],mistake:"Very informal. Best with close friends."},
+  {text:"how's everything going",category:"phrase",meaning:"A friendly way to ask about someone's life.",example:"Hey! How's everything going? I haven't heard from you in a while!",tone:"warm",func:"greeting",level:"B1",keywords:["greeting","ask","life"],mistake:""},
+  {text:"it was nothing like I expected",category:"phrase",meaning:"The reality was very different from what you imagined.",example:"The concert was nothing like I expected — it was so much better!",tone:"excited",func:"reacting",level:"B1+",keywords:["surprise","different","unexpected"],mistake:"Can be positive or negative."},
+  {text:"I meant to tell you",category:"phrase",meaning:"Introducing something you forgot to mention.",example:"Oh, I meant to tell you — I saw that film you recommended and absolutely loved it!",tone:"casual",func:"opening",level:"B1",keywords:["forgot","mention","share"],mistake:""},
+  {text:"that makes two of us",category:"phrase",meaning:"I feel the same way; me too.",example:"You're tired of this rain? That makes two of us!",tone:"casual",func:"reacting",level:"B1+",keywords:["agree","same","shared"],mistake:""},
+  {text:"all in all",category:"phrase",meaning:"Considering everything; overall.",example:"All in all, it was a fantastic trip — I'd definitely go back.",tone:"reflective",func:"closing",level:"B1+",keywords:["summary","overall","conclusion"],mistake:""},
+  {text:"not a big deal",category:"phrase",meaning:"Not important or serious.",example:"Don't worry about the broken cup — it's not a big deal at all!",tone:"reassuring",func:"reacting",level:"B1",keywords:["important","relax","minor"],mistake:""},
+  {text:"to be honest",category:"phrase",meaning:"Used to introduce a frank opinion or confession.",example:"To be honest, I was a bit disappointed with the restaurant — the food wasn't great.",tone:"reflective",func:"explaining",level:"B1+",keywords:["honest","opinion","frank"],mistake:""},
+
+  // ===== SENTENCE STEMS (18 items) =====
+  {text:"I just wanted to tell you about...",category:"sentence stem",meaning:"A friendly opening to share news or a story.",example:"I just wanted to tell you about the amazing thing that happened at work yesterday!",tone:"casual",func:"opening",level:"B1",keywords:["share","news","story"],mistake:""},
+  {text:"You won't believe what happened...",category:"sentence stem",meaning:"An exciting opening to introduce a surprising story.",example:"You won't believe what happened at the festival — it was absolutely crazy!",tone:"excited",func:"opening",level:"B1+",keywords:["surprise","story","exciting"],mistake:""},
+  {text:"I was a bit nervous at first, but...",category:"sentence stem",meaning:"Describes overcoming initial anxiety.",example:"I was a bit nervous at first, but once the music started, I forgot all about my worries.",tone:"reflective",func:"explaining",level:"B1+",keywords:["nervous","overcome","experience"],mistake:""},
+  {text:"If I were you, I'd...",category:"sentence stem",meaning:"A friendly way to give advice.",example:"If I were you, I'd talk to your teacher about it — I'm sure she'll understand.",tone:"helpful",func:"advising",level:"B1+",keywords:["advice","recommend","suggest"],mistake:"'If I were you' (not 'was') is the standard form."},
+  {text:"One thing that really helped was...",category:"sentence stem",meaning:"Sharing useful advice from experience.",example:"One thing that really helped was making a timetable — it kept me on track.",tone:"helpful",func:"advising",level:"B1+",keywords:["advice","tip","help"],mistake:""},
+  {text:"I should probably mention that...",category:"sentence stem",meaning:"Used to add an important piece of information.",example:"I should probably mention that the restaurant gets very busy, so we should book a table.",tone:"casual",func:"explaining",level:"B1+",keywords:["mention","inform","add"],mistake:""},
+  {text:"What I liked most was...",category:"sentence stem",meaning:"Highlighting the best part of an experience.",example:"What I liked most was the live music — the band was incredible!",tone:"excited",func:"reacting",level:"B1+",keywords:["favourite","best","highlight"],mistake:""},
+  {text:"The best part was...",category:"sentence stem",meaning:"Introducing the highlight of a story.",example:"The best part was when we saw the sunset from the top of the mountain — it was breathtaking.",tone:"excited",func:"explaining",level:"B1",keywords:["highlight","favourite","best"],mistake:""},
+  {text:"I've been meaning to write to you about...",category:"sentence stem",meaning:"An apologetic but warm way to start a delayed email.",example:"I've been meaning to write to you about the party — it was fantastic!",tone:"warm",func:"opening",level:"B1+",keywords:["delay","write","share"],mistake:""},
+  {text:"I'm writing to ask if...",category:"sentence stem",meaning:"A clear way to introduce a question or request.",example:"I'm writing to ask if you'd be interested in coming to our end-of-year celebration.",tone:"warm",func:"inviting",level:"B1",keywords:["ask","question","request"],mistake:""},
+  {text:"It was such a... that...",category:"sentence stem",meaning:"Emphasising how strong an experience or feeling was.",example:"It was such a surprise that I didn't know what to say for a moment!",tone:"excited",func:"reacting",level:"B1+",keywords:["emphasis","strong","feeling"],mistake:"'Such a' + noun; 'so' + adjective. 'Such a shock' / 'so shocking'."},
+  {text:"To be honest, I think...",category:"sentence stem",meaning:"Introducing a frank opinion.",example:"To be honest, I think you'd enjoy the smaller class more — it's more relaxed.",tone:"reflective",func:"advising",level:"B1+",keywords:["opinion","honest","frank"],mistake:""},
+  {text:"I'd highly recommend...",category:"sentence stem",meaning:"Giving a strong recommendation.",example:"I'd highly recommend the new museum exhibit — the art was stunning.",tone:"helpful",func:"advising",level:"B1+",keywords:["recommend","advise","suggest"],mistake:""},
+  {text:"One thing you could do is...",category:"sentence stem",meaning:"A softer way to give advice or make a suggestion.",example:"One thing you could do is ask your neighbour — she might know a good plumber.",tone:"helpful",func:"suggesting",level:"B1+",keywords:["advice","suggest","option"],mistake:""},
+  {text:"Anyway, I'd better go now...",category:"sentence stem",meaning:"A natural, friendly way to sign off.",example:"Anyway, I'd better go now — I've still got loads of packing to do!",tone:"casual",func:"closing",level:"B1",keywords:["closing","ending","goodbye"],mistake:""},
+  {text:"I hope you don't mind me asking, but...",category:"sentence stem",meaning:"A polite way to ask a personal or sensitive question.",example:"I hope you don't mind me asking, but are you planning to move to London?",tone:"warm",func:"opening",level:"B2",keywords:["polite","question","sensitive"],mistake:""},
+  {text:"It made me realise that...",category:"sentence stem",meaning:"Describing a moment of understanding.",example:"Travelling alone really made me realise that I'm more independent than I thought.",tone:"reflective",func:"explaining",level:"B2",keywords:["realise","understand","reflect"],mistake:""},
+  {text:"The reason I'm writing is...",category:"sentence stem",meaning:"A clear way to state the purpose of your email.",example:"The reason I'm writing is to see if you'd like to share a flat next year.",tone:"casual",func:"opening",level:"B1+",keywords:["purpose","reason","why"],mistake:""},
+];
+
+/* =====================================================================
+   HAND-CRAFTED DISTRACTORS
+   Map from item text to plausible wrong answers for quizzes.
+   These target real B1/B2 learner confusions.
+   ===================================================================== */
+const DISTRACTORS = {
+  "look forward to":{
+    fill:["look forward for","look forwards to","look up to"],
+    meaning:["To look ahead physically","To admire someone","To search for something"]
+  },
+  "catch up":{
+    fill:["catch on","catch out","catch off"],
+    meaning:["To throw something to someone","To capture something","To arrive at a place"]
+  },
+  "make a big difference":{
+    fill:["do a big difference","take a big difference","give a big difference"],
+    meaning:["To create something large","To notice a large object","To earn a large amount"]
+  },
+  "have a great time":{
+    fill:["make a great time","do a great time","take a great time"],
+    meaning:["To create a schedule","To be very busy","To arrive on time"]
+  },
+  "give it a try":{
+    fill:["give it a go for","take it a try","make it a try"],
+    meaning:["To hand something to someone","To study very hard","To ask for permission"]
+  },
+  "get the hang of":{
+    fill:["get the hang on","take the hang of","catch the hang of"],
+    meaning:["To hold onto something tightly","To hang something on a hook","To wait for a long time"]
+  },
+  "feel like":{
+    fill:["feel like to","feel for","feel as"],
+    meaning:["To physically touch something","To search for something","To have sympathy"]
+  },
+  "end up":{
+    fill:["end up to","finish up to","end off"],
+    meaning:["To complete a task","To stop doing something","To reach the conclusion of a book"]
+  },
+  "put off":{
+    fill:["put off to","put away to","put out to"],
+    meaning:["To place something on a shelf","To turn off a light","To discard something"]
+  },
+  "over the moon":{
+    fill:["above the moon","on the moon","under the moon"],
+    meaning:["Very tired","Very confused","Very angry"]
+  },
+  "a piece of cake":{
+    fill:["a slice of cake","a bit of cake","a part of cake"],
+    meaning:["Something delicious","Something expensive","Something boring"]
+  },
+  "sorry for not replying sooner":{
+    fill:["sorry for not reply sooner","sorry to not replying sooner","sorry for not to reply sooner"],
+    meaning:["Apologising for sending too many messages","Apologising for writing too much","Apologising for a short email"]
+  },
+  "burst out laughing":{
+    fill:["burst in laughing","burst up laughing","broke out laughing"],
+    meaning:["To cry suddenly","To shout loudly","To run away quickly"]
+  },
+  "keep in touch":{
+    fill:["keep on touch","keep at touch","stay on touch"],
+    meaning:["To hold something carefully","To remember a fact","To stay in one place"]
+  },
+  "lost track of time":{
+    fill:["lost the track of time","missed track of time","lost tracking of time"],
+    meaning:["To lose a watch","To be late for work","To forget someone's name"]
+  },
+  "If I were you, I'd...":{
+    fill:["If I was you, I'll...","If I am you, I'd...","If I were you, I will..."],
+    meaning:["A way to criticise someone","A way to make a complaint","A way to describe the past"]
+  },
+  "it's been ages since":{
+    fill:["it's been ages from","it's ages since","it has ages since"],
+    meaning:["Something happened recently","You forgot someone's age","You are feeling old"]
+  },
+  "in the end":{
+    fill:["at the end","on the end","by the end"],
+    meaning:["At the start of something","During the middle of something","Before something begins"]
+  },
+  "I was wondering if":{
+    fill:["I was wondering that","I wondered that if","I was wonder if"],
+    meaning:["I was surprised about something","I was confused about something","I was worried about something"]
+  },
+  "to be honest":{
+    fill:["to be honestly","for be honest","to being honest"],
+    meaning:["To tell a joke","To change the subject","To end a conversation"]
+  },
+};
+
+/* =====================================================================
+   APP STATE
+   ===================================================================== */
+let bank = [];
+let progress = {
+  quizAttempts:0, quizCorrect:0, streak:0, bestStreak:0,
+  categoryStats:{}, funcStats:{}, toneStats:{},
+  favourites:[], difficult:[], mastered:[], missedItems:{},
+  // SRS data: { itemId: { box:0-4, nextReview: timestamp } }
+  srs:{},
+  // History: array of { date:'YYYY-MM-DD', attempts:N, correct:N }
+  history:[]
+};
+let wbPage = 0;
+const WB_PER_PAGE = 18;
+
+/* ===== STORAGE ===== */
+function loadBank(){
+  const s=localStorage.getItem('ell_bank');
+  if(s){try{bank=JSON.parse(s)}catch(e){bank=STARTER_DATA.map((it,i)=>({...it,id:i+1}))}}
+  else{bank=STARTER_DATA.map((it,i)=>({...it,id:i+1}))}
+  bank.forEach((item,i)=>{if(!item.id)item.id=i+1});
+}
+function saveBank(){localStorage.setItem('ell_bank',JSON.stringify(bank))}
+function loadProgress(){const s=localStorage.getItem('ell_progress');if(s){try{progress={...progress,...JSON.parse(s)}}catch(e){}}}
+function saveProgress(){localStorage.setItem('ell_progress',JSON.stringify(progress))}
+
+/* ===== INIT ===== */
+function init(){
+  loadBank();loadProgress();initSRS();
+  const theme=localStorage.getItem('ell_theme');
+  if(theme==='dark'){document.documentElement.setAttribute('data-theme','dark');updateThemeUI()}
+  renderAll();autoBackupCheck();
+}
+
+/* =====================================================================
+   NAVIGATION
+   ===================================================================== */
+function navigateTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+  document.querySelector('.sidebar').classList.remove('open');
+  if(page==='dashboard')renderDashboard();
+  if(page==='wordbank'){wbPage=0;renderWordBank()}
+  if(page==='flashcards')renderFlashcards();
+  if(page==='patterns')renderPatterns();
+  if(page==='builder')initBuilder();
+  if(page==='progress')renderProgress();
+  if(page==='teacher')renderTeacherList();
+}
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>navigateTo(item.dataset.page));
+});
+
+/* ===== DARK MODE ===== */
+function toggleTheme(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDark?'':'dark');
+  localStorage.setItem('ell_theme',isDark?'light':'dark');
+  updateThemeUI();
+}
+function updateThemeUI(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.getElementById('theme-icon').textContent=isDark?'☀':'🌙';
+  document.getElementById('theme-label').textContent=isDark?'Light Mode':'Dark Mode';
+}
+
+/* ===== AUDIO ===== */
+function speak(text){
+  if(!('speechSynthesis' in window))return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.85;u.pitch=1;
+  const voices=window.speechSynthesis.getVoices();
+  const brit=voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(brit)u.voice=brit;
+  window.speechSynthesis.speak(u);
+}
+
+/* ===== TOAST ===== */
+function toast(msg){const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function toStr(v){return v==null?'':String(v)}
+function uniqueStrings(arr){
+  const seen=new Set();
+  return (arr||[]).map(v=>toStr(v).trim()).filter(Boolean).filter(v=>{
+    const key=v.toLowerCase();
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+function buildOptions(correctText,distractors){
+  const correct=toStr(correctText).trim();
+  if(!correct) return null;
+  const pool=[{text:correct,correct:true},...((distractors||[]).map(d=>({text:toStr(d && d.text).trim(),correct:false})))].filter(o=>o.text);
+  const byKey=new Map();
+  pool.forEach(o=>{
+    const key=o.text.toLowerCase();
+    if(!byKey.has(key)) byKey.set(key,{text:o.text,correct:!!o.correct});
+    else if(o.correct) byKey.set(key,{text:o.text,correct:true});
+  });
+  const deduped=[...byKey.values()];
+  const correctOption=deduped.find(o=>o.correct);
+  const others=shuffle(deduped.filter(o=>!o.correct)).slice(0,3);
+  if(!correctOption || others.length<3) return null;
+  return shuffle([correctOption,...others]);
+}
+
+function escapeRegExp(str){
+  return toStr(str).replace(/[.*+?^${}()|[\\]\\]/g,'\\$&');
+}
+
+function getPhraseVariants(text){
+  const raw=toStr(text).trim();
+  if(!raw) return [];
+  const variants=[raw];
+  const words=raw.split(/\s+/);
+  if(!words.length) return uniqueStrings(variants);
+  const first=words[0];
+  const rest=words.slice(1).join(' ');
+  const irregular={
+    get:['got','getting','gets'],
+    come:['came','coming','comes'],
+    run:['ran','running','runs'],
+    make:['made','making','makes'],
+    keep:['kept','keeping','keeps'],
+    lose:['lost','losing','loses'],
+    feel:['felt','feeling','feels'],
+    end:['ended','ending','ends'],
+    turn:['turned','turning','turns'],
+    put:['put','putting','puts'],
+    look:['looked','looking','looks'],
+    catch:['caught','catching','catches'],
+    burst:['burst','bursting','bursts'],
+    sort:['sorted','sorting','sorts']
+  };
+  let firstForms=irregular[first] ? [first, ...irregular[first]] : [first];
+  if(!irregular[first]){
+    const ing=first.endsWith('e') ? first.slice(0,-1)+'ing' : first+'ing';
+    const ed=first.endsWith('e') ? first+'d' : first+'ed';
+    const s=first.endsWith('y') ? first.slice(0,-1)+'ies' : first+'s';
+    firstForms.push(ing,ed,s);
+  }
+  firstForms=uniqueStrings(firstForms);
+  firstForms.forEach(f=>variants.push(rest ? `${f} ${rest}` : f));
+  return uniqueStrings(variants);
+}
+
+function buildMaskedExample(item){
+  const example=toStr(item && item.example).trim();
+  const target=toStr(item && item.text).trim();
+  if(!example || !target) return null;
+  for(const variant of getPhraseVariants(target)){
+    const re=new RegExp(escapeRegExp(variant),'i');
+    if(re.test(example)) return example.replace(re,'______');
+  }
+  return null;
+}
+
+/* =====================================================================
+   SPACED REPETITION SYSTEM (Leitner-style)
+   Box 0 = new (review now)
+   Box 1 = learning (review in 1 day)
+   Box 2 = review (review in 3 days)
+   Box 3 = familiar (review in 7 days)
+   Box 4 = mastered (review in 21 days)
+   ===================================================================== */
+const SRS_INTERVALS = [0, 1, 3, 7, 21]; // days
+const SRS_LABELS = ['New','Learning','Review','Familiar','Mastered'];
+const SRS_CLASSES = ['srs-new','srs-learning','srs-review','srs-review','srs-mastered'];
+
+function initSRS(){
+  // Ensure every item has SRS data
+  bank.forEach(item=>{
+    if(!progress.srs[item.id]){
+      progress.srs[item.id]={box:0,nextReview:Date.now()};
+    }
+  });
+  saveProgress();
+}
+
+function getSRSBox(itemId){return (progress.srs[itemId]||{box:0}).box}
+function isDue(itemId){
+  const data=progress.srs[itemId];
+  if(!data)return true;
+  return Date.now()>=data.nextReview;
+}
+function getDueItems(){return bank.filter(i=>isDue(i.id))}
+
+function srsAnswer(itemId, quality){
+  // quality: 0=again, 1=hard, 2=good, 3=easy
+  if(!progress.srs[itemId])progress.srs[itemId]={box:0,nextReview:Date.now()};
+  const data=progress.srs[itemId];
+  if(quality===0){data.box=0;data.nextReview=Date.now()}
+  else if(quality===1){data.box=Math.max(0,data.box-1);data.nextReview=Date.now()+SRS_INTERVALS[data.box]*86400000}
+  else if(quality===2){data.box=Math.min(4,data.box+1);data.nextReview=Date.now()+SRS_INTERVALS[data.box]*86400000}
+  else if(quality===3){data.box=Math.min(4,data.box+2);data.nextReview=Date.now()+SRS_INTERVALS[Math.min(4,data.box)]*86400000}
+  saveProgress();
+}
+
+/* =====================================================================
+   DASHBOARD
+   ===================================================================== */
+function renderDashboard(){
+  const acc=progress.quizAttempts?Math.round(progress.quizCorrect/progress.quizAttempts*100):0;
+  const due=getDueItems().length;
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-number">${bank.length}</div><div class="stat-label">Language Items</div></div>
+    <div class="stat-card"><div class="stat-number" style="color:${due>0?'var(--orange)':'var(--green)'}">${due}</div><div class="stat-label">Due for Review</div></div>
+    <div class="stat-card"><div class="stat-number">${progress.quizAttempts}</div><div class="stat-label">Questions Done</div></div>
+    <div class="stat-card"><div class="stat-number">${acc}%</div><div class="stat-label">Accuracy</div></div>
+    <div class="stat-card"><div class="stat-number">${progress.bestStreak}</div><div class="stat-label">Best Streak</div></div>
+    <div class="stat-card"><div class="stat-number">${progress.mastered.length}</div><div class="stat-label">Mastered</div></div>`;
+
+  const dueCard=document.getElementById('dash-due-card');
+  if(due>0){
+    dueCard.innerHTML=`<h3 style="margin-bottom:8px">&#127183; ${due} item${due!==1?'s':''} due for review</h3>
+      <p style="color:var(--text-light);font-size:.86rem;margin-bottom:12px">Spaced repetition works best when you review items on time.</p>
+      <button class="btn btn-primary" onclick="navigateTo('flashcards')">Start Review</button>`;
+    dueCard.style.display='block';
+  }else{
+    dueCard.innerHTML=`<h3>&#10024; All caught up!</h3><p style="color:var(--text-light);font-size:.86rem;margin-top:4px">No items due for review right now. Great job!</p>`;
+    dueCard.style.display='block';
+  }
+}
+
+/* =====================================================================
+   RENDER ALL
+   ===================================================================== */
+function renderAll(){populateFilters();renderDashboard();renderWordBank();renderPatterns();initBuilder();renderProgress();renderTeacherList()}
+
+/* =====================================================================
+   WORD BANK — WITH PAGINATION + AUDIO
+   ===================================================================== */
+function populateFilters(){
+  const tones=new Set();const funcs=new Set();
+  bank.forEach(i=>{tones.add(i.tone);funcs.add(i.func)});
+  document.getElementById('wb-tone').innerHTML='<option value="">All tones</option>'+[...tones].sort().map(t=>`<option value="${t}">${t[0].toUpperCase()+t.slice(1)}</option>`).join('');
+  document.getElementById('wb-func').innerHTML='<option value="">All functions</option>'+[...funcs].sort().map(f=>`<option value="${f}">${f[0].toUpperCase()+f.slice(1)}</option>`).join('');
+}
+
+function getFilteredItems(){
+  const search=document.getElementById('wb-search').value.toLowerCase();
+  const cat=document.getElementById('wb-cat').value;
+  const tone=document.getElementById('wb-tone').value;
+  const func=document.getElementById('wb-func').value;
+  const level=document.getElementById('wb-level').value;
+  const status=document.getElementById('wb-status').value;
+  return bank.filter(item=>{
+    const text=toStr(item.text).toLowerCase();
+    const meaning=toStr(item.meaning).toLowerCase();
+    const keywords=(item.keywords||[]).map(k=>toStr(k).toLowerCase());
+    if(search && !text.includes(search) && !meaning.includes(search) && !keywords.some(k=>k.includes(search))) return false;
+    if(cat && item.category!==cat)return false;
+    if(tone && item.tone!==tone)return false;
+    if(func && item.func!==func)return false;
+    if(level && item.level!==level)return false;
+    if(status==='fav' && !progress.favourites.includes(item.id))return false;
+    if(status==='diff' && !progress.difficult.includes(item.id))return false;
+    if(status==='mastered' && !progress.mastered.includes(item.id))return false;
+    if(status==='unmastered' && progress.mastered.includes(item.id))return false;
+    if(status==='due' && !isDue(item.id))return false;
+    return true;
+  });
+}
+
+function renderWordBank(){
+  const all=getFilteredItems();
+  const totalPages=Math.max(1,Math.ceil(all.length/WB_PER_PAGE));
+  if(wbPage>=totalPages)wbPage=totalPages-1;
+  if(wbPage<0)wbPage=0;
+  const items=all.slice(wbPage*WB_PER_PAGE,(wbPage+1)*WB_PER_PAGE);
+  document.getElementById('wb-count').textContent=all.length;
+  const grid=document.getElementById('wb-grid');
+  const empty=document.getElementById('wb-empty');
+  if(!all.length){grid.innerHTML='';empty.style.display='block';document.getElementById('wb-pagination').innerHTML='';return}
+  empty.style.display='none';
+  grid.innerHTML=items.map(item=>{
+    const catCls='badge-'+(item.category==='sentence stem'?'stem':item.category);
+    const lvlCls='badge-'+item.level.toLowerCase().replace('+','plus');
+    const isFav=progress.favourites.includes(item.id);
+    const isDiff=progress.difficult.includes(item.id);
+    const isMast=progress.mastered.includes(item.id);
+    const box=getSRSBox(item.id);
+    return `<div class="wb-item">
+      <div class="wb-item-header">
+        <div class="wb-item-text">${esc(item.text)} <button class="btn-audio" onclick="event.stopPropagation();speak('${esc(item.text.replace(/'/g,"\\'"))}')" title="Listen">&#128264;</button>
+          <span class="srs-badge ${SRS_CLASSES[box]}">${SRS_LABELS[box]}</span>
+        </div>
+        <div class="wb-actions">
+          <button class="btn-icon ${isFav?'active':''}" title="Favourite" onclick="toggleFav(${item.id})">&#9733;</button>
+          <button class="btn-icon" title="Difficult" onclick="toggleDiff(${item.id})" style="${isDiff?'background:var(--red-bg);color:var(--red)':''}">&#9888;</button>
+          <button class="btn-icon" title="Mastered" onclick="toggleMast(${item.id})" style="${isMast?'background:var(--green-bg);color:var(--green)':''}">&#10003;</button>
+        </div>
+      </div>
+      <div class="wb-item-meaning">${esc(item.meaning)}</div>
+      <div class="wb-item-example">${esc(item.example)}</div>
+      ${item.mistake?`<div class="wb-item-mistake">&#9888; Common mistake: ${esc(item.mistake)}</div>`:''}
+      <div class="wb-item-tags">
+        <span class="badge ${catCls}">${esc(item.category)}</span>
+        <span class="badge ${lvlCls}">${esc(item.level)}</span>
+        <span class="tone-badge">${esc(item.tone)}</span>
+        <span class="func-badge">${esc(item.func)}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Pagination
+  const pag=document.getElementById('wb-pagination');
+  if(totalPages<=1){pag.innerHTML='';return}
+  let html='<button class="btn btn-secondary btn-sm" onclick="wbPage=0;renderWordBank()" '+(wbPage===0?'disabled':'')+'>&#171;</button>';
+  html+='<button class="btn btn-secondary btn-sm" onclick="wbPage--;renderWordBank()" '+(wbPage===0?'disabled':'')+'>&#8249;</button>';
+  html+=`<span class="page-info">Page ${wbPage+1} of ${totalPages}</span>`;
+  html+='<button class="btn btn-secondary btn-sm" onclick="wbPage++;renderWordBank()" '+(wbPage>=totalPages-1?'disabled':'')+'>&#8250;</button>';
+  html+='<button class="btn btn-secondary btn-sm" onclick="wbPage='+(totalPages-1)+';renderWordBank()" '+(wbPage>=totalPages-1?'disabled':'')+'>&#187;</button>';
+  pag.innerHTML=html;
+}
+
+['wb-search','wb-cat','wb-tone','wb-func','wb-level','wb-status'].forEach(id=>{
+  document.getElementById(id).addEventListener(id==='wb-search'?'input':'change',()=>{wbPage=0;renderWordBank()});
+});
+
+function toggleFav(id){const i=progress.favourites.indexOf(id);if(i===-1)progress.favourites.push(id);else progress.favourites.splice(i,1);saveProgress();renderWordBank()}
+function toggleDiff(id){const i=progress.difficult.indexOf(id);if(i===-1)progress.difficult.push(id);else progress.difficult.splice(i,1);saveProgress();renderWordBank()}
+function toggleMast(id){const i=progress.mastered.indexOf(id);if(i===-1)progress.mastered.push(id);else progress.mastered.splice(i,1);saveProgress();renderWordBank()}
+
+/* =====================================================================
+   FLASHCARD REVIEW (SRS)
+   ===================================================================== */
+let fcState={items:[],current:0,flipped:false};
+
+function renderFlashcards(){
+  const due=getDueItems();
+  const el=document.getElementById('fc-area');
+  if(!due.length){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:40px">
+      <h2>&#10024; All caught up!</h2>
+      <p style="color:var(--text-light);margin:12px 0">No items due for review. Come back later or add items to your study set.</p>
+      <button class="btn btn-primary" onclick="navigateTo('wordbank')">Browse Word Bank</button>
+    </div>`;return;
+  }
+  fcState={items:shuffle(due).slice(0,30),current:0,flipped:false};
+  renderCurrentCard();
+}
+
+function renderCurrentCard(){
+  const el=document.getElementById('fc-area');
+  if(fcState.current>=fcState.items.length){
+    el.innerHTML=`<div class="card" style="text-align:center;padding:40px">
+      <h2>&#127881; Session Complete!</h2>
+      <p style="color:var(--text-light);margin:12px 0">You reviewed ${fcState.items.length} item${fcState.items.length!==1?'s':''}.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:16px">
+        <button class="btn btn-primary" onclick="renderFlashcards()">Review Again</button>
+        <button class="btn btn-secondary" onclick="navigateTo('dashboard')">Dashboard</button>
+      </div>
+    </div>`;return;
+  }
+  const item=fcState.items[fcState.current];
+  const box=getSRSBox(item.id);
+  fcState.flipped=false;
+  el.innerHTML=`<div class="flashcard-container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:.82rem;color:var(--text-light)">Card ${fcState.current+1} of ${fcState.items.length}</span>
+      <span class="srs-badge ${SRS_CLASSES[box]}">${SRS_LABELS[box]}</span>
+    </div>
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <h2>${esc(item.text)}</h2>
+          <span class="badge" style="background:rgba(255,255,255,.2);color:#fff;margin-top:8px">${esc(item.category)}</span>
+          <div class="flashcard-hint">Click to reveal meaning</div>
+        </div>
+        <div class="flashcard-back">
+          <h3>${esc(item.text)}</h3>
+          <p>${esc(item.meaning)}</p>
+          <div class="fc-example">"${esc(item.example)}"</div>
+          ${item.mistake?`<p style="font-size:.78rem;color:var(--red);margin-top:8px">&#9888; ${esc(item.mistake)}</p>`:''}
+        </div>
+      </div>
+    </div>
+    <div id="srs-buttons" style="display:none">
+      <p style="text-align:center;font-size:.82rem;color:var(--text-light);margin-bottom:10px">How well did you know this?</p>
+      <div class="srs-buttons">
+        <button class="srs-btn again" onclick="rateSRS(0)">Again</button>
+        <button class="srs-btn hard" onclick="rateSRS(1)">Hard</button>
+        <button class="srs-btn good" onclick="rateSRS(2)">Good</button>
+        <button class="srs-btn easy" onclick="rateSRS(3)">Easy</button>
+      </div>
+      <div class="srs-info">Again = reset &middot; Hard = step back &middot; Good = advance &middot; Easy = skip ahead</div>
+    </div>
+    <div style="text-align:center;margin-top:12px">
+      <button class="btn-audio" onclick="speak('${esc(item.text.replace(/'/g,"\\'"))}')" style="width:40px;height:40px;font-size:1rem">&#128264;</button>
+    </div>
+  </div>`;
+}
+
+function flipCard(){
+  const card=document.getElementById('flashcard');
+  if(!card)return;
+  fcState.flipped=!fcState.flipped;
+  card.classList.toggle('flipped');
+  if(fcState.flipped)document.getElementById('srs-buttons').style.display='block';
+}
+
+function rateSRS(quality){
+  const item=fcState.items[fcState.current];
+  srsAnswer(item.id,quality);
+  fcState.current++;
+  renderCurrentCard();
+}
+
+/* =====================================================================
+   QUIZ MODE — WITH HAND-CRAFTED DISTRACTORS
+   ===================================================================== */
+let quizState={questions:[],current:0,score:0,answered:false,total:0};
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function pick(arr,n){return shuffle(arr).slice(0,n)}
+function randFrom(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+function getDistractors(item, type, pool, count){
+  const correctText=type==='meaning'?toStr(item.meaning):toStr(item.text);
+  const hc=DISTRACTORS[item.text];
+  if(hc && hc[type] && hc[type].length){
+    const crafted=uniqueStrings(hc[type]).filter(t=>toStr(t).trim().toLowerCase()!==correctText.trim().toLowerCase()).slice(0,count).map(t=>({text:t,correct:false}));
+    if(crafted.length>=count)return crafted;
+  }
+  let candidates=(pool||[]).filter(i=>i.id!==item.id);
+  if(type==='fill'||type==='collocation'){
+    const sameCat=candidates.filter(c=>c.category===item.category);
+    if(sameCat.length>=count)candidates=sameCat;
+  }
+  const mapped=(type==='meaning'?candidates.map(d=>d.meaning):candidates.map(d=>d.text))
+    .map(v=>toStr(v).trim())
+    .filter(Boolean)
+    .filter(v=>v.toLowerCase()!==correctText.trim().toLowerCase());
+  return pick(uniqueStrings(mapped),count).map(t=>({text:t,correct:false}));
+}
+
+function generateQuestions(type,num,level){
+  let items=level?bank.filter(i=>i.level===level):bank;
+  // Prioritise SRS-due items if checkbox checked
+  if(document.getElementById('quiz-srs-priority').checked){
+    const dueItems=items.filter(i=>isDue(i.id));
+    if(dueItems.length>=4)items=[...shuffle(dueItems),...shuffle(items.filter(i=>!isDue(i.id)))];
+  }
+  if(items.length<4)return[];
+  const questions=[];
+  const types=type==='mixed'?['fill','meaning','error','collocation']:[type];
+  const used=new Set();
+
+  for(let q=0;q<num&&q<items.length;q++){
+    const qType=randFrom(types);
+    // Pick unused item when possible
+    let item;
+    const unused=items.filter(i=>!used.has(i.id));
+    item=unused.length?randFrom(unused):randFrom(items);
+    used.add(item.id);
+
+    const pool=items.filter(i=>i.id!==item.id);
+    if(pool.length<3)continue;
+    let question;
+    switch(qType){
+      case'fill':question=makeQuizFill(item,pool);break;
+      case'purpose':question=makeQuizPurpose(item,pool);break;
+      case'tone':question=makeQuizTone(item,pool);break;
+      case'meaning':question=makeQuizMeaning(item,pool);break;
+      case'function':question=makeQuizFunction(item,pool);break;
+      case'error':question=makeQuizError(item,pool);break;
+      case'collocation':question=makeQuizCollocation(item,pool);break;
+      default:question=makeQuizMeaning(item,pool);
+    }
+    if(question && Array.isArray(question.options) && question.options.length===4 && question.options.some(o=>o.correct))questions.push({...question,sourceItem:item});
+  }
+  return questions;
+}
+
+function makeQuizFill(item,pool){
+  const masked=buildMaskedExample(item);
+  if(!masked) return makeQuizMeaning(item,pool);
+  const prompt=`Complete the sentence:\n"${masked}"`;
+  const distractors=getDistractors(item,'fill',pool,3);
+  const options=buildOptions(item.text,distractors);
+  if(!options)return makeQuizMeaning(item,pool);
+  return{type:'fill',prompt,options,
+    explanation:`"${item.text}" fits naturally here. It means: ${item.meaning}`,
+    distractorNote:distractors.map(d=>`"${d.text}" doesn't fit because it has a different meaning or doesn't collocate correctly.`).join(' '),
+    betterExample:item.example};
+}
+
+function makeQuizPurpose(item,pool){
+  const funcNames={greeting:'greet a friend',opening:'open an email',explaining:'explain something',reacting:'react to news',advising:'give advice',suggesting:'make a suggestion',inviting:'invite someone',apologising:'apologise',closing:'close an email'};
+  const prompt=`You are writing to a friend and want to ${funcNames[item.func]||item.func}. Which phrase fits best?`;
+  const distractors=getDistractors(item,'purpose',pool.filter(p=>p.func!==item.func),3);
+  if(distractors.length<3)return makeQuizMeaning(item,pool);
+  const options=buildOptions(item.text,distractors);
+  if(!options)return makeQuizMeaning(item,pool);
+  return{type:'purpose',prompt,options,explanation:`"${item.text}" is used for ${item.func}. ${item.meaning}`,distractorNote:`The other options are used for different communicative purposes.`,betterExample:item.example};
+}
+
+function makeQuizTone(item,pool){
+  const prompt=`You are writing to a close friend and want to sound ${item.tone} while ${item.func}. Which expression fits best?`;
+  const distractors=getDistractors(item,'tone',pool.filter(p=>p.tone!==item.tone),3);
+  if(distractors.length<3)return makeQuizMeaning(item,pool);
+  const options=buildOptions(item.text,distractors);
+  if(!options)return makeQuizMeaning(item,pool);
+  return{type:'tone',prompt,options,explanation:`"${item.text}" has a ${item.tone} tone. ${item.meaning}`,distractorNote:`The other options have a different tone — they wouldn't convey the same feeling.`,betterExample:item.example};
+}
+
+function makeQuizMeaning(item,pool){
+  const prompt=`What does "${item.text}" mean?`;
+  const distractors=getDistractors(item,'meaning',pool,3);
+  const options=buildOptions(item.meaning,distractors);
+  if(!options)return null;
+  return{type:'meaning',prompt,options,explanation:`"${item.text}" means: ${item.meaning}`,distractorNote:`The other definitions describe different expressions.`,betterExample:item.example};
+}
+
+function makeQuizFunction(item,pool){
+  const prompt=`You are writing an informal email to a friend. Which phrase best fits the ${item.func} part?`;
+  const diffFunc=pool.filter(d=>d.func!==item.func);
+  const distractors=getDistractors(item,'function',diffFunc.length>=3?diffFunc:pool,3);
+  const options=buildOptions(item.text,distractors);
+  if(!options)return makeQuizMeaning(item,pool);
+  return{type:'function',prompt,options,explanation:`"${item.text}" is used for ${item.func}. ${item.meaning}`,distractorNote:`The other options are better suited for different parts of an email.`,betterExample:item.example};
+}
+
+function makeQuizError(item,pool){
+  const prompt=`Which sentence sounds most natural and correct in an email to a friend?`;
+  const hc=DISTRACTORS[item.text];
+  const masked=buildMaskedExample(item);
+  let wrongSentences=[];
+
+  if(hc && hc.fill && masked){
+    wrongSentences=uniqueStrings(hc.fill).map(wrong=>({
+      text:masked.replace('______',wrong),
+      correct:false
+    })).filter(o=>toStr(o.text).trim().toLowerCase()!==toStr(item.example).trim().toLowerCase()).slice(0,3);
+  }
+
+  if(wrongSentences.length<3) return makeQuizMeaning(item,pool);
+
+  const options=buildOptions(item.example,wrongSentences);
+  if(!options)return makeQuizMeaning(item,pool);
+  return{type:'error',prompt,options,explanation:`The correct sentence uses "${item.text}" naturally. ${item.meaning}`,distractorNote:`The other sentences contain errors or unnatural phrasing.`,betterExample:item.example};
+}
+
+function makeQuizCollocation(item,pool){
+  const masked=buildMaskedExample(item);
+  const prompt=masked?`Complete the sentence with the best word combination:\n"${masked}"`:`Which word combination is correct and natural?`;
+  const hc=DISTRACTORS[item.text];
+  let distractors;
+  if(hc && hc.fill){
+    distractors=hc.fill.slice(0,3).map(t=>({text:t,correct:false}));
+  }else{
+    distractors=pick(pool,3).map(d=>{
+      const w1=item.text.split(' ');const w2=d.text.split(' ');
+      if(w1.length>1&&w2.length>1)return{text:w1[0]+' '+w2[w2.length-1],correct:false};
+      return{text:d.text,correct:false};
+    });
+  }
+  const options=buildOptions(item.text,distractors);
+  if(!options)return makeQuizMeaning(item,pool);
+  return{type:'collocation',prompt,options,explanation:`"${item.text}" is the correct combination. ${item.meaning}`,distractorNote:`The other combinations are not natural English collocations.`,betterExample:item.example};
+}
+
+function startQuiz(){
+  const type=document.getElementById('quiz-type-select').value;
+  const num=parseInt(document.getElementById('quiz-num').value);
+  const level=document.getElementById('quiz-level').value;
+  const questions=generateQuestions(type,num,level);
+  if(questions.length<1){toast('Not enough items. Try different settings.');return}
+  quizState={questions,current:0,score:0,answered:false,total:questions.length};
+  document.getElementById('quiz-setup').style.display='none';
+  document.getElementById('quiz-area').style.display='block';
+  renderQuizQuestion();
+}
+
+function exitQuiz(){
+  quizState={questions:[],current:0,score:0,answered:false,total:0};
+  document.getElementById('quiz-setup').style.display='block';
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('quiz-area').innerHTML='';
+}
+
+function renderQuizQuestion(){
+  if(quizState.current>=quizState.total){renderQuizEnd();return}
+  const q=quizState.questions[quizState.current];
+  const pct=Math.round(quizState.current/quizState.total*100);
+  quizState.answered=false;
+  document.getElementById('quiz-area').innerHTML=`
+    <div class="quiz-question">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-secondary btn-sm" onclick="exitQuiz()">← Back to setup</button>
+        <div class="quiz-counter">Question ${quizState.current+1} of ${quizState.total} &middot; Score: ${quizState.score} &middot; Streak: ${progress.streak}</div>
+      </div>
+      <div class="quiz-score-bar"><div class="quiz-score-fill" style="width:${pct}%"></div></div>
+      <div class="quiz-prompt">${esc(q.prompt).replace(/\n/g,'<br>')}</div>
+      <div class="quiz-options">${q.options.map((o,i)=>`<div class="quiz-option" data-idx="${i}" onclick="answerQuiz(${i})">${esc(o.text)}</div>`).join('')}</div>
+      <div id="quiz-feedback"></div>
+    </div>`;
+}
+
+function answerQuiz(idx){
+  if(quizState.answered)return;
+  quizState.answered=true;
+  const q=quizState.questions[quizState.current];
+  const correct=q.options[idx].correct;
+  const correctIdx=q.options.findIndex(o=>o.correct);
+
+  document.querySelectorAll('.quiz-option').forEach((el,i)=>{
+    if(i===idx)el.classList.add(correct?'correct':'incorrect');
+    if(i===correctIdx&&!correct)el.classList.add('reveal-correct');
+    el.style.cursor='default';
+  });
+
+  // Track progress
+  progress.quizAttempts++;
+  const cat=q.sourceItem.category;const fn=q.sourceItem.func;
+  if(!progress.categoryStats[cat])progress.categoryStats[cat]={attempts:0,correct:0};
+  if(!progress.funcStats[fn])progress.funcStats[fn]={attempts:0,correct:0};
+  progress.categoryStats[cat].attempts++;
+  progress.funcStats[fn].attempts++;
+
+  if(correct){
+    quizState.score++;progress.quizCorrect++;progress.streak++;
+    if(progress.streak>progress.bestStreak)progress.bestStreak=progress.streak;
+    progress.categoryStats[cat].correct++;
+    progress.funcStats[fn].correct++;
+    srsAnswer(q.sourceItem.id,2); // good
+  }else{
+    progress.streak=0;
+    if(!progress.missedItems[q.sourceItem.id])progress.missedItems[q.sourceItem.id]=0;
+    progress.missedItems[q.sourceItem.id]++;
+    srsAnswer(q.sourceItem.id,0); // again
+  }
+  recordHistory();
+  saveProgress();
+
+  const fb=document.getElementById('quiz-feedback');
+  fb.innerHTML=`<div class="quiz-feedback ${correct?'correct-fb':'incorrect-fb'}">
+    <h4>${correct?'&#10003; Correct!':'&#10007; Not quite'}</h4>
+    <p>${esc(q.explanation)}</p>
+    <p style="color:var(--text-light);font-size:.8rem">${esc(q.distractorNote||'')}</p>
+    <p style="margin-top:6px"><strong>Example:</strong> <em>${esc(q.betterExample)}</em></p>
+    <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="quizState.current++;renderQuizQuestion()">${quizState.current+1<quizState.total?'Next Question':'See Results'}</button>
+  </div>`;
+}
+
+function renderQuizEnd(){
+  const pct=Math.round(quizState.score/quizState.total*100);
+  let msg='Keep practising!';if(pct>=80)msg='Excellent work!';else if(pct>=60)msg='Good effort!';
+  document.getElementById('quiz-area').innerHTML=`
+    <div class="card" style="max-width:500px;text-align:center;padding:36px">
+      <h2 style="margin-bottom:8px">Quiz Complete!</h2>
+      <div class="stat-number" style="font-size:2.8rem">${pct}%</div>
+      <p style="color:var(--text-light);margin:8px 0">${quizState.score} out of ${quizState.total} correct</p>
+      <p style="font-size:1.05rem;font-weight:600;margin-bottom:18px">${msg}</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn btn-primary" onclick="startQuiz()">Try Again</button>
+        <button class="btn btn-secondary" onclick="exitQuiz()">New Quiz</button>
+      </div>
+    </div>`;
+}
+
+/* =====================================================================
+   SENTENCE PATTERNS
+   ===================================================================== */
+const PATTERNS=[
+  {purpose:"Starting the email",patterns:[
+    {text:"I just wanted to tell you about...",examples:["I just wanted to tell you about the incredible trip I took last weekend!","I just wanted to tell you about something funny that happened at school.","I just wanted to tell you about the new hobby I've picked up."],practice:"Write a sentence starting with this pattern about something exciting that happened recently."},
+    {text:"You won't believe what happened...",examples:["You won't believe what happened at the party on Saturday night!","You won't believe what happened when I tried to cook dinner for the first time.","You won't believe what happened on my way to work this morning."],practice:"Use this pattern to tell a friend about a surprising event."},
+    {text:"I've been meaning to write to you about...",examples:["I've been meaning to write to you about the concert we went to.","I've been meaning to write to you about my new job.","I've been meaning to write to you about our plans for the summer."],practice:"Start an email to a friend you haven't contacted in a while."},
+    {text:"Guess what!",examples:["Guess what! I finally passed my driving test!","Guess what! We're moving to a bigger flat next month.","Guess what! I met someone famous at the airport."],practice:"Use 'Guess what!' to share some good news with a friend."},
+  ]},
+  {purpose:"Giving advice",patterns:[
+    {text:"If I were you, I'd...",examples:["If I were you, I'd talk to your boss about it — I'm sure she'd understand.","If I were you, I'd take a few days off and just relax.","If I were you, I'd give it a try — you've got nothing to lose!"],practice:"A friend is stressed about exams. Give them advice using this pattern."},
+    {text:"One thing that really helped was...",examples:["One thing that really helped was making a study plan early on.","One thing that really helped was talking to someone who'd been through the same thing.","One thing that really helped was taking breaks instead of studying non-stop."],practice:"Share a helpful tip with a friend starting a new job."},
+    {text:"One thing you could do is...",examples:["One thing you could do is ask your flatmate to split the cost.","One thing you could do is try a different approach and see what happens.","One thing you could do is join a club — it's a great way to meet people."],practice:"Suggest a solution to a friend feeling lonely in a new city."},
+    {text:"I'd highly recommend...",examples:["I'd highly recommend the Italian place on Park Street — the pasta is amazing.","I'd highly recommend taking the train instead of driving.","I'd highly recommend that documentary I told you about."],practice:"Recommend something (a film, place, or activity) to your friend."},
+  ]},
+  {purpose:"Describing experiences",patterns:[
+    {text:"I was a bit nervous at first, but...",examples:["I was a bit nervous at first, but once I started talking, everything was fine.","I was a bit nervous at first, but the people were so friendly that I relaxed quickly.","I was a bit nervous at first, but it turned out to be a great experience."],practice:"Describe a time when you tried something new."},
+    {text:"The best part was...",examples:["The best part was the sunset — I've never seen anything so beautiful.","The best part was when the band played my favourite song.","The best part was that we had the whole beach to ourselves."],practice:"Tell a friend about the highlight of a recent trip or event."},
+    {text:"It was such a... that...",examples:["It was such a surprise that I nearly dropped my phone!","It was such a long journey that I fell asleep three times on the train.","It was such a relief that I couldn't stop smiling for the rest of the day."],practice:"Describe a strong experience using emphasis."},
+    {text:"What I liked most was...",examples:["What I liked most was the atmosphere — everyone was so welcoming.","What I liked most was the food, especially the desserts.","What I liked most was how organised everything was."],practice:"Write about your favourite part of a recent experience."},
+  ]},
+  {purpose:"Reacting to news",patterns:[
+    {text:"I was over the moon when...",examples:["I was over the moon when I got the acceptance letter!","I was over the moon when she said yes to the invitation.","I was over the moon when I found out we were going to the same university."],practice:"React to some great news a friend has shared."},
+    {text:"I know what you mean...",examples:["I know what you mean — it can be really frustrating when that happens.","I know what you mean about the weather — it's been terrible here too.","I know what you mean — finding the right flat is so stressful!"],practice:"Show empathy to a friend complaining about something."},
+    {text:"That sounds amazing!",examples:["That sounds amazing — I'm so happy for you!","That sounds amazing — you must have had the best time!","That sounds amazing — I wish I could have been there!"],practice:"React enthusiastically to a friend's good news."},
+  ]},
+  {purpose:"Apologising",patterns:[
+    {text:"Sorry for not replying sooner...",examples:["Sorry for not replying sooner — I've been incredibly busy with exams.","Sorry for not replying sooner — I completely lost track of time this week.","Sorry for not replying sooner — things have been a bit hectic at home."],practice:"Start an email apologising for a late reply."},
+    {text:"I hope you don't mind me asking, but...",examples:["I hope you don't mind me asking, but did everything work out with the job?","I hope you don't mind me asking, but are you okay? You seemed a bit quiet.","I hope you don't mind me asking, but would you be able to lend me your notes?"],practice:"Ask a friend a sensitive question politely."},
+  ]},
+  {purpose:"Closing the email",patterns:[
+    {text:"Anyway, I'd better go now...",examples:["Anyway, I'd better go now — I've still got loads of homework to do!","Anyway, I'd better go now — early start tomorrow!","Anyway, I'd better go now, but let's chat again soon."],practice:"Write a natural closing for an email to a close friend."},
+    {text:"Write back when you can.",examples:["No pressure — just write back when you can!","I'd love to hear what you've been up to. Write back when you can!","Take your time and write back when you can."],practice:"End an email with a relaxed request for a reply."},
+    {text:"Can't wait to hear from you!",examples:["Can't wait to hear from you — I want to know everything!","Can't wait to hear from you and catch up properly.","Can't wait to hear from you. Take care!"],practice:"Write an enthusiastic email closing."},
+  ]},
+];
+
+function renderPatterns(){
+  document.getElementById('patterns-content').innerHTML=PATTERNS.map((group,gi)=>`
+    <div class="pattern-group">
+      <div class="pattern-group-title">&#128204; ${esc(group.purpose)}</div>
+      ${group.patterns.map((p,pi)=>`
+        <div class="pattern-card" onclick="togglePattern(this)">
+          <div class="pattern-text">${esc(p.text)} <button class="btn-audio" onclick="event.stopPropagation();speak('${esc(p.text.replace(/'/g,"\\'").replace(/\.\.\./g,''))}')">&#128264;</button></div>
+          <div class="pattern-examples" style="display:none">
+            ${p.examples.map(e=>`<div class="pattern-example">"${esc(e)}"</div>`).join('')}
+            <div class="pattern-practice"><strong>Practice:</strong> ${esc(p.practice)}</div>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+function togglePattern(el){
+  const ex=el.querySelector('.pattern-examples');const showing=ex.style.display!=='none';
+  el.parentElement.querySelectorAll('.pattern-examples').forEach(e=>e.style.display='none');
+  el.parentElement.querySelectorAll('.pattern-card').forEach(c=>c.classList.remove('expanded'));
+  if(!showing){ex.style.display='block';el.classList.add('expanded')}
+}
+
+/* =====================================================================
+   SENTENCE BUILDER — IMPROVED COMPATIBILITY MATRIX
+   ===================================================================== */
+const SB_DATA={
+  opening:["I just wanted to tell you","You'll never guess what happened","I've been meaning to write","I thought I'd drop you a line","Great news!","So, guess what","I was so excited to hear","Sorry it's been a while, but"],
+  linking:["because","and the thing is","but honestly","so anyway","and on top of that","which was great because","and to make things better","although at first"],
+  feeling:["I was absolutely thrilled","I couldn't believe it","I was a bit nervous","it was such a relief","I was over the moon","I felt so grateful","I was a bit overwhelmed","I couldn't stop smiling"],
+  content:["I finally got the job I applied for","we had the most amazing time at the festival","the trip turned out better than expected","I managed to pass all my exams","I met someone really interesting at the party","the surprise birthday party was a huge success","the new flat is even better than we hoped","the course has been really challenging but rewarding"],
+  closing:["Anyway, write back when you can!","Can't wait to hear your news!","Let me know what you think!","I'll keep you posted on everything.","Drop me a line when you're free!","Hope to hear from you soon!","Take care and speak soon!","I'd love to catch up properly soon."]
+};
+
+// Compatibility matrix: [openingIdx][linkingIdx] => -1 (bad), 0 (ok), 1 (good)
+const SB_COMPAT_OL=[[1,0,0,0,0,1,1,0],[1,1,0,1,0,0,0,1],[0,1,1,0,0,0,0,0],[0,0,1,1,0,1,0,0],[1,1,0,1,1,1,1,-1],[1,1,0,1,0,0,1,0],[0,0,0,0,0,1,0,1],[-1,1,1,0,1,0,0,1]];
+// Feeling-content compatibility
+const SB_COMPAT_FC=[[1,1,1,1,1,1,1,1],[1,1,1,0,1,1,0,0],[0,0,1,0,0,0,0,1],[1,0,1,1,0,0,1,1],[1,1,1,1,1,1,1,0],[1,0,0,1,0,1,1,1],[0,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,0]];
+
+function initBuilder(){
+  Object.keys(SB_DATA).forEach(key=>{
+    const sel=document.getElementById('sb-'+key);if(!sel)return;
+    sel.innerHTML='<option value="">Choose...</option>'+SB_DATA[key].map((v,i)=>`<option value="${i}">${v}</option>`).join('');
+    sel.onchange=updateBuilderPreview;
+  });
+  updateBuilderPreview();
+}
+
+function updateBuilderPreview(){
+  const parts=[];
+  ['opening','linking','feeling','content','closing'].forEach(key=>{
+    const sel=document.getElementById('sb-'+key);
+    if(sel&&sel.value!=='')parts.push(SB_DATA[key][parseInt(sel.value)]);
+  });
+  const preview=document.getElementById('sb-preview');
+  if(!parts.length){preview.textContent='Select chunks above to build a sentence...';preview.classList.remove('filled');return}
+  preview.textContent=parts.join(' — ');
+  preview.classList.add('filled');
+}
+
+function checkSentence(){
+  const vals={};let filled=0;
+  ['opening','linking','feeling','content','closing'].forEach(key=>{
+    const sel=document.getElementById('sb-'+key);
+    if(sel&&sel.value!==''){vals[key]=parseInt(sel.value);filled++}else{vals[key]=-1}
+  });
+  if(filled<3){toast('Please select at least 3 chunks.');return}
+
+  let score=0;let issues=[];let tips=[];
+
+  // Check opening-linking compatibility
+  if(vals.opening>=0 && vals.linking>=0){
+    const c=SB_COMPAT_OL[vals.opening]?.[vals.linking]??0;
+    score+=c;
+    if(c<0)issues.push('The opening and linking chunks don\'t connect smoothly.');
+    if(c>0)tips.push('Nice flow from your opening to the linking phrase.');
+  }
+  // Check feeling-content compatibility
+  if(vals.feeling>=0 && vals.content>=0){
+    const c=SB_COMPAT_FC[vals.feeling]?.[vals.content]??0;
+    score+=c;
+    if(c<0)issues.push('The feeling and content don\'t match well — the emotion seems disconnected from the event.');
+    if(c>0)tips.push('Great match between the feeling and the content.');
+  }
+  // Check apology opening with excited feeling
+  if(vals.opening===7 && vals.feeling!==undefined && [0,4,7].includes(vals.feeling)){
+    issues.push('Starting with "Sorry" and then sounding very excited feels contradictory.');score--;
+  }
+  // Bonus for using all 5
+  if(filled===5){tips.push('Using all five chunks makes a rich, detailed sentence.');score++}
+
+  let rating,note,suggestion='';
+  if(score>=2){rating='natural';note='This reads naturally and flows well.'}
+  else if(score>=0){rating='natural';note='This works! The sentence sounds like a real email.'}
+  else{rating='awkward';note='Some parts don\'t connect smoothly.'}
+
+  if(issues.length)suggestion=issues.join(' ');
+  if(tips.length&&!issues.length)note+=' '+tips.join(' ');
+
+  const icons={natural:'&#10003;',awkward:'&#9889;',poor:'&#10007;'};
+  document.getElementById('sb-result').innerHTML=`
+    <div class="sb-result ${rating}">
+      <h4>${icons[rating]} ${rating==='natural'?'Sounds natural!':'A bit awkward'}</h4>
+      <p>${note}</p>
+      ${suggestion?`<p style="margin-top:6px"><strong>Tip:</strong> ${suggestion}</p>`:''}
+    </div>`;
+}
+
+function resetBuilder(){
+  ['opening','linking','feeling','content','closing'].forEach(key=>{const sel=document.getElementById('sb-'+key);if(sel)sel.value=''});
+  updateBuilderPreview();document.getElementById('sb-result').innerHTML='';
+}
+function randomBuilder(){
+  ['opening','linking','feeling','content','closing'].forEach(key=>{const sel=document.getElementById('sb-'+key);if(sel){const opts=sel.options;sel.selectedIndex=1+Math.floor(Math.random()*(opts.length-1))}});
+  updateBuilderPreview();
+}
+
+/* =====================================================================
+   PROGRESS — WITH SPARKLINE + SRS SUMMARY
+   ===================================================================== */
+function recordHistory(){
+  const today=new Date().toISOString().slice(0,10);
+  if(!progress.history)progress.history=[];
+  let entry=progress.history.find(h=>h.date===today);
+  if(!entry){entry={date:today,attempts:0,correct:0};progress.history.push(entry)}
+  entry.attempts++;
+  if(progress.quizCorrect>0)entry.correct=progress.quizCorrect-(progress.quizAttempts-entry.attempts>0?progress.history.filter(h=>h.date!==today).reduce((s,h)=>s+h.correct,0):0);
+  // Simpler: just track today's results
+  entry.correct=entry.attempts-(progress.quizAttempts-progress.quizCorrect-(progress.history.filter(h=>h.date!==today).reduce((s,h)=>s+(h.attempts-h.correct),0)));
+  if(entry.correct<0)entry.correct=0;
+  if(entry.correct>entry.attempts)entry.correct=entry.attempts;
+}
+
+function renderProgress(){
+  const acc=progress.quizAttempts?Math.round(progress.quizCorrect/progress.quizAttempts*100):0;
+  let strongest='—',weakest='—',bestAcc=0,worstAcc=100;
+  Object.entries(progress.categoryStats).forEach(([cat,s])=>{
+    if(s.attempts>=2){const a=Math.round(s.correct/s.attempts*100);if(a>bestAcc){bestAcc=a;strongest=cat}if(a<worstAcc){worstAcc=a;weakest=cat}}
+  });
+
+  document.getElementById('progress-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-number">${bank.length}</div><div class="stat-label">Total Items</div></div>
+    <div class="stat-card"><div class="stat-number">${progress.quizAttempts}</div><div class="stat-label">Questions Done</div></div>
+    <div class="stat-card"><div class="stat-number">${acc}%</div><div class="stat-label">Accuracy</div></div>
+    <div class="stat-card"><div class="stat-number">${progress.bestStreak}</div><div class="stat-label">Best Streak</div></div>
+    <div class="stat-card"><div class="stat-number" style="font-size:1.1rem;text-transform:capitalize">${strongest}</div><div class="stat-label">Strongest</div></div>
+    <div class="stat-card"><div class="stat-number" style="font-size:1.1rem;text-transform:capitalize;color:var(--orange)">${weakest}</div><div class="stat-label">Weakest</div></div>`;
+
+  // Sparkline
+  const spark=document.getElementById('sparkline-area');
+  const hist=progress.history||[];
+  if(hist.length>=2){
+    const last14=hist.slice(-14);
+    const maxA=Math.max(...last14.map(h=>h.attempts),1);
+    const w=280;const h=50;const step=w/(last14.length-1||1);
+    let path='';let dots='';
+    last14.forEach((d,i)=>{
+      const pct=d.attempts?d.correct/d.attempts:0;
+      const x=i*step;const y=h-pct*h;
+      path+=(i===0?'M':'L')+` ${x} ${y}`;
+      dots+=`<circle cx="${x}" cy="${y}" r="3" fill="var(--accent)"><title>${d.date}: ${Math.round(pct*100)}%</title></circle>`;
+    });
+    spark.innerHTML=`<svg viewBox="-5 -5 ${w+10} ${h+10}" preserveAspectRatio="none">
+      <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      ${dots}</svg>
+      <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-light)"><span>${last14[0].date}</span><span>${last14[last14.length-1].date}</span></div>`;
+  }else{spark.innerHTML='<p style="color:var(--text-light);font-size:.84rem">Take quizzes on different days to see your progress chart.</p>'}
+
+  // SRS summary
+  const srsSummary=document.getElementById('srs-summary');
+  const boxes=[0,0,0,0,0];
+  Object.values(progress.srs).forEach(d=>{if(d.box>=0&&d.box<=4)boxes[d.box]++});
+  const total=boxes.reduce((a,b)=>a+b,0)||1;
+  srsSummary.innerHTML=SRS_LABELS.map((label,i)=>{
+    const pct=Math.round(boxes[i]/total*100);
+    return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.8rem"><span>${label}</span><span>${boxes[i]} items (${pct}%)</span></div><div class="progress-bar"><div class="progress-fill ${i<=1?'orange':i<=2?'accent':'green'}" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+
+  // Category bars
+  document.getElementById('prog-cat-bars').innerHTML=Object.entries(progress.categoryStats).map(([cat,s])=>{
+    const pct=s.attempts?Math.round(s.correct/s.attempts*100):0;
+    return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.8rem"><span style="text-transform:capitalize">${cat}</span><span>${pct}% (${s.correct}/${s.attempts})</span></div><div class="progress-bar"><div class="progress-fill ${pct>=70?'green':pct>=40?'accent':'orange'}" style="width:${pct}%"></div></div></div>`;
+  }).join('')||'<p style="color:var(--text-light);font-size:.84rem">No quiz data yet.</p>';
+
+  document.getElementById('prog-func-bars').innerHTML=Object.entries(progress.funcStats).map(([fn,s])=>{
+    const pct=s.attempts?Math.round(s.correct/s.attempts*100):0;
+    return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.8rem"><span style="text-transform:capitalize">${fn}</span><span>${pct}% (${s.correct}/${s.attempts})</span></div><div class="progress-bar"><div class="progress-fill ${pct>=70?'green':pct>=40?'accent':'orange'}" style="width:${pct}%"></div></div></div>`;
+  }).join('')||'<p style="color:var(--text-light);font-size:.84rem">No data yet.</p>';
+
+  // Revision items
+  const revList=document.getElementById('revision-list');
+  const missed=Object.entries(progress.missedItems||{}).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  if(missed.length){
+    revList.innerHTML=missed.map(([id,count])=>{
+      const item=bank.find(i=>i.id===parseInt(id));if(!item)return'';
+      return `<div class="revision-item"><span><strong>${esc(item.text)}</strong> <span style="color:var(--text-light);font-size:.76rem">(${item.category})</span></span><span style="color:var(--red);font-size:.78rem">missed ${count}&times;</span></div>`;
+    }).join('');
+  }else{revList.innerHTML='<p style="padding:14px;color:var(--text-light);font-size:.84rem">No missed items yet.</p>'}
+}
+
+/* =====================================================================
+   TEACHER MODE
+   ===================================================================== */
+let editingId=null;
+
+function renderTeacherList(){
+  const search=(document.getElementById('teacher-search').value||'').toLowerCase();
+  const cat=document.getElementById('teacher-cat-filter').value;
+  const filtered=bank.filter(i=>{
+    if(search&&!i.text.toLowerCase().includes(search))return false;
+    if(cat&&i.category!==cat)return false;return true;
+  });
+  document.getElementById('teacher-list').innerHTML=filtered.map(item=>`
+    <div class="teacher-item">
+      <span><strong>${esc(item.text)}</strong> <span class="badge badge-${item.category==='sentence stem'?'stem':item.category}" style="font-size:.6rem;padding:2px 5px">${item.category}</span> <span class="badge badge-${item.level.toLowerCase().replace('+','plus')}" style="font-size:.6rem;padding:2px 5px">${item.level}</span></span>
+      <span style="display:flex;gap:4px">
+        <button class="btn btn-secondary btn-sm" onclick="editItem(${item.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.id})">Del</button>
+      </span>
+    </div>`).join('');
+}
+
+function showAddForm(){
+  editingId=null;document.getElementById('teacher-form-title').textContent='Add New Item';
+  ['tf-text','tf-meaning','tf-example','tf-keywords','tf-mistake'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tf-category').value='vocabulary';document.getElementById('tf-level').value='B1';
+  document.getElementById('tf-tone').value='casual';document.getElementById('tf-function').value='opening';
+  document.getElementById('teacher-form-area').style.display='block';
+  document.getElementById('teacher-form-area').scrollIntoView({behavior:'smooth'});
+}
+
+function editItem(id){
+  const item=bank.find(i=>i.id===id);if(!item)return;editingId=id;
+  document.getElementById('teacher-form-title').textContent='Edit Item';
+  document.getElementById('tf-text').value=item.text;document.getElementById('tf-category').value=item.category;
+  document.getElementById('tf-level').value=item.level;document.getElementById('tf-meaning').value=item.meaning;
+  document.getElementById('tf-example').value=item.example;document.getElementById('tf-tone').value=item.tone;
+  document.getElementById('tf-function').value=item.func;
+  document.getElementById('tf-keywords').value=(item.keywords||[]).join(', ');
+  document.getElementById('tf-mistake').value=item.mistake||'';
+  document.getElementById('teacher-form-area').style.display='block';
+  document.getElementById('teacher-form-area').scrollIntoView({behavior:'smooth'});
+}
+
+function saveItem(){
+  const wasEditing=editingId;
+  const text=document.getElementById('tf-text').value.trim();
+  const meaning=document.getElementById('tf-meaning').value.trim();
+  const example=document.getElementById('tf-example').value.trim();
+  if(!text||!meaning||!example){toast('Please fill in text, meaning, and example.');return}
+  const item={text,category:document.getElementById('tf-category').value,meaning,example,
+    tone:document.getElementById('tf-tone').value,func:document.getElementById('tf-function').value,
+    level:document.getElementById('tf-level').value,
+    keywords:document.getElementById('tf-keywords').value.split(',').map(k=>k.trim()).filter(Boolean),
+    mistake:document.getElementById('tf-mistake').value.trim()};
+  if(editingId){const idx=bank.findIndex(i=>i.id===editingId);if(idx!==-1){item.id=editingId;bank[idx]=item}}
+  else{item.id=bank.length?Math.max(...bank.map(i=>i.id))+1:1;bank.push(item)}
+  saveBank();initSRS();cancelEdit();renderAll();toast(wasEditing?'Item updated!':'Item added!');
+}
+
+function cancelEdit(){editingId=null;document.getElementById('teacher-form-area').style.display='none'}
+
+function deleteItem(id){if(!confirm('Delete this item?'))return;bank=bank.filter(i=>i.id!==id);saveBank();renderAll();toast('Item deleted.')}
+
+function exportBank(){
+  const blob=new Blob([JSON.stringify(bank,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='email-language-bank.json';a.click();toast('Bank exported!');
+}
+function importBank(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      const cleaned=normalizeImportedBank(data);
+      if(!cleaned.length){toast('Import failed: no valid items found.');return}
+      bank=cleaned;saveBank();initSRS();renderAll();toast(cleaned.length+' items imported!');
+    }catch(err){toast('Error reading file.')}
+  };reader.readAsText(file);event.target.value='';
+}
+
+/* ===== FULL BACKUP / RESTORE ===== */
+function exportBackup(){
+  const backup={version:2,date:new Date().toISOString(),bank,progress};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='email-lab-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  localStorage.setItem('ell_lastBackup',Date.now().toString());
+  toast('Full backup downloaded!');
+}
+
+function restoreBackup(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.bank){
+        const cleaned=normalizeImportedBank(data.bank);
+        if(cleaned.length){bank=cleaned;saveBank()}
+      }
+      if(data.progress && typeof data.progress==='object'){
+        progress={...progress,...data.progress,srs:(data.progress.srs&&typeof data.progress.srs==='object')?data.progress.srs:{}};
+        saveProgress();
+      }
+      initSRS();renderAll();toast('Backup restored!');
+    }catch(err){toast('Error reading backup.')}
+  };reader.readAsText(file);event.target.value='';
+}
+
+function autoBackupCheck(){
+  const last=parseInt(localStorage.getItem('ell_lastBackup')||'0');
+  const weekAgo=Date.now()-7*86400000;
+  if(last<weekAgo && progress.quizAttempts>10){
+    document.getElementById('dash-backup').innerHTML=`<div class="backup-banner">
+      <span>&#128190; It's been a while since your last backup. Save your progress!</span>
+      <button class="btn btn-sm btn-primary" onclick="exportBackup();document.getElementById('dash-backup').innerHTML=''">Download Backup</button>
+    </div>`;
+  }
+}
+
+function resetProgress(){
+  if(!confirm('Reset all progress? This cannot be undone.'))return;
+  progress={quizAttempts:0,quizCorrect:0,streak:0,bestStreak:0,categoryStats:{},funcStats:{},toneStats:{},favourites:[],difficult:[],mastered:[],missedItems:{},srs:{},history:[]};
+  saveProgress();initSRS();renderAll();toast('Progress reset.');
+}
+function resetToDefault(){
+  if(!confirm('Reset to default bank? Custom items will be lost.'))return;
+  bank=STARTER_DATA.map((it,i)=>({...it,id:i+1}));saveBank();initSRS();renderAll();toast('Bank reset to default.');
+}
+
+/* ===== INIT ===== */
+init();
+// Preload voices for speech synthesis
+if('speechSynthesis' in window)speechSynthesis.getVoices();
+</script>
+<!-- GoatCounter analytics script -->
+<script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Simple client-side password protection -->
+<script>
+  (function () {
+    const correctUsername = "igcse";
+    const correctPassword = "esl2026";
+    function promptForCredentials() {
+      const username = window.prompt("Enter username:");
+      const password = window.prompt("Enter password:");
+      if (username === correctUsername && password === correctPassword) {
+        sessionStorage.setItem("igcse_esl_authenticated", "true");
+      } else {
+        alert("Incorrect credentials. Please try again.");
+        promptForCredentials();
+      }
+    }
+    if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+      promptForCredentials();
+    }
+  })();
+</script>
+</body>
+</html>
