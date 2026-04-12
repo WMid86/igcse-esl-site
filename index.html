@@ -39,8 +39,10 @@
       width: 100%;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      max-height: 350px;
-      object-fit: cover;
+      /* Allow the full hero image to display without being cut off */
+      max-height: none;
+      height: auto;
+      object-fit: contain;
     }
     .hero-title {
       font-size: 2rem;
@@ -116,21 +118,27 @@
     <p class="hero-tagline">Dive into quizzes, labs and guides designed to make your English learning fun and effective.</p>
     <!-- Interactive icon row linking to each exam paper and vocabulary labs -->
     <div class="icon-row">
+      <!-- Updated icons: a pencil for reading & writing, an ear for listening, a speaking head for speaking,
+           a speech bubble for vocabulary labs, and a book for textbook units -->
       <a href="#paper1" title="Paper 1 – Reading &amp; Writing">
-        <span class="icon">📖</span>
+        <span class="icon">📝</span>
         <span class="label">Reading &amp; Writing</span>
       </a>
       <a href="#paper2" title="Paper 2 – Listening">
-        <span class="icon">🎧</span>
+        <span class="icon">👂</span>
         <span class="label">Listening</span>
       </a>
       <a href="#paper3" title="Paper 3 – Speaking">
-        <span class="icon">🎤</span>
+        <span class="icon">🗣</span>
         <span class="label">Speaking</span>
       </a>
       <a href="#vocab" title="Vocabulary Labs">
-        <span class="icon">📚</span>
+        <span class="icon">💬</span>
         <span class="label">Vocabulary</span>
+      </a>
+      <a href="#units" title="Textbook Units">
+        <span class="icon">📘</span>
+        <span class="label">Textbook Units</span>
       </a>
     </div>
   </section>
@@ -144,7 +152,7 @@
     <!-- Paper 1: Reading & Writing -->
     <div id="paper1" class="exam-section">
       <!-- Include a friendly icon to make the section more inviting -->
-      <h2 class="section-header">📖 Paper 1 – Reading &amp; Writing</h2>
+      <h2 class="section-header">📝 Paper 1 – Reading &amp; Writing</h2>
       <div class="section-content hidden">
         <p>Two-hour paper combining reading comprehension and writing tasks. 60 marks (50 % of total grade).</p>
         <ul>
@@ -163,7 +171,7 @@
     <!-- Paper 2: Listening -->
     <div id="paper2" class="exam-section">
       <!-- Headphones icon to symbolise listening tasks -->
-      <h2 class="section-header">🎧 Paper 2 – Listening</h2>
+      <h2 class="section-header">👂 Paper 2 – Listening</h2>
       <div class="section-content hidden">
         <p>Approximately 50-minute listening paper with various short and long audio texts. 40 marks (25 % of total grade).</p>
         <ul>
@@ -174,7 +182,7 @@
     <!-- Paper 3: Speaking -->
     <div id="paper3" class="exam-section">
       <!-- Microphone icon to symbolise speaking tasks -->
-      <h2 class="section-header">🎤 Paper 3 – Speaking</h2>
+      <h2 class="section-header">🗣 Paper 3 – Speaking</h2>
       <div class="section-content hidden">
         <p>10–15 minute speaking test including an interview, short talk and discussion. 40 marks (25 % of total grade).</p>
         <ul>
@@ -185,16 +193,27 @@
       </div>
     </div>
 
-    <!-- Vocabulary Labs & Units -->
+    <!-- Vocabulary Labs -->
     <div id="vocab" class="exam-section">
-      <!-- Books icon to represent vocabulary labs -->
-      <h2 class="section-header">📚 Vocabulary Labs</h2>
+      <!-- Speech bubble icon to represent vocabulary labs -->
+      <h2 class="section-header">💬 Vocabulary Labs</h2>
       <div class="section-content hidden">
         <p>Interactive vocabulary labs to strengthen your lexical range. Practice using words in context and discover idiomatic expressions.</p>
         <ul>
           <li><a href="interview-vocabulary-lab-branded.html">Unit 6: Interview Vocabulary Lab</a></li>
           <li><a href="b2_vocab_interview.html">Unit 6: Interview Vocabulary (B2)</a></li>
           <li>More unit vocabulary labs coming soon</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Textbook units panel added to help students navigate textbook resources by unit -->
+    <div id="units" class="exam-section">
+      <h2 class="section-header">📘 Textbook Units</h2>
+      <div class="section-content hidden">
+        <p>Navigate the Cambridge IGCSE ESL textbook by unit. We'll be adding resources for every unit – start with Unit 6.</p>
+        <ul>
+          <li><a href="#vocab">Unit 6: Interview</a> (see Vocabulary Labs)</li>
+          <li>Units 1–5 &amp; 7–10 (coming soon)</li>
         </ul>
       </div>
     </div>
