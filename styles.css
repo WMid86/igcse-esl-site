@@ -11,16 +11,17 @@
 
 :root {
   /* Base colours */
-  --bg: #f4f6fb;            /* light background for pages */
+  /* Palette update for a more vibrant, youth‑friendly look */
+  --bg: #f7f8fc;            /* very light background */
   --card: #ffffff;          /* white cards and panels */
-  --primary: #6366f1;       /* primary brand colour (indigo) */
-  --primary-light: #eef2ff; /* lighter tint of primary */
-  --primary-dark: #4f46e5;  /* darker shade for emphasis */
-  --accent: #3b82f6;        /* secondary accent colour (blue) */
-  --accent-light: #dbeafe;  /* lighter tint of the accent */
+  --primary: #8b5cf6;       /* vibrant purple primary */
+  --primary-light: #ede9fe; /* lighter tint of primary */
+  --primary-dark: #7c3aed;  /* darker shade for emphasis */
+  --accent: #10b981;        /* energetic emerald accent */
+  --accent-light: #d1fae5;  /* lighter tint of accent */
   --text: #1e293b;          /* default text colour (slate) */
   --text-light: #64748b;    /* muted text */
   --border: #e2e8f0;        /* light border for cards and separators */
   --radius: 10px;           /* consistent border radius for elements */
-  --shadow: 0 2px 8px rgba(0,0,0,.07); /* subtle shadow for depth */
+  --shadow: 0 2px 8px rgba(0,0,0,.08); /* subtle shadow for depth */
 }
