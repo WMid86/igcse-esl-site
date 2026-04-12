@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGCSE 0511 Report Writer</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --primary: #2c5f8a;
+    --primary-light: #e8f0f8;
+    --accent: #3a8f6e;
+    --accent-light: #e6f5ef;
+    --warn: #c47a20;
+    --warn-light: #fdf3e4;
+    --danger: #b5443a;
+    --danger-light: #fce8e6;
+    --text: #2d3748;
+    --muted: #718096;
+    --border: #d2dae4;
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    background: linear-gradient(135deg, var(--primary), #1e4263);
+    color: #fff;
+    padding: 28px 24px 22px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: .3px; }
+  header p  { font-size: .92rem; opacity: .85; margin-top: 4px; }
+
+  /* ---------- LAYOUT ---------- */
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: 0 16px 40px;
+  }
+  @media (max-width: 900px) {
+    .wrapper { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- CARDS ---------- */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+  .card h2 {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h2 .icon { font-size: 1.2rem; }
+
+  /* ---------- REMINDER BOX ---------- */
+  .reminder {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    padding: 16px 20px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin-bottom: 18px;
+    font-size: .88rem;
+  }
+  .reminder strong { display: block; margin-bottom: 6px; font-size: .95rem; }
+  .reminder ul { padding-left: 18px; }
+  .reminder li { margin-bottom: 3px; }
+
+  /* ---------- FORM ELEMENTS ---------- */
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: .88rem;
+    margin-bottom: 5px;
+    color: var(--primary);
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border .2s;
+  }
+  input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44,95,138,.12);
+  }
+  textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-size: .95rem;
+    font-family: inherit;
+    line-height: 1.65;
+    resize: vertical;
+    transition: border .2s;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44,95,138,.12);
+  }
+  .field-row { margin-bottom: 14px; }
+  .word-count {
+    text-align: right;
+    font-size: .78rem;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* ---------- CHECKLIST BADGES ---------- */
+  .checks { margin-top: 12px; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: .85rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: .75rem;
+    font-weight: 600;
+    min-width: 72px;
+    text-align: center;
+  }
+  .badge-included  { background: var(--accent-light); color: var(--accent); }
+  .badge-missing   { background: var(--danger-light); color: var(--danger); }
+  .badge-partial   { background: var(--warn-light);   color: var(--warn);   }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar { position: sticky; top: 20px; align-self: start; }
+  .sidebar .card { margin-bottom: 14px; }
+
+  /* progress bar */
+  .progress-wrap {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 14px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #2ec4a0);
+    border-radius: 8px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  .progress-label {
+    text-align: center;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+
+  /* dashboard checklist */
+  .dash-group { margin-bottom: 14px; }
+  .dash-group h3 {
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .dash-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 0;
+    font-size: .84rem;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-yes   { background: var(--accent); }
+  .dot-no    { background: #cbd5e0; }
+  .dot-warn  { background: var(--warn); }
+
+  /* language flags */
+  .lang-flags { margin-top: 8px; }
+  .lang-flag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: .76rem;
+    font-weight: 600;
+    margin: 3px 4px 3px 0;
+  }
+  .flag-good    { background: var(--accent-light); color: var(--accent); }
+  .flag-warn    { background: var(--warn-light);   color: var(--warn);   }
+  .flag-bad     { background: var(--danger-light);  color: var(--danger); }
+
+  /* total word count */
+  .total-wc {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+  }
+  .total-wc small { font-size: .75rem; font-weight: 400; color: var(--muted); display: block; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity .2s, transform .1s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-primary   { background: var(--primary); color: #fff; }
+  .btn-accent    { background: var(--accent);  color: #fff; }
+  .btn-outline   { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-danger    { background: var(--danger); color: #fff; }
+
+  /* ---------- EXAMPLE SENTENCES ---------- */
+  .examples {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #f7fafc;
+    border-radius: 7px;
+    font-size: .82rem;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+  }
+  .examples strong { color: var(--text); font-size: .84rem; }
+  .examples ul { padding-left: 16px; margin-top: 4px; }
+  .examples li { margin-bottom: 3px; }
+
+  /* ---------- PRINT ---------- */
+  @media print {
+    header { padding: 12px; }
+    .wrapper { display: block; padding: 0; }
+    .sidebar, .btn-row, .reminder, .checks, .examples, .no-print { display: none !important; }
+    .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    textarea, input[type="text"] { border: none; padding: 0; min-height: auto; height: auto; }
+    textarea { white-space: pre-wrap; }
+  }
+
+  /* ---------- SAVED TOAST ---------- */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: .88rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all .3s;
+    pointer-events: none;
+    z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>IGCSE 0511 Report Writer</h1>
+  <p>Plan, draft, and check your report &mdash; step by step</p>
+</header>
+
+<div class="wrapper">
+
+<!-- ============ MAIN COLUMN ============ -->
+<main>
+
+  <!-- Reminder -->
+  <div class="reminder">
+    <strong>What makes a strong report?</strong>
+    <ul>
+      <li>Use <b>formal language</b> throughout</li>
+      <li>Include a clear <b>title</b></li>
+      <li>Organise ideas under <b>subheadings</b></li>
+      <li>Explain <b>who requested</b> the report</li>
+      <li>Explain <b>why</b> the report was written</li>
+      <li>Explain <b>how</b> information was collected</li>
+      <li>Present <b>findings</b> clearly, avoiding personal opinions</li>
+      <li>End with <b>sensible conclusions</b> or recommendations</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1 : Title -->
+  <div class="card" id="sec-title">
+    <h2><span class="icon">1</span> Report Title</h2>
+    <div class="field-row">
+      <label for="reportTitle">Give your report a clear, informative title</label>
+      <input type="text" id="reportTitle" placeholder="e.g. Report on Student Satisfaction with School Facilities" oninput="analyse()">
+    </div>
+    <div class="examples">
+      <strong>Example titles you could adapt:</strong>
+      <ul>
+        <li>Report on Healthy Eating Habits Among Teenagers</li>
+        <li>Report on the Use of Technology in the Classroom</li>
+        <li>Report on After-School Activities and Student Wellbeing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2 : Introduction -->
+  <div class="card" id="sec-intro">
+    <h2><span class="icon">2</span> Introduction</h2>
+    <div class="field-row">
+      <label for="subheading1">Subheading</label>
+      <input type="text" id="subheading1" value="Introduction" oninput="analyse()">
+    </div>
+    <div class="field-row">
+      <label for="introText">Write your introduction below. Explain the background of the report: who asked for it, why it was written, and how information was gathered.</label>
+      <textarea id="introText" placeholder="Start writing your introduction here..." oninput="analyse()"></textarea>
+      <div class="word-count" id="wcIntro">0 words</div>
+    </div>
+
+    <!-- Live checks for introduction -->
+    <div class="checks" id="introChecks">
+      <div class="check-item"><span class="badge badge-missing" id="chkWho">Missing</span> Who requested the report</div>
+      <div class="check-item"><span class="badge badge-missing" id="chkWhy">Missing</span> Why the report was written</div>
+      <div class="check-item"><span class="badge badge-missing" id="chkHow">Missing</span> How information was collected</div>
+      <div class="check-item"><span class="badge badge-missing" id="chkMethod">Missing</span> Method mentioned (survey, questionnaire, interviews, etc.)</div>
+      <div class="check-item"><span class="badge badge-missing" id="chkParticipants">Missing</span> Number of participants or respondents</div>
+    </div>
+
+    <div class="examples">
+      <strong>Useful sentence starters (adapt these in your own words):</strong>
+      <ul>
+        <li>"This report was requested by... in order to..."</li>
+        <li>"The purpose of this report is to investigate..."</li>
+        <li>"Information was gathered through a survey of..."</li>
+        <li>"A total of ... students responded to the questionnaire."</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : Positive Findings -->
+  <div class="card" id="sec-positive">
+    <h2><span class="icon">3</span> Positive Findings</h2>
+    <div class="field-row">
+      <label for="subheading2">Subheading</label>
+      <input type="text" id="subheading2" value="Positive Findings" oninput="analyse()">
+    </div>
+    <div class="field-row">
+      <label for="positiveText">Present the positive results or strengths found in your research.</label>
+      <textarea id="positiveText" placeholder="What were the positive findings from your research?" oninput="analyse()"></textarea>
+      <div class="word-count" id="wcPositive">0 words</div>
+    </div>
+    <div class="examples">
+      <strong>Useful phrases:</strong>
+      <ul>
+        <li>"The majority of respondents stated that..."</li>
+        <li>"A significant number of students reported..."</li>
+        <li>"One of the key strengths identified was..."</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 4 : Areas for Improvement -->
+  <div class="card" id="sec-improve">
+    <h2><span class="icon">4</span> Areas for Improvement</h2>
+    <div class="field-row">
+      <label for="subheading3">Subheading</label>
+      <input type="text" id="subheading3" value="Areas for Improvement" oninput="analyse()">
+    </div>
+    <div class="field-row">
+      <label for="improveText">Present the areas that need improvement or the problems identified.</label>
+      <textarea id="improveText" placeholder="What needs to be improved based on your findings?" oninput="analyse()"></textarea>
+      <div class="word-count" id="wcImprove">0 words</div>
+    </div>
+    <div class="examples">
+      <strong>Useful phrases:</strong>
+      <ul>
+        <li>"However, a number of respondents expressed concern about..."</li>
+        <li>"An area that requires attention is..."</li>
+        <li>"It was found that ... could be improved by..."</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 5 : Conclusion -->
+  <div class="card" id="sec-conclusion">
+    <h2><span class="icon">5</span> Conclusion</h2>
+    <div class="field-row">
+      <label for="subheading4">Subheading</label>
+      <input type="text" id="subheading4" value="Conclusion" oninput="analyse()">
+    </div>
+    <div class="field-row">
+      <label for="conclusionText">Summarise your main findings and make sensible recommendations. Do not introduce new information here.</label>
+      <textarea id="conclusionText" placeholder="Summarise the key points and suggest what should happen next..." oninput="analyse()"></textarea>
+      <div class="word-count" id="wcConclusion">0 words</div>
+    </div>
+    <div class="examples">
+      <strong>Useful phrases:</strong>
+      <ul>
+        <li>"In conclusion, the findings suggest that..."</li>
+        <li>"It is recommended that..."</li>
+        <li>"Overall, the evidence indicates..."</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar">
+
+  <!-- Word Count -->
+  <div class="card">
+    <h2>Word Count</h2>
+    <div class="total-wc" id="totalWC">0 <small>total words</small></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="card">
+    <h2>Progress</h2>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-label" id="progressLabel">0%</div>
+  </div>
+
+  <!-- Structure Checks -->
+  <div class="card" id="dashCard">
+    <h2>Report Dashboard</h2>
+
+    <div class="dash-group">
+      <h3>Structure</h3>
+      <div class="dash-item"><span class="dot dot-no" id="dTitle"></span> Title present</div>
+      <div class="dash-item"><span class="dot dot-no" id="dSubs"></span> At least 3 subheadings</div>
+      <div class="dash-item"><span class="dot dot-no" id="dIntro"></span> Introduction present</div>
+      <div class="dash-item"><span class="dot dot-no" id="dBody"></span> Findings sections present</div>
+      <div class="dash-item"><span class="dot dot-no" id="dConc"></span> Conclusion present</div>
+    </div>
+
+    <div class="dash-group">
+      <h3>Content</h3>
+      <div class="dash-item"><span class="dot dot-no" id="dWho"></span> Who requested the report</div>
+      <div class="dash-item"><span class="dot dot-no" id="dWhy"></span> Why the report was written</div>
+      <div class="dash-item"><span class="dot dot-no" id="dMethod"></span> Data collection method</div>
+      <div class="dash-item"><span class="dot dot-no" id="dParticipants"></span> Number of participants</div>
+      <div class="dash-item"><span class="dot dot-no" id="dPos"></span> Positive point included</div>
+      <div class="dash-item"><span class="dot dot-no" id="dNeg"></span> Improvement point included</div>
+      <div class="dash-item"><span class="dot dot-no" id="dRec"></span> Conclusion / recommendation</div>
+    </div>
+
+    <div class="dash-group">
+      <h3>Language</h3>
+      <div class="lang-flags" id="langFlags">
+        <span class="lang-flag flag-good">Write to see feedback</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="card no-print">
+    <div class="btn-row">
+      <button class="btn btn-accent" onclick="saveWork()">Save</button>
+      <button class="btn btn-primary" onclick="window.print()">Print</button>
+      <button class="btn btn-danger" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+
+</aside>
+</div>
+
+<div class="toast" id="toast">Saved!</div>
+
+<script>
+(function(){
+  // ---- ELEMENTS ----
+  const $ = id => document.getElementById(id);
+  const fields = {
+    title:      $('reportTitle'),
+    sub1:       $('subheading1'),
+    intro:      $('introText'),
+    sub2:       $('subheading2'),
+    positive:   $('positiveText'),
+    sub3:       $('subheading3'),
+    improve:    $('improveText'),
+    sub4:       $('subheading4'),
+    conclusion: $('conclusionText')
+  };
+
+  // ---- WORD COUNT HELPER ----
+  function wc(text){
+    const t = text.trim();
+    return t === '' ? 0 : t.split(/\s+/).length;
+  }
+
+  // ---- PATTERN HELPERS ----
+  function hasMatch(text, patterns){
+    const lower = text.toLowerCase();
+    return patterns.some(p => p instanceof RegExp ? p.test(lower) : lower.includes(p));
+  }
+
+  // ---- INTRO CHECKS ----
+  const whoPatterns = [
+    'requested by', 'asked by', 'commissioned by', 'written for',
+    'prepared for', 'on behalf of', 'was asked to', 'head teacher',
+    'headteacher', 'principal', 'school council', 'student council',
+    'manager', 'director', 'committee', 'board', 'department'
+  ];
+  const whyPatterns = [
+    'purpose of this report', 'aim of this report', 'in order to',
+    'to investigate', 'to find out', 'to examine', 'to explore',
+    'to assess', 'to evaluate', 'to determine', 'to discover',
+    'to understand', 'to analyse', 'to analyze', 'written to',
+    'purpose is to', 'aims to', 'objective'
+  ];
+  const howPatterns = [
+    'survey', 'questionnaire', 'interview', 'observation',
+    'data was collected', 'data were collected', 'information was gathered',
+    'information was collected', 'research was conducted', 'carried out',
+    'distributed', 'responses were', 'feedback was', 'focus group',
+    'poll', 'investigation'
+  ];
+  const methodPatterns = [
+    'survey', 'questionnaire', 'interview', 'observation',
+    'focus group', 'poll', 'online form', 'feedback form',
+    'research method'
+  ];
+  const participantPatterns = [
+    /\d+\s*(students?|people|respondents?|participants?|pupils?|members?|staff|teachers?|employees?)/,
+    /a total of\s*\d+/,
+    /out of\s*\d+/,
+    /\d+\s*out of/,
+    /\d+\s*responses?/,
+    /\d+\s*completed/,
+    /number of (respondents?|participants?|students?)/
+  ];
+
+  // ---- LANGUAGE CHECKS ----
+  const firstPersonRe  = /\b(I think|I believe|I feel|my opinion|we think|we believe|we feel)\b/gi;
+  const opinionRe      = /\b(in my opinion|i strongly feel|personally|i am sure|i am certain|obviously everyone|clearly everyone)\b/gi;
+  const informalRe     = /\b(gonna|wanna|gotta|kinda|sorta|stuff|things like that|you know|basically|literally|pretty much|a lot of|lots of|tons of|kids|guys|cool|awesome|amazing|horrible|terrible|worst ever|best ever|sucks|rubbish|lol|omg|btw)\b/gi;
+  const storyRe        = /\b(once upon|one day|suddenly|then he|then she|it was a dark|the sun was shining|walked into|felt a wave of|heart was pounding)\b/gi;
+
+  // ---- BADGE SETTER ----
+  function setBadge(el, status){
+    el.className = 'badge badge-' + status;
+    el.textContent = status === 'included' ? 'Included' : status === 'missing' ? 'Missing' : 'Partly clear';
+  }
+
+  // ---- DOT SETTER ----
+  function setDot(el, on, warn){
+    el.className = 'dot ' + (on ? 'dot-yes' : warn ? 'dot-warn' : 'dot-no');
+  }
+
+  // ---- MAIN ANALYSIS ----
+  window.analyse = function(){
+    const title      = fields.title.value;
+    const intro      = fields.intro.value;
+    const positive   = fields.positive.value;
+    const improve    = fields.improve.value;
+    const conclusion = fields.conclusion.value;
+    const allText    = [intro, positive, improve, conclusion].join(' ');
+
+    // Word counts per section
+    const wcI = wc(intro), wcP = wc(positive), wcM = wc(improve), wcC = wc(conclusion);
+    $('wcIntro').textContent      = wcI + ' words';
+    $('wcPositive').textContent   = wcP + ' words';
+    $('wcImprove').textContent    = wcM + ' words';
+    $('wcConclusion').textContent = wcC + ' words';
+    const total = wc(title) + wc(fields.sub1.value) + wc(fields.sub2.value) + wc(fields.sub3.value) + wc(fields.sub4.value) + wcI + wcP + wcM + wcC;
+    $('totalWC').innerHTML = total + '<small>total words</small>';
+
+    // ---- INTRO CHECKS ----
+    const whoFound    = hasMatch(intro, whoPatterns);
+    const whyFound    = hasMatch(intro, whyPatterns);
+    const howFound    = hasMatch(intro, howPatterns);
+    const methodFound = hasMatch(intro, methodPatterns);
+    const partFound   = hasMatch(intro, participantPatterns);
+
+    setBadge($('chkWho'),          whoFound ? 'included' : (intro.length > 30 ? 'missing' : 'missing'));
+    setBadge($('chkWhy'),          whyFound ? 'included' : (intro.length > 30 ? 'missing' : 'missing'));
+    setBadge($('chkHow'),          howFound ? 'included' : (hasMatch(intro, methodPatterns) ? 'partial' : (intro.length > 30 ? 'missing' : 'missing')));
+    setBadge($('chkMethod'),       methodFound ? 'included' : (intro.length > 30 ? 'missing' : 'missing'));
+    setBadge($('chkParticipants'), partFound ? 'included' : (intro.length > 30 ? 'missing' : 'missing'));
+
+    // ---- STRUCTURE DASHBOARD ----
+    const hasTitle = title.trim().length > 0;
+    const subs = [fields.sub1.value, fields.sub2.value, fields.sub3.value, fields.sub4.value].filter(s => s.trim().length > 0);
+    const hasSubs  = subs.length >= 3;
+    const hasIntro = wcI >= 5;
+    const hasBody  = wcP >= 5 || wcM >= 5;
+    const hasConc  = wcC >= 5;
+
+    setDot($('dTitle'), hasTitle);
+    setDot($('dSubs'),  hasSubs, subs.length >= 1 && subs.length < 3);
+    setDot($('dIntro'), hasIntro);
+    setDot($('dBody'),  hasBody);
+    setDot($('dConc'),  hasConc);
+
+    // ---- CONTENT DASHBOARD ----
+    setDot($('dWho'),          whoFound);
+    setDot($('dWhy'),          whyFound);
+    setDot($('dMethod'),       methodFound || howFound);
+    setDot($('dParticipants'), partFound);
+    setDot($('dPos'),          wcP >= 5);
+    setDot($('dNeg'),          wcM >= 5);
+    const recPatterns = ['recommend', 'conclusion', 'therefore', 'suggest', 'should', 'it is clear', 'overall', 'in summary'];
+    setDot($('dRec'),          hasConc && hasMatch(conclusion, recPatterns), hasConc && !hasMatch(conclusion, recPatterns));
+
+    // ---- PROGRESS ----
+    const items = [hasTitle, hasSubs, hasIntro, whoFound, whyFound, methodFound||howFound, partFound, wcP>=5, wcM>=5, hasConc];
+    const done = items.filter(Boolean).length;
+    const pct = Math.round(done / items.length * 100);
+    $('progressBar').style.width = pct + '%';
+    $('progressLabel').textContent = pct + '%';
+
+    // ---- LANGUAGE FLAGS ----
+    const flagsEl = $('langFlags');
+    flagsEl.innerHTML = '';
+    if(total < 10){
+      flagsEl.innerHTML = '<span class="lang-flag flag-good">Write more to see feedback</span>';
+      autoSave();
+      return;
+    }
+
+    const fp   = (allText.match(firstPersonRe) || []);
+    const op   = (allText.match(opinionRe) || []);
+    const inf  = (allText.match(informalRe) || []);
+    const stor = (allText.match(storyRe) || []);
+
+    let flags = [];
+
+    if(fp.length === 0 && op.length === 0){
+      flags.push({text:'Avoids personal opinion', cls:'flag-good'});
+    } else {
+      if(fp.length > 0)  flags.push({text:'Possible personal opinion found', cls:'flag-warn'});
+      if(op.length > 0)  flags.push({text:'Opinion phrases detected', cls:'flag-bad'});
+    }
+
+    if(inf.length === 0){
+      flags.push({text:'Formal tone', cls:'flag-good'});
+    } else if(inf.length <= 2){
+      flags.push({text:'A bit informal in places', cls:'flag-warn'});
+    } else {
+      flags.push({text:'Too informal — check wording', cls:'flag-bad'});
+    }
+
+    if(stor.length === 0){
+      flags.push({text:'Clear and concise', cls:'flag-good'});
+    } else {
+      flags.push({text:'Too descriptive — keep it factual', cls:'flag-warn'});
+    }
+
+    // check for first person pronouns (I, we as subjects)
+    const iCount = (allText.match(/\bI\b/g) || []).length;
+    if(iCount === 0){
+      flags.push({text:'No first person — good', cls:'flag-good'});
+    } else if(iCount <= 2){
+      flags.push({text:'First person used a little', cls:'flag-warn'});
+    } else {
+      flags.push({text:'Avoid first person (I, my)', cls:'flag-bad'});
+    }
+
+    flags.forEach(f => {
+      const sp = document.createElement('span');
+      sp.className = 'lang-flag ' + f.cls;
+      sp.textContent = f.text;
+      flagsEl.appendChild(sp);
+    });
+
+    autoSave();
+  };
+
+  // ---- LOCAL STORAGE ----
+  const STORAGE_KEY = 'igcse0511report';
+
+  function autoSave(){
+    const data = {};
+    for(const k in fields) data[k] = fields[k].value;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
+  }
+
+  window.saveWork = function(){
+    autoSave();
+    const t = $('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  };
+
+  function loadWork(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const data = JSON.parse(raw);
+      for(const k in data){
+        if(fields[k]) fields[k].value = data[k];
+      }
+      analyse();
+    } catch(e){}
+  }
+
+  window.resetAll = function(){
+    if(!confirm('Are you sure you want to reset everything? This cannot be undone.')) return;
+    for(const k in fields){
+      if(k === 'sub1') fields[k].value = 'Introduction';
+      else if(k === 'sub2') fields[k].value = 'Positive Findings';
+      else if(k === 'sub3') fields[k].value = 'Areas for Improvement';
+      else if(k === 'sub4') fields[k].value = 'Conclusion';
+      else fields[k].value = '';
+    }
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    analyse();
+  };
+
+  // ---- INIT ----
+  loadWork();
+  analyse();
+})();
+</script>
+</main>
+
+  <!-- GoatCounter analytics script -->
+  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <!-- Simple client-side password protection (same credentials as the portal) -->
+  <script>
+    (function () {
+      const correctUsername = "igcse";
+      const correctPassword = "esl2026";
+      function promptForCredentials() {
+        const username = window.prompt("Enter username:");
+        const password = window.prompt("Enter password:");
+        if (username === correctUsername && password === correctPassword) {
+          sessionStorage.setItem("igcse_esl_authenticated", "true");
+        } else {
+          alert("Incorrect credentials. Please try again.");
+          promptForCredentials();
+        }
+      }
+      if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
+        promptForCredentials();
+      }
+    })();
+  </script>
+
+</body>
+</html>
