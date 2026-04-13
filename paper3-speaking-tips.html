@@ -79,23 +79,9 @@
     <h3>Practice Idea</h3>
     <p>Choose a topic that interests you (e.g. technology, environment, music). Spend three minutes thinking about what you could say. Then speak about the topic for two minutes while recording yourself. Listen back and note what you did well and what could be improved.</p>
   </div>
-  <script>
-    // Password protection script
-    (function() {
-      const sessionKey = 'igcse_esl_authenticated';
-      if (!sessionStorage.getItem(sessionKey)) {
-        const username = prompt('Enter username to access this page');
-        const password = prompt('Enter password');
-        if (username !== 'igcse' || password !== 'esl2026') {
-          alert('Incorrect username or password. Please try again.');
-          window.location.reload();
-        } else {
-          sessionStorage.setItem(sessionKey, 'true');
-        }
-      }
-    })();
-  </script>
   <!-- GoatCounter analytics -->
   <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <!-- Multi-user authentication script -->
+  <script src="auth.js"></script>
 </body>
 </html>

@@ -79,23 +79,9 @@
     <h3>Practice Idea</h3>
     <p>Find a short podcast or conversation online. Listen once to get the overall meaning. Listen again and jot down key points or fill in a notes table. Compare your notes with the original recording.</p>
   </div>
-  <script>
-    // Client-side password protection: prompts for username & password once per session
-    (function() {
-      const sessionKey = 'igcse_esl_authenticated';
-      if (!sessionStorage.getItem(sessionKey)) {
-        const username = prompt('Enter username to access this page');
-        const password = prompt('Enter password');
-        if (username !== 'igcse' || password !== 'esl2026') {
-          alert('Incorrect username or password. Please try again.');
-          window.location.reload();
-        } else {
-          sessionStorage.setItem(sessionKey, 'true');
-        }
-      }
-    })();
-  </script>
   <!-- GoatCounter analytics -->
   <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <!-- Multi-user authentication script -->
+  <script src="auth.js"></script>
 </body>
 </html>
