@@ -291,31 +291,7 @@
 
   <!-- GoatCounter analytics script -->
   <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-
-  <!-- Simple client-side password protection -->
-  <script>
-    (function () {
-      // Shared credentials
-      const correctUsername = "igcse";
-      const correctPassword = "esl2026";
-
-      function promptForCredentials() {
-        const username = window.prompt("Enter username:");
-        const password = window.prompt("Enter password:");
-        if (username === correctUsername && password === correctPassword) {
-          // Store a flag so returning users don't have to re‑enter credentials during the same browser session
-          sessionStorage.setItem("igcse_esl_authenticated", "true");
-        } else {
-          alert("Incorrect credentials. Please try again.");
-          promptForCredentials();
-        }
-      }
-
-      // If the visitor hasn't authenticated yet, prompt for credentials
-      if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
-        promptForCredentials();
-      }
-    })();
-  </script>
+  <!-- Multi-user authentication script -->
+  <script src="auth.js"></script>
 </body>
 </html>

@@ -103,25 +103,6 @@
     <textarea placeholder="Write your notes or answer practice questions here..."></textarea>
   </div>
   <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  <script>
-    // Client-side password protection
-    (function() {
-      const correctUsername = "igcse";
-      const correctPassword = "esl2026";
-      function ensureAuthenticated() {
-        if (sessionStorage.getItem("igcse_esl_authenticated") !== "true") {
-          const username = window.prompt("Please enter the username:");
-          const password = window.prompt("Please enter the password:");
-          if (username === correctUsername && password === correctPassword) {
-            sessionStorage.setItem("igcse_esl_authenticated", "true");
-          } else {
-            alert("Incorrect credentials. Please reload the page and try again.");
-            ensureAuthenticated();
-          }
-        }
-      }
-      ensureAuthenticated();
-    })();
-  </script>
+  <script src="auth.js"></script>
 </body>
 </html>
