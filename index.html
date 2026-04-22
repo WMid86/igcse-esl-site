@@ -116,7 +116,27 @@
     <div class="container">
       <!-- Mode selection panel -->
       <div id="modeSelection">
-        <h1>Extensive Reading Log</h1>
+        <!-- Welcome heading -->
+        <h1>Welcome to the Reading Project</h1>
+        <!-- Introduction and purpose of the project -->
+        <p>
+          This reading project is all about helping you build the habit of
+          sustained reading.  By logging your reading minutes and sessions you
+          create a record of your progress and provide data that helps us
+          understand how well the programme is working.  In turn this data
+          enables teachers to identify strengths and areas for improvement and to
+          adjust support accordingly.  Reading for pleasure and fluency is the
+          focus here, not test preparation, so we encourage you to choose books
+          you enjoy and to track your reading honestly.
+        </p>
+        <p>
+          Students should log their reading minutes, sessions, books and
+          reactions each week to see their own progress.  Teachers will track
+          participation across their classes and use your feedback to refine the
+          project.  Participating teachers include Mr Midlane, Mr Mcquay,
+          Ms Liu, Mr Pottas, Mr Meyer and Ms Jenna.  Please choose whether you
+          are a student or a teacher to get started.
+        </p>
         <p>Choose whether you are a student or a teacher to proceed.</p>
         <div class="buttons" style="justify-content: center; margin-top: 20px;">
           <button type="button" id="studentMode">I am a Student</button>
@@ -181,6 +201,48 @@
               <label for="studentSessions">Number of Sessions</label>
               <input type="number" id="studentSessions" min="1" required />
             </div>
+            <!-- New fields for book logging -->
+            <div class="form-group">
+              <label for="bookSelect">Book Title</label>
+              <select id="bookSelect" required>
+                <option value="">Select Book</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="bookAuthor">Author</label>
+              <input type="text" id="bookAuthor" readonly />
+            </div>
+            <div class="form-group">
+              <label for="bookLevel">Level</label>
+              <input type="text" id="bookLevel" readonly />
+            </div>
+            <div class="form-group">
+              <label for="startPageSelect">Start Page</label>
+              <select id="startPageSelect" required>
+                <option value="">Start Page</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="endPageSelect">End Page</label>
+              <select id="endPageSelect" required>
+                <option value="">End Page</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pagesReadDisplay">Pages Read</label>
+              <input type="number" id="pagesReadDisplay" readonly />
+            </div>
+            <div class="form-group">
+              <label for="reaction">Reaction (1-5)</label>
+              <select id="reaction" required>
+                <option value="">Select Reaction</option>
+                <option value="1">1 - Disliked</option>
+                <option value="2">2</option>
+                <option value="3">3 - Neutral</option>
+                <option value="4">4</option>
+                <option value="5">5 - Loved</option>
+              </select>
+            </div>
             <div class="buttons">
               <button type="submit">Save Reading</button>
             </div>
@@ -197,6 +259,12 @@
                 <th>Week</th>
                 <th>Minutes</th>
                 <th>Sessions</th>
+                <th>Book</th>
+                <th>Level</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Pages</th>
+                <th>Reaction</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -226,11 +294,13 @@
           <label for="filterTeacher">Filter by Teacher</label>
           <select id="filterTeacher">
             <option value="all">All Teachers</option>
-            <option value="Mr M">Mr M</option>
-            <option value="Ms J">Ms J</option>
-            <option value="Mr D">Mr D</option>
-            <option value="Ms H">Ms H</option>
-            <option value="Mr T">Mr T</option>
+            <!-- Teacher options reflect the current staff teaching Grades 9 and 11. -->
+            <option value="Mr Midlane">Mr Midlane</option>
+            <option value="Mr Mcquay">Mr Mcquay</option>
+            <option value="Ms Liu">Ms Liu</option>
+            <option value="Mr Pottas">Mr Pottas</option>
+            <option value="Mr Meyer">Mr Meyer</option>
+            <option value="Ms Jenna">Ms Jenna</option>
           </select>
         </div>
         <div class="form-group" style="max-width: 200px;">
@@ -255,6 +325,12 @@
               <th>Week</th>
               <th>Minutes</th>
               <th>Sessions</th>
+              <th>Book</th>
+              <th>Level</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Pages</th>
+              <th>Reaction</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -278,10 +354,25 @@
        */
 
       // Map of teachers by grade for populating dropdowns
+      // Map of teachers by grade for populating dropdowns.  These names correspond
+      // to the teachers involved in the project.  If your cohort structure
+      // changes, update this map accordingly.  Grade 11 is taught by Mr Midlane,
+      // Mr Mcquay and Ms Liu.  Grade 9 is taught by Mr Pottas, Mr Meyer and Ms Jenna.
       const teacherMap = {
-        '9': ['Mr M', 'Ms J', 'Mr D'],
-        '11': ['Mr M', 'Ms H', 'Mr T'],
+        '9': ['Mr Pottas', 'Mr Meyer', 'Ms Jenna'],
+        '11': ['Mr Midlane', 'Mr Mcquay', 'Ms Liu'],
       };
+
+      // List of available books with metadata. Update this array with your actual titles, authors,
+      // levels, and total page counts. Students will select from this list when logging their reading.
+      const bookList = [
+        { title: 'The Secret Garden', author: 'Frances Hodgson Burnett', level: 'Starter', pages: 80 },
+        { title: 'Sherlock Holmes and the Duke\'s Son', author: 'Arthur Conan Doyle', level: 'Level 1', pages: 80 },
+        { title: 'Treasure Island', author: 'Robert Louis Stevenson', level: 'Level 2', pages: 90 },
+        { title: 'Jane Eyre', author: 'Charlotte Brontë', level: 'Level 3', pages: 100 },
+        { title: 'Dracula', author: 'Bram Stoker', level: 'Level 4', pages: 110 },
+        { title: 'Sense and Sensibility', author: 'Jane Austen', level: 'Level 5', pages: 120 },
+      ];
 
       // Utility functions for localStorage
       function loadEntries() {
@@ -306,6 +397,13 @@
       const studentSummary = document.getElementById('studentSummary');
       const studentEntriesTableBody = document.querySelector('#studentEntriesTable tbody');
       const studentWelcome = document.getElementById('studentWelcome');
+      const bookSelect = document.getElementById('bookSelect');
+      const bookAuthorInput = document.getElementById('bookAuthor');
+      const bookLevelInput = document.getElementById('bookLevel');
+      const startPageSelect = document.getElementById('startPageSelect');
+      const endPageSelect = document.getElementById('endPageSelect');
+      const pagesReadDisplay = document.getElementById('pagesReadDisplay');
+      const reactionSelect = document.getElementById('reaction');
       const filterGradeSelect = document.getElementById('filterGrade');
       const filterTeacherSelect = document.getElementById('filterTeacher');
       const filterStudentInput = document.getElementById('filterStudent');
@@ -369,6 +467,67 @@
         }
       });
 
+      // Populate book dropdown on initial load
+      function populateBookSelect() {
+        bookSelect.innerHTML = '<option value="">Select Book</option>';
+        bookList.forEach((b) => {
+          const opt = document.createElement('option');
+          opt.value = b.title;
+          opt.textContent = b.title;
+          bookSelect.appendChild(opt);
+        });
+      }
+      // Populate page dropdowns based on selected book's total pages
+      function populatePageSelects(totalPages) {
+        startPageSelect.innerHTML = '<option value="">Start Page</option>';
+        endPageSelect.innerHTML = '<option value="">End Page</option>';
+        for (let i = 1; i <= totalPages; i++) {
+          const opt1 = document.createElement('option');
+          opt1.value = i;
+          opt1.textContent = i;
+          startPageSelect.appendChild(opt1);
+          const opt2 = document.createElement('option');
+          opt2.value = i;
+          opt2.textContent = i;
+          endPageSelect.appendChild(opt2);
+        }
+      }
+      // Update author, level and pages when book changes
+      function updateBookFields() {
+        const selectedTitle = bookSelect.value;
+        const book = bookList.find((b) => b.title === selectedTitle);
+        if (book) {
+          bookAuthorInput.value = book.author;
+          bookLevelInput.value = book.level;
+          populatePageSelects(book.pages);
+          computePagesRead();
+        } else {
+          bookAuthorInput.value = '';
+          bookLevelInput.value = '';
+          startPageSelect.innerHTML = '<option value="">Start Page</option>';
+          endPageSelect.innerHTML = '<option value="">End Page</option>';
+          pagesReadDisplay.value = '';
+        }
+      }
+      // Compute pages read based on start and end pages
+      function computePagesRead() {
+        const start = parseInt(startPageSelect.value);
+        const end = parseInt(endPageSelect.value);
+        if (!isNaN(start) && !isNaN(end) && end >= start) {
+          const pagesRead = end - start + 1;
+          pagesReadDisplay.value = pagesRead;
+        } else {
+          pagesReadDisplay.value = '';
+        }
+      }
+
+      // Initialize book selection on page load
+      populateBookSelect();
+      // Hook up book and page events
+      bookSelect.addEventListener('change', updateBookFields);
+      startPageSelect.addEventListener('change', computePagesRead);
+      endPageSelect.addEventListener('change', computePagesRead);
+
       // Student form submission
       studentForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -377,16 +536,31 @@
         const week = document.getElementById('studentWeek').value;
         const minutes = document.getElementById('studentMinutes').value;
         const sessions = document.getElementById('studentSessions').value;
-        if (!grade || !teacher || !week || minutes === '' || sessions === '') {
+        // New fields
+        const bookTitle = bookSelect.value;
+        const author = bookAuthorInput.value;
+        const level = bookLevelInput.value;
+        const startPage = startPageSelect.value;
+        const endPage = endPageSelect.value;
+        const pagesRead = pagesReadDisplay.value;
+        const reaction = reactionSelect.value;
+        // Validate required fields
+        if (!grade || !teacher || !week || minutes === '' || sessions === '' || !bookTitle || !startPage || !endPage || pagesRead === '' || !reaction) {
           alert('Please complete all required fields.');
           return;
         }
         const entries = loadEntries();
-        entries.push({ grade, teacher, studentId: currentStudentId, week, minutes, sessions });
+        entries.push({ grade, teacher, studentId: currentStudentId, week, minutes, sessions, bookTitle, author, level, startPage, endPage, pagesRead, reaction });
         saveEntries(entries);
-        // Clear form and teacher dropdown
+        // Clear form and reset dependent fields
         studentForm.reset();
         studentTeacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+        // Reset book-related fields
+        bookAuthorInput.value = '';
+        bookLevelInput.value = '';
+        startPageSelect.innerHTML = '<option value="">Start Page</option>';
+        endPageSelect.innerHTML = '<option value="">End Page</option>';
+        pagesReadDisplay.value = '';
         updateStudentView();
       });
 
@@ -399,9 +573,11 @@
         if (entries.length > 0) {
           let totalMinutes = 0;
           let totalSessions = 0;
+          let totalPages = 0;
           entries.forEach((e) => {
             totalMinutes += Number(e.minutes);
             totalSessions += Number(e.sessions);
+            if (e.pagesRead) totalPages += Number(e.pagesRead);
           });
           const card = document.createElement('div');
           card.className = 'summary-card';
@@ -409,9 +585,11 @@
             <h3>Your Reading Summary</h3>
             <p>Total Minutes: ${totalMinutes}</p>
             <p>Total Sessions: ${totalSessions}</p>
+            <p>Total Pages: ${totalPages}</p>
             <p>Entries: ${entries.length}</p>
             <p>Avg Minutes per Entry: ${(totalMinutes / entries.length).toFixed(1)}</p>
             <p>Avg Sessions per Entry: ${(totalSessions / entries.length).toFixed(1)}</p>
+            <p>Avg Pages per Entry: ${(totalPages / entries.length).toFixed(1)}</p>
           `;
           studentSummary.appendChild(card);
         }
@@ -425,6 +603,12 @@
             <td>${entry.week}</td>
             <td>${entry.minutes}</td>
             <td>${entry.sessions}</td>
+            <td>${entry.bookTitle || ''}</td>
+            <td>${entry.level || ''}</td>
+            <td>${entry.startPage || ''}</td>
+            <td>${entry.endPage || ''}</td>
+            <td>${entry.pagesRead || ''}</td>
+            <td>${entry.reaction || ''}</td>
           `;
           studentEntriesTableBody.appendChild(tr);
         });
@@ -460,17 +644,19 @@
         entries.forEach((e) => {
           // Grade summarisation
           if (!summaryByGrade[e.grade]) {
-            summaryByGrade[e.grade] = { minutes: 0, sessions: 0, count: 0 };
+            summaryByGrade[e.grade] = { minutes: 0, sessions: 0, pages: 0, count: 0 };
           }
           summaryByGrade[e.grade].minutes += Number(e.minutes);
           summaryByGrade[e.grade].sessions += Number(e.sessions);
+          summaryByGrade[e.grade].pages += e.pagesRead ? Number(e.pagesRead) : 0;
           summaryByGrade[e.grade].count += 1;
           // Teacher summarisation
           if (!summaryByTeacher[e.teacher]) {
-            summaryByTeacher[e.teacher] = { minutes: 0, sessions: 0, count: 0 };
+            summaryByTeacher[e.teacher] = { minutes: 0, sessions: 0, pages: 0, count: 0 };
           }
           summaryByTeacher[e.teacher].minutes += Number(e.minutes);
           summaryByTeacher[e.teacher].sessions += Number(e.sessions);
+          summaryByTeacher[e.teacher].pages += e.pagesRead ? Number(e.pagesRead) : 0;
           summaryByTeacher[e.teacher].count += 1;
         });
         // Create cards for each grade
@@ -482,9 +668,11 @@
             <h3>Grade ${grade}</h3>
             <p>Total Minutes: ${s.minutes}</p>
             <p>Total Sessions: ${s.sessions}</p>
+            <p>Total Pages: ${s.pages}</p>
             <p>Entries: ${s.count}</p>
             <p>Avg Minutes per Entry: ${(s.minutes / s.count).toFixed(1)}</p>
             <p>Avg Sessions per Entry: ${(s.sessions / s.count).toFixed(1)}</p>
+            <p>Avg Pages per Entry: ${(s.pages / s.count).toFixed(1)}</p>
           `;
           teacherSummary.appendChild(card);
         });
@@ -497,9 +685,11 @@
             <h3>${teacher}</h3>
             <p>Total Minutes: ${s.minutes}</p>
             <p>Total Sessions: ${s.sessions}</p>
+            <p>Total Pages: ${s.pages}</p>
             <p>Entries: ${s.count}</p>
-            <p>Avg Minutes: ${(s.minutes / s.count).toFixed(1)}</p>
-            <p>Avg Sessions: ${(s.sessions / s.count).toFixed(1)}</p>
+            <p>Avg Minutes per Entry: ${(s.minutes / s.count).toFixed(1)}</p>
+            <p>Avg Sessions per Entry: ${(s.sessions / s.count).toFixed(1)}</p>
+            <p>Avg Pages per Entry: ${(s.pages / s.count).toFixed(1)}</p>
           `;
           teacherSummary.appendChild(card);
         });
@@ -518,6 +708,12 @@
             <td>${entry.week}</td>
             <td>${entry.minutes}</td>
             <td>${entry.sessions}</td>
+            <td>${entry.bookTitle || ''}</td>
+            <td>${entry.level || ''}</td>
+            <td>${entry.startPage || ''}</td>
+            <td>${entry.endPage || ''}</td>
+            <td>${entry.pagesRead || ''}</td>
+            <td>${entry.reaction || ''}</td>
             <td><button class="delete-btn" data-index="${index}">Delete</button></td>
           `;
           teacherEntriesTableBody.appendChild(tr);
@@ -536,8 +732,21 @@
           alert('No data to export.');
           return;
         }
-        const header = ['Grade','Teacher','Student Number','Week','Minutes','Sessions'];
-        const rows = entries.map((e) => [e.grade, e.teacher, e.studentId, e.week, e.minutes, e.sessions]);
+        const header = ['Grade','Teacher','Student Number','Week','Minutes','Sessions','Book','Level','Start Page','End Page','Pages Read','Reaction'];
+        const rows = entries.map((e) => [
+          e.grade,
+          e.teacher,
+          e.studentId,
+          e.week,
+          e.minutes,
+          e.sessions,
+          e.bookTitle || '',
+          e.level || '',
+          e.startPage || '',
+          e.endPage || '',
+          e.pagesRead || '',
+          e.reaction || ''
+        ]);
         let csvContent = header.join(',') + '\n';
         rows.forEach((row) => {
           csvContent += row.map((item) => '"' + String(item).replace(/"/g, '""') + '"').join(',') + '\n';
@@ -576,14 +785,20 @@
           const filtered = getFilteredEntries();
           const entryToDelete = filtered[index];
           // Find the index of this entry in the full list
-          const fullIndex = allEntries.findIndex((e) => {
+          const fullIndex = allEntries.findIndex((entry) => {
             return (
-              e.grade === entryToDelete.grade &&
-              e.teacher === entryToDelete.teacher &&
-              e.studentId === entryToDelete.studentId &&
-              e.week === entryToDelete.week &&
-              e.minutes === entryToDelete.minutes &&
-              e.sessions === entryToDelete.sessions
+              entry.grade === entryToDelete.grade &&
+              entry.teacher === entryToDelete.teacher &&
+              entry.studentId === entryToDelete.studentId &&
+              entry.week === entryToDelete.week &&
+              entry.minutes === entryToDelete.minutes &&
+              entry.sessions === entryToDelete.sessions &&
+              (entry.bookTitle || '') === (entryToDelete.bookTitle || '') &&
+              (entry.level || '') === (entryToDelete.level || '') &&
+              (entry.startPage || '') === (entryToDelete.startPage || '') &&
+              (entry.endPage || '') === (entryToDelete.endPage || '') &&
+              (entry.pagesRead || '') === (entryToDelete.pagesRead || '') &&
+              (entry.reaction || '') === (entryToDelete.reaction || '')
             );
           });
           if (fullIndex > -1) {
