@@ -18,10 +18,11 @@
         --warn: #c05621;
         --danger: #c53030;
         --soft: #eef4fb;
+        --soft-warn: #fff4ea;
+        --soft-danger: #fdecec;
+        --soft-good: #edf8f1;
       }
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -29,45 +30,27 @@
         color: var(--ink);
       }
       .wrap {
-        max-width: 1240px;
+        max-width: 1320px;
         margin: 0 auto;
         padding: 24px;
       }
-      .hero,
-      .panel,
-      .card,
-      .status-box {
+      .hero, .panel, .card, .status-box, .insight-box {
         background: var(--card);
         border: 1px solid var(--line);
         border-radius: 14px;
         box-shadow: 0 6px 20px rgba(36, 52, 71, 0.06);
       }
-      .hero {
-        padding: 28px;
-        margin-bottom: 20px;
-      }
-      h1,
-      h2,
-      h3 {
-        margin-top: 0;
-      }
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
-      p {
-        color: var(--muted);
-        line-height: 1.55;
-      }
-      .hero-actions,
-      .button-row {
+      .hero { padding: 28px; margin-bottom: 20px; }
+      h1, h2, h3 { margin-top: 0; }
+      h1 { font-size: 2rem; margin-bottom: 10px; }
+      p { color: var(--muted); line-height: 1.55; }
+      .hero-actions, .button-row {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
         margin-top: 16px;
       }
-      button,
-      .button-link {
+      button, .button-link {
         border: none;
         border-radius: 10px;
         padding: 12px 16px;
@@ -80,53 +63,24 @@
         align-items: center;
         justify-content: center;
       }
-      button.secondary,
-      .button-link.secondary {
-        background: #6b7280;
-      }
-      button.good {
-        background: var(--good);
-      }
-      button.warn {
-        background: var(--warn);
-      }
-      button.danger {
-        background: var(--danger);
-      }
-      button.ghost {
-        background: #e8eef6;
-        color: var(--ink);
-      }
-      .hidden {
-        display: none !important;
-      }
-      .panel {
-        padding: 22px;
-        margin-bottom: 20px;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 14px;
-      }
-      .field {
-        grid-column: span 4;
-      }
-      .field.wide {
-        grid-column: span 6;
-      }
-      .field.full {
-        grid-column: 1 / -1;
-      }
+      button.secondary, .button-link.secondary { background: #6b7280; }
+      button.good { background: var(--good); }
+      button.warn { background: var(--warn); }
+      button.danger { background: var(--danger); }
+      button.ghost { background: #e8eef6; color: var(--ink); }
+      .hidden { display: none !important; }
+      .panel { padding: 22px; margin-bottom: 20px; }
+      .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+      .field { grid-column: span 4; }
+      .field.wide { grid-column: span 6; }
+      .field.full { grid-column: 1 / -1; }
       label {
         display: block;
         margin-bottom: 6px;
         font-size: 0.92rem;
         font-weight: 700;
       }
-      input,
-      select,
-      textarea {
+      input, select, textarea {
         width: 100%;
         border: 1px solid #cfd8e3;
         border-radius: 10px;
@@ -134,77 +88,55 @@
         font-size: 0.95rem;
         background: #fff;
       }
-      textarea {
-        min-height: 110px;
-        resize: vertical;
-      }
+      textarea { min-height: 110px; resize: vertical; }
       .cards {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 14px;
         margin-top: 18px;
       }
-      .card {
-        padding: 16px;
-      }
+      .card { padding: 16px; }
       .metric {
         font-size: 1.7rem;
         font-weight: 700;
         color: var(--brand);
         margin: 6px 0 2px;
       }
-      .metric-label {
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
+      .metric-label { color: var(--muted); font-size: 0.9rem; }
       .status-box {
         padding: 14px 16px;
         margin-bottom: 16px;
       }
-      .status-box strong {
-        display: block;
-        margin-bottom: 4px;
-      }
-      .ok {
-        border-left: 6px solid var(--good);
-      }
-      .bad {
-        border-left: 6px solid var(--danger);
-      }
-      .soft {
-        border-left: 6px solid var(--brand-2);
-      }
-      .table-wrap {
-        overflow-x: auto;
-        margin-top: 18px;
-      }
+      .status-box strong { display: block; margin-bottom: 4px; }
+      .ok { border-left: 6px solid var(--good); }
+      .bad { border-left: 6px solid var(--danger); }
+      .soft { border-left: 6px solid var(--brand-2); }
+      .table-wrap { overflow-x: auto; margin-top: 18px; }
       table {
         width: 100%;
         border-collapse: collapse;
         min-width: 980px;
         background: #fff;
       }
-      th,
-      td {
+      th, td {
         border-bottom: 1px solid #e7edf5;
         padding: 10px 10px;
         text-align: left;
         vertical-align: top;
         font-size: 0.93rem;
       }
-      th {
-        background: #f7fafd;
-        color: #334155;
+      th { background: #f7fafd; color: #334155; }
+      .small { font-size: 0.85rem; color: var(--muted); }
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 12px;
       }
-      .small {
-        font-size: 0.85rem;
-        color: var(--muted);
-      }
-      .split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
-      }
+      .muted { color: var(--muted); }
       .pill {
         display: inline-block;
         padding: 5px 9px;
@@ -213,29 +145,32 @@
         background: var(--soft);
         color: var(--brand);
       }
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 12px;
+      .insight-box { padding: 16px; }
+      .insight-box.warn { background: var(--soft-warn); border-color: #f1d4ba; }
+      .insight-box.danger { background: var(--soft-danger); border-color: #efc1c1; }
+      .insight-box.good { background: var(--soft-good); border-color: #cfe6d7; }
+      .list { margin: 0; padding-left: 18px; }
+      .bar-table td:first-child { width: 180px; }
+      .bar-cell { min-width: 260px; }
+      .bar-track {
+        background: #edf2f7;
+        height: 16px;
+        border-radius: 999px;
+        overflow: hidden;
       }
-      .muted {
-        color: var(--muted);
+      .bar-fill {
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        height: 100%;
+        border-radius: 999px;
       }
-      .note-list {
-        margin: 8px 0 0;
-        padding-left: 18px;
-        color: var(--muted);
+      .score-good { color: var(--good); font-weight: 700; }
+      .score-warn { color: var(--warn); font-weight: 700; }
+      .score-danger { color: var(--danger); font-weight: 700; }
+      @media (max-width: 1000px) {
+        .split, .triple { grid-template-columns: 1fr; }
       }
       @media (max-width: 900px) {
-        .field,
-        .field.wide {
-          grid-column: span 12;
-        }
-        .split {
-          grid-template-columns: 1fr;
-        }
+        .field, .field.wide { grid-column: span 12; }
       }
     </style>
   </head>
@@ -244,14 +179,13 @@
       <div id="homePanel" class="hero">
         <h1>Extensive Reading Project Tracker</h1>
         <p>
-          This website now supports a shared Google Sheets workflow. Student reading entries and teacher
-          implementation checks are designed to flow into one central spreadsheet so all staff can work from the
-          same data rather than isolated browser storage.
+          This website supports a shared Google Sheets workflow. Student reading entries and teacher
+          implementation checks flow into one central spreadsheet so staff can work from the same data.
         </p>
         <p>
           Use the student form to log reading. Use the teacher dashboard to review shared entries, export filtered
-          data, and monitor implementation. Use the implementation form to record whether ER routines are actually
-          happening in class.
+          data, and monitor implementation quality. Use the implementation form to record whether ER routines are
+          actually happening in class.
         </p>
         <div class="hero-actions">
           <button id="openStudentBtn">Student Reading Log</button>
@@ -392,7 +326,7 @@
         <div class="topbar">
           <div>
             <h2>Teacher Dashboard</h2>
-            <div class="small">Shared data view from Google Sheets.</div>
+            <div class="small">Shared data view from Google Sheets with analytics.</div>
           </div>
           <button class="secondary" data-back="true">Back</button>
         </div>
@@ -445,6 +379,56 @@
         </div>
 
         <div class="cards" id="teacherSummaryCards"></div>
+
+        <div class="triple" style="margin-top:18px;">
+          <div class="insight-box danger">
+            <h3>Students needing attention</h3>
+            <ul id="studentRiskList" class="list"></ul>
+          </div>
+          <div class="insight-box warn">
+            <h3>Implementation watchpoints</h3>
+            <ul id="implementationRiskList" class="list"></ul>
+          </div>
+          <div class="insight-box good">
+            <h3>Quick interpretation</h3>
+            <ul id="insightSummaryList" class="list"></ul>
+          </div>
+        </div>
+
+        <div class="split" style="margin-top:18px;">
+          <div class="panel" style="padding:16px;">
+            <h3>Teacher comparison</h3>
+            <div class="table-wrap">
+              <table class="bar-table">
+                <thead>
+                  <tr>
+                    <th>Teacher</th>
+                    <th>Minutes Read</th>
+                    <th>Implementation Score</th>
+                    <th>Students</th>
+                  </tr>
+                </thead>
+                <tbody id="teacherComparisonBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel" style="padding:16px;">
+            <h3>Week comparison</h3>
+            <div class="table-wrap">
+              <table class="bar-table">
+                <thead>
+                  <tr>
+                    <th>Week</th>
+                    <th>Total Minutes</th>
+                    <th>Entries</th>
+                    <th>Average Reaction</th>
+                  </tr>
+                </thead>
+                <tbody id="weekComparisonBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
         <div class="split" style="margin-top:18px;">
           <div>
@@ -732,6 +716,46 @@
         }
       }
 
+      function safeNumber(value) {
+        const n = Number(value);
+        return Number.isFinite(n) ? n : 0;
+      }
+
+      function normaliseReadingEntry(entry) {
+        return {
+          timestamp: entry.timestamp || entry.Timestamp || '',
+          studentNumber: entry.studentNumber || entry.StudentNumber || '',
+          grade: String(entry.grade || entry.Grade || ''),
+          teacher: entry.teacher || entry.Teacher || '',
+          week: String(entry.week || entry.Week || ''),
+          minutesRead: safeNumber(entry.minutesRead || entry.MinutesRead),
+          sessions: safeNumber(entry.sessions || entry.Sessions),
+          bookTitle: entry.bookTitle || entry.BookTitle || '',
+          author: entry.author || entry.Author || '',
+          level: entry.level || entry.Level || '',
+          startPage: entry.startPage || entry.StartPage || '',
+          endPage: entry.endPage || entry.EndPage || '',
+          pagesRead: safeNumber(entry.pagesRead || entry.PagesRead),
+          reaction: safeNumber(entry.reaction || entry.Reaction),
+          comment: entry.comment || entry.Comment || '',
+        };
+      }
+
+      function normaliseImplementationEntry(entry) {
+        return {
+          timestamp: entry.timestamp || entry.Timestamp || '',
+          teacher: entry.teacher || entry.Teacher || '',
+          grade: String(entry.grade || entry.Grade || ''),
+          week: String(entry.week || entry.Week || ''),
+          erRanThisWeek: entry.erRanThisWeek || entry.ERRanThisWeek || '',
+          minutesAllocated: safeNumber(entry.minutesAllocated || entry.MinutesAllocated),
+          booksReady: entry.booksReady || entry.BooksReady || '',
+          teacherModelledReading: entry.teacherModelledReading || entry.TeacherModelledReading || '',
+          pairShareDone: entry.pairShareDone || entry.PairShareDone || '',
+          notes: entry.notes || entry.Notes || '',
+        };
+      }
+
       async function apiPost(payload) {
         if (!CONFIG.appsScriptUrl || !CONFIG.appsScriptUrl.startsWith('https://script.google.com/')) {
           throw new Error('Apps Script URL is not configured yet.');
@@ -806,10 +830,10 @@
         const target = document.getElementById('studentSummaryCards');
         target.innerHTML = '';
         if (!entries.length) return;
-        const totalMinutes = entries.reduce((sum, e) => sum + Number(e.minutesRead || 0), 0);
-        const totalSessions = entries.reduce((sum, e) => sum + Number(e.sessions || 0), 0);
-        const totalPages = entries.reduce((sum, e) => sum + Number(e.pagesRead || 0), 0);
-        const avgReaction = entries.reduce((sum, e) => sum + Number(e.reaction || 0), 0) / entries.length;
+        const totalMinutes = entries.reduce((sum, e) => sum + safeNumber(e.minutesRead), 0);
+        const totalSessions = entries.reduce((sum, e) => sum + safeNumber(e.sessions), 0);
+        const totalPages = entries.reduce((sum, e) => sum + safeNumber(e.pagesRead), 0);
+        const avgReaction = entries.reduce((sum, e) => sum + safeNumber(e.reaction), 0) / entries.length;
         const cards = [
           ['Entries', entries.length],
           ['Total Minutes', totalMinutes],
@@ -856,7 +880,7 @@
         }
         try {
           const data = await apiGet({ action: 'getReadingEntries', studentNumber });
-          const entries = Array.isArray(data.entries) ? data.entries : [];
+          const entries = Array.isArray(data.entries) ? data.entries.map(normaliseReadingEntry) : [];
           renderStudentCards(entries);
           renderStudentTable(entries);
         } catch (error) {
@@ -886,8 +910,8 @@
       async function refreshTeacherData() {
         try {
           const data = await apiGet({ action: 'getDashboardData' });
-          state.readingEntries = Array.isArray(data.readingEntries) ? data.readingEntries : [];
-          state.implementationEntries = Array.isArray(data.implementationEntries) ? data.implementationEntries : [];
+          state.readingEntries = Array.isArray(data.readingEntries) ? data.readingEntries.map(normaliseReadingEntry) : [];
+          state.implementationEntries = Array.isArray(data.implementationEntries) ? data.implementationEntries.map(normaliseImplementationEntry) : [];
           renderTeacherDashboard();
         } catch (error) {
           alert(error.message || 'Unable to refresh shared data.');
@@ -914,32 +938,220 @@
         });
       }
 
+      function buildTeacherStats(reading, implementation) {
+        const map = {};
+        reading.forEach(entry => {
+          if (!map[entry.teacher]) {
+            map[entry.teacher] = { teacher: entry.teacher, minutes: 0, sessions: 0, pages: 0, reactions: [], students: new Set(), impl: [] };
+          }
+          map[entry.teacher].minutes += safeNumber(entry.minutesRead);
+          map[entry.teacher].sessions += safeNumber(entry.sessions);
+          map[entry.teacher].pages += safeNumber(entry.pagesRead);
+          map[entry.teacher].students.add(entry.studentNumber);
+          if (safeNumber(entry.reaction)) map[entry.teacher].reactions.push(safeNumber(entry.reaction));
+        });
+        implementation.forEach(entry => {
+          if (!map[entry.teacher]) {
+            map[entry.teacher] = { teacher: entry.teacher, minutes: 0, sessions: 0, pages: 0, reactions: [], students: new Set(), impl: [] };
+          }
+          map[entry.teacher].impl.push(entry);
+        });
+        return Object.values(map).map(item => {
+          const implScore = calculateImplementationScore(item.impl);
+          return {
+            teacher: item.teacher,
+            minutes: item.minutes,
+            sessions: item.sessions,
+            pages: item.pages,
+            studentCount: item.students.size,
+            avgReaction: item.reactions.length ? (item.reactions.reduce((a, b) => a + b, 0) / item.reactions.length) : 0,
+            implementationScore: implScore,
+          };
+        }).sort((a, b) => b.minutes - a.minutes);
+      }
+
+      function calculateImplementationScore(entries) {
+        if (!entries.length) return 0;
+        let total = 0;
+        entries.forEach(entry => {
+          let score = 0;
+          if (entry.erRanThisWeek === 'Yes') score += 4;
+          else if (entry.erRanThisWeek === 'Partly') score += 2;
+          if (safeNumber(entry.minutesAllocated) >= 25) score += 2;
+          else if (safeNumber(entry.minutesAllocated) >= 10) score += 1;
+          if (entry.booksReady === 'Yes') score += 1;
+          else if (entry.booksReady === 'Mostly') score += 0.5;
+          if (entry.teacherModelledReading === 'Yes') score += 1.5;
+          if (entry.pairShareDone === 'Yes') score += 1.5;
+          total += score;
+        });
+        return +(total / entries.length).toFixed(1);
+      }
+
+      function buildWeekStats(reading) {
+        const map = {};
+        reading.forEach(entry => {
+          const week = entry.week || 'Unknown';
+          if (!map[week]) {
+            map[week] = { week, minutes: 0, entries: 0, reactions: [] };
+          }
+          map[week].minutes += safeNumber(entry.minutesRead);
+          map[week].entries += 1;
+          if (safeNumber(entry.reaction)) map[week].reactions.push(safeNumber(entry.reaction));
+        });
+        return Object.values(map).sort((a, b) => safeNumber(a.week) - safeNumber(b.week)).map(item => ({
+          week: item.week,
+          minutes: item.minutes,
+          entries: item.entries,
+          avgReaction: item.reactions.length ? (item.reactions.reduce((x, y) => x + y, 0) / item.reactions.length).toFixed(1) : '0.0',
+        }));
+      }
+
+      function buildStudentRiskList(reading) {
+        const map = {};
+        reading.forEach(entry => {
+          const id = entry.studentNumber || 'Unknown';
+          if (!map[id]) {
+            map[id] = { studentNumber: id, teacher: entry.teacher, grade: entry.grade, entries: 0, minutes: 0, pages: 0, reactions: [] };
+          }
+          map[id].entries += 1;
+          map[id].minutes += safeNumber(entry.minutesRead);
+          map[id].pages += safeNumber(entry.pagesRead);
+          if (safeNumber(entry.reaction)) map[id].reactions.push(safeNumber(entry.reaction));
+        });
+        return Object.values(map)
+          .map(item => {
+            const avgReaction = item.reactions.length ? item.reactions.reduce((a, b) => a + b, 0) / item.reactions.length : 0;
+            let risk = 0;
+            if (item.minutes < 30) risk += 3;
+            else if (item.minutes < 60) risk += 2;
+            if (item.entries < 1) risk += 3;
+            if (item.pages < 10) risk += 2;
+            if (avgReaction > 0 && avgReaction <= 2.5) risk += 2;
+            return { ...item, avgReaction: avgReaction.toFixed(1), risk };
+          })
+          .filter(item => item.risk >= 3)
+          .sort((a, b) => b.risk - a.risk || a.minutes - b.minutes)
+          .slice(0, 8);
+      }
+
+      function buildImplementationRiskList(implementation) {
+        const teacherStats = {};
+        implementation.forEach(entry => {
+          if (!teacherStats[entry.teacher]) teacherStats[entry.teacher] = [];
+          teacherStats[entry.teacher].push(entry);
+        });
+        return Object.entries(teacherStats).map(([teacher, entries]) => {
+          const score = calculateImplementationScore(entries);
+          const noRun = entries.filter(e => e.erRanThisWeek === 'No').length;
+          const partial = entries.filter(e => e.erRanThisWeek === 'Partly').length;
+          return { teacher, score, noRun, partial, checks: entries.length };
+        }).filter(item => item.score < 6 || item.noRun > 0)
+          .sort((a, b) => a.score - b.score)
+          .slice(0, 8);
+      }
+
+      function insightText(reading, implementation, teacherStats, weekStats) {
+        const totalMinutes = reading.reduce((sum, e) => sum + safeNumber(e.minutesRead), 0);
+        const totalEntries = reading.length;
+        const avgMinutes = totalEntries ? (totalMinutes / totalEntries).toFixed(1) : '0.0';
+        const topTeacher = teacherStats[0];
+        const bestWeek = [...weekStats].sort((a, b) => b.minutes - a.minutes)[0];
+        const erYes = implementation.filter(e => e.erRanThisWeek === 'Yes').length;
+        const erRate = implementation.length ? Math.round((erYes / implementation.length) * 100) : 0;
+        return [
+          `Average reading time per entry is ${avgMinutes} minutes.`,
+          topTeacher ? `${topTeacher.teacher} currently has the strongest reading total in this filtered view.` : 'No teacher comparison is available yet.',
+          bestWeek ? `${bestWeek.week === 'Unknown' ? 'One unidentified week' : 'Week ' + bestWeek.week} has the strongest reading volume so far.` : 'No week pattern is available yet.',
+          `Clear ER delivery is recorded in ${erRate}% of implementation checks.`,
+        ];
+      }
+
+      function scoreClass(score) {
+        if (score >= 7.5) return 'score-good';
+        if (score >= 5) return 'score-warn';
+        return 'score-danger';
+      }
+
+      function bar(percent) {
+        return `<div class="bar-track"><div class="bar-fill" style="width:${Math.max(0, Math.min(100, percent))}%"></div></div>`;
+      }
+
       function renderTeacherDashboard() {
         const reading = getFilteredReadingEntries();
         const implementation = getFilteredImplementationEntries();
+        const teacherStats = buildTeacherStats(reading, implementation);
+        const weekStats = buildWeekStats(reading);
+        const riskStudents = buildStudentRiskList(reading);
+        const riskImplementation = buildImplementationRiskList(implementation);
+        const insightSummary = insightText(reading, implementation, teacherStats, weekStats);
 
         const summaryTarget = document.getElementById('teacherSummaryCards');
         summaryTarget.innerHTML = '';
-
-        const totalMinutes = reading.reduce((sum, e) => sum + Number(e.minutesRead || 0), 0);
-        const totalSessions = reading.reduce((sum, e) => sum + Number(e.sessions || 0), 0);
-        const totalPages = reading.reduce((sum, e) => sum + Number(e.pagesRead || 0), 0);
+        const totalMinutes = reading.reduce((sum, e) => sum + safeNumber(e.minutesRead), 0);
+        const totalSessions = reading.reduce((sum, e) => sum + safeNumber(e.sessions), 0);
+        const totalPages = reading.reduce((sum, e) => sum + safeNumber(e.pagesRead), 0);
         const uniqueStudents = new Set(reading.map(e => e.studentNumber)).size;
         const erYesCount = implementation.filter(e => e.erRanThisWeek === 'Yes').length;
+        const avgReaction = reading.length ? (reading.reduce((sum, e) => sum + safeNumber(e.reaction), 0) / reading.filter(e => safeNumber(e.reaction) > 0).length || 0).toFixed(1) : '0.0';
+        const avgImplScore = teacherStats.length ? (teacherStats.reduce((sum, t) => sum + t.implementationScore, 0) / teacherStats.length).toFixed(1) : '0.0';
         const cards = [
           ['Reading Entries', reading.length],
           ['Unique Students', uniqueStudents],
           ['Total Minutes', totalMinutes],
           ['Total Sessions', totalSessions],
           ['Total Pages', totalPages],
+          ['Average Reaction', avgReaction],
           ['Implementation Checks', implementation.length],
           ['ER Clearly Happened', erYesCount],
+          ['Average Implementation Score', avgImplScore],
         ];
         cards.forEach(([label, value]) => {
           const card = document.createElement('div');
           card.className = 'card';
           card.innerHTML = `<div class="metric">${value}</div><div class="metric-label">${label}</div>`;
           summaryTarget.appendChild(card);
+        });
+
+        const studentRiskList = document.getElementById('studentRiskList');
+        studentRiskList.innerHTML = riskStudents.length
+          ? riskStudents.map(s => `<li>${s.studentNumber} (${s.teacher}, Grade ${s.grade}) — ${s.minutes} min, ${s.pages} pages, reaction ${s.avgReaction}</li>`).join('')
+          : '<li>No clear student red flags in this filtered view.</li>';
+
+        const implementationRiskList = document.getElementById('implementationRiskList');
+        implementationRiskList.innerHTML = riskImplementation.length
+          ? riskImplementation.map(t => `<li>${t.teacher} — score ${t.score}, no-ER weeks: ${t.noRun}, partial weeks: ${t.partial}</li>`).join('')
+          : '<li>No major implementation watchpoints in this filtered view.</li>';
+
+        const insightSummaryList = document.getElementById('insightSummaryList');
+        insightSummaryList.innerHTML = insightSummary.map(text => `<li>${text}</li>`).join('');
+
+        const teacherComparisonBody = document.getElementById('teacherComparisonBody');
+        teacherComparisonBody.innerHTML = '';
+        const maxTeacherMinutes = Math.max(...teacherStats.map(t => t.minutes), 1);
+        teacherStats.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.teacher}</td>
+            <td class="bar-cell">${bar((item.minutes / maxTeacherMinutes) * 100)}<div class="small">${item.minutes} min</div></td>
+            <td><span class="${scoreClass(item.implementationScore)}">${item.implementationScore}</span></td>
+            <td>${item.studentCount}</td>
+          `;
+          teacherComparisonBody.appendChild(tr);
+        });
+
+        const weekComparisonBody = document.getElementById('weekComparisonBody');
+        weekComparisonBody.innerHTML = '';
+        const maxWeekMinutes = Math.max(...weekStats.map(w => w.minutes), 1);
+        weekStats.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.week === 'Unknown' ? 'Unknown' : 'Week ' + item.week}</td>
+            <td class="bar-cell">${bar((item.minutes / maxWeekMinutes) * 100)}<div class="small">${item.minutes} min</div></td>
+            <td>${item.entries}</td>
+            <td>${item.avgReaction}</td>
+          `;
+          weekComparisonBody.appendChild(tr);
         });
 
         const readingBody = document.getElementById('teacherReadingBody');
