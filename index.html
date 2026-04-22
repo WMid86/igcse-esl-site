@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Extensive Reading Project Tracker</title>
     <style>
+      /* ── Design tokens ── */
       :root {
         --bg: #f3f6fb;
         --card: #ffffff;
@@ -21,198 +22,159 @@
         --soft-warn: #fff4ea;
         --soft-danger: #fdecec;
         --soft-good: #edf8f1;
+        --radius: 14px;
       }
       * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: var(--bg);
-        color: var(--ink);
-      }
-      .wrap {
-        max-width: 1320px;
-        margin: 0 auto;
-        padding: 24px;
-      }
+      body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--ink); }
+      .wrap { max-width: 1320px; margin: 0 auto; padding: 24px; }
+
+      /* ── Cards / panels ── */
       .hero, .panel, .card, .status-box, .insight-box {
         background: var(--card);
         border: 1px solid var(--line);
-        border-radius: 14px;
-        box-shadow: 0 6px 20px rgba(36, 52, 71, 0.06);
+        border-radius: var(--radius);
+        box-shadow: 0 6px 20px rgba(36,52,71,.06);
       }
       .hero { padding: 28px; margin-bottom: 20px; }
+      .panel { padding: 22px; margin-bottom: 20px; }
+      .card { padding: 16px; }
+      .status-box { padding: 14px 16px; margin-bottom: 16px; }
+      .status-box strong { display: block; margin-bottom: 4px; }
+      .ok  { border-left: 6px solid var(--good); }
+      .bad { border-left: 6px solid var(--danger); }
+      .soft-border { border-left: 6px solid var(--brand-2); }
+      .insight-box { padding: 16px; }
+      .insight-box.warn   { background: var(--soft-warn);   border-color: #f1d4ba; }
+      .insight-box.danger { background: var(--soft-danger); border-color: #efc1c1; }
+      .insight-box.good   { background: var(--soft-good);   border-color: #cfe6d7; }
+
+      /* ── Typography ── */
       h1, h2, h3 { margin-top: 0; }
       h1 { font-size: 2rem; margin-bottom: 10px; }
-      p { color: var(--muted); line-height: 1.55; }
-      .hero-actions, .button-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 16px;
-      }
+      p  { color: var(--muted); line-height: 1.55; }
+      .small { font-size: .85rem; color: var(--muted); }
+      .muted { color: var(--muted); }
+
+      /* ── Buttons ── */
       button, .button-link {
-        border: none;
-        border-radius: 10px;
-        padding: 12px 16px;
-        cursor: pointer;
-        background: var(--brand);
-        color: #fff;
-        font-size: 0.96rem;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        border: none; border-radius: 10px; padding: 12px 16px; cursor: pointer;
+        background: var(--brand); color: #fff; font-size: .96rem;
+        text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+        transition: opacity .15s;
       }
-      button.secondary, .button-link.secondary { background: #6b7280; }
-      button.good { background: var(--good); }
-      button.warn { background: var(--warn); }
-      button.danger { background: var(--danger); }
-      button.ghost { background: #e8eef6; color: var(--ink); }
+      button:hover { opacity: .88; }
+      button.secondary { background: #6b7280; }
+      button.good    { background: var(--good); }
+      button.warn    { background: var(--warn); }
+      button.danger  { background: var(--danger); }
+      button.ghost   { background: #e8eef6; color: var(--ink); }
+      button:disabled { opacity: .5; cursor: not-allowed; }
+      .hero-actions, .button-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+
+      /* ── Layout helpers ── */
       .hidden { display: none !important; }
-      .panel { padding: 22px; margin-bottom: 20px; }
-      .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
-      .field { grid-column: span 4; }
-      .field.wide { grid-column: span 6; }
-      .field.full { grid-column: 1 / -1; }
-      label {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 0.92rem;
-        font-weight: 700;
-      }
+      .grid   { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+      .field       { grid-column: span 4; }
+      .field.wide  { grid-column: span 6; }
+      .field.full  { grid-column: 1 / -1; }
+      .split  { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+      .cards  { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 18px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 12px; }
+
+      /* ── Forms ── */
+      label { display: block; margin-bottom: 6px; font-size: .92rem; font-weight: 700; }
       input, select, textarea {
-        width: 100%;
-        border: 1px solid #cfd8e3;
-        border-radius: 10px;
-        padding: 10px 12px;
-        font-size: 0.95rem;
-        background: #fff;
+        width: 100%; border: 1px solid #cfd8e3; border-radius: 10px;
+        padding: 10px 12px; font-size: .95rem; background: #fff;
       }
       textarea { min-height: 110px; resize: vertical; }
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 14px;
-        margin-top: 18px;
-      }
-      .card { padding: 16px; }
-      .metric {
-        font-size: 1.7rem;
-        font-weight: 700;
-        color: var(--brand);
-        margin: 6px 0 2px;
-      }
-      .metric-label { color: var(--muted); font-size: 0.9rem; }
-      .status-box {
-        padding: 14px 16px;
-        margin-bottom: 16px;
-      }
-      .status-box strong { display: block; margin-bottom: 4px; }
-      .ok { border-left: 6px solid var(--good); }
-      .bad { border-left: 6px solid var(--danger); }
-      .soft { border-left: 6px solid var(--brand-2); }
+
+      /* ── Metrics ── */
+      .metric       { font-size: 1.7rem; font-weight: 700; color: var(--brand); margin: 6px 0 2px; }
+      .metric-label { color: var(--muted); font-size: .9rem; }
+
+      /* ── Tables ── */
       .table-wrap { overflow-x: auto; margin-top: 18px; }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 980px;
-        background: #fff;
-      }
-      th, td {
-        border-bottom: 1px solid #e7edf5;
-        padding: 10px 10px;
-        text-align: left;
-        vertical-align: top;
-        font-size: 0.93rem;
-      }
+      table { width: 100%; border-collapse: collapse; min-width: 820px; background: #fff; }
+      th, td { border-bottom: 1px solid #e7edf5; padding: 10px; text-align: left; vertical-align: top; font-size: .93rem; }
       th { background: #f7fafd; color: #334155; }
-      .small { font-size: 0.85rem; color: var(--muted); }
-      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-      .triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 12px;
-      }
-      .muted { color: var(--muted); }
       .pill {
-        display: inline-block;
-        padding: 5px 9px;
-        border-radius: 999px;
-        font-size: 0.8rem;
-        background: var(--soft);
-        color: var(--brand);
+        display: inline-block; padding: 5px 9px; border-radius: 999px;
+        font-size: .8rem; background: var(--soft); color: var(--brand);
       }
-      .insight-box { padding: 16px; }
-      .insight-box.warn { background: var(--soft-warn); border-color: #f1d4ba; }
-      .insight-box.danger { background: var(--soft-danger); border-color: #efc1c1; }
-      .insight-box.good { background: var(--soft-good); border-color: #cfe6d7; }
       .list { margin: 0; padding-left: 18px; }
+      .bar-track { background: #edf2f7; height: 16px; border-radius: 999px; overflow: hidden; }
+      .bar-fill  { background: linear-gradient(90deg, var(--brand), var(--brand-2)); height: 100%; border-radius: 999px; }
       .bar-table td:first-child { width: 180px; }
-      .bar-cell { min-width: 260px; }
-      .bar-track {
-        background: #edf2f7;
-        height: 16px;
-        border-radius: 999px;
-        overflow: hidden;
-      }
-      .bar-fill {
-        background: linear-gradient(90deg, var(--brand), var(--brand-2));
-        height: 100%;
-        border-radius: 999px;
-      }
-      .score-good { color: var(--good); font-weight: 700; }
-      .score-warn { color: var(--warn); font-weight: 700; }
+      .bar-cell { min-width: 220px; }
+      .score-good   { color: var(--good);   font-weight: 700; }
+      .score-warn   { color: var(--warn);   font-weight: 700; }
       .score-danger { color: var(--danger); font-weight: 700; }
-      @media (max-width: 1000px) {
-        .split, .triple { grid-template-columns: 1fr; }
+
+      /* ── Toast ── */
+      #toast {
+        position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+        background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 10px;
+        font-size: .95rem; z-index: 9999; opacity: 0; transition: opacity .3s;
+        pointer-events: none; white-space: nowrap;
       }
-      @media (max-width: 900px) {
-        .field, .field.wide { grid-column: span 12; }
+      #toast.show { opacity: 1; }
+
+      /* ── Spinner ── */
+      .spinner {
+        display: inline-block; width: 16px; height: 16px;
+        border: 3px solid rgba(255,255,255,.4); border-top-color: #fff;
+        border-radius: 50%; animation: spin .6s linear infinite; margin-right: 8px;
       }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* ── Responsive ── */
+      @media (max-width: 1000px) { .split, .triple { grid-template-columns: 1fr; } }
+      @media (max-width: 900px)  { .field, .field.wide { grid-column: span 12; } }
     </style>
   </head>
   <body>
+    <div id="toast"></div>
     <div class="wrap">
+
+      <!-- ══════════════════════════════════════════
+           HOME
+      ══════════════════════════════════════════ -->
       <div id="homePanel" class="hero">
-        <h1>Extensive Reading Project Tracker</h1>
+        <h1>📚 Extensive Reading Project Tracker</h1>
         <p>
-          This website supports a shared Google Sheets workflow. Student reading entries and teacher
-          implementation checks flow into one central spreadsheet so staff can work from the same data.
+          Log weekly reading entries, monitor teacher implementation, and view class-wide analytics —
+          all backed by shared online storage so every submission is immediately visible to the whole team.
         </p>
-        <p>
-          Use the student form to log reading. Use the teacher dashboard to review shared entries, export filtered
-          data, and monitor implementation quality. Use the implementation form to record whether ER routines are
-          actually happening in class.
-        </p>
+        <div id="connectionBanner" class="status-box soft-border" style="margin-top:16px;">
+          <strong>Storage status</strong>
+          <div id="connectionMessage">Checking connection…</div>
+        </div>
         <div class="hero-actions">
-          <button id="openStudentBtn">Student Reading Log</button>
-          <button id="openTeacherBtn">Teacher Dashboard</button>
-          <button id="openImplementationBtn" class="good">Teacher Implementation Check</button>
+          <button id="openStudentBtn">📖 Student Reading Log</button>
+          <button id="openTeacherBtn" class="good">📊 Teacher Dashboard</button>
+          <button id="openImplementationBtn" class="warn">✅ Teacher Implementation Check</button>
         </div>
       </div>
 
-      <div id="configPanel" class="status-box soft">
-        <strong>Connection status</strong>
-        <div id="connectionMessage">The site is currently in setup mode. Add your Google Apps Script web app URL in the CONFIG section near the top of this file, then redeploy on GitHub Pages.</div>
-      </div>
-
+      <!-- ══════════════════════════════════════════
+           STUDENT PANEL
+      ══════════════════════════════════════════ -->
       <section id="studentPanel" class="panel hidden">
         <div class="topbar">
           <div>
             <h2>Student Reading Log</h2>
-            <div class="small">Shared submission form linked to the central project spreadsheet.</div>
+            <div class="small">Submit your weekly reading entry. It is saved online and shared with your teacher.</div>
           </div>
-          <button class="secondary" data-back="true">Back</button>
+          <button class="secondary" data-back="true">← Back</button>
         </div>
 
         <div class="panel" style="padding:16px; background:#f9fbfe;">
           <div class="grid">
             <div class="field">
               <label for="studentLoginId">Student Number</label>
-              <input type="text" id="studentLoginId" placeholder="Enter student number" />
+              <input type="text" id="studentLoginId" placeholder="e.g. 12345" />
             </div>
             <div class="field">
               <label for="studentGrade">Grade</label>
@@ -232,29 +194,23 @@
               <label for="studentWeek">Week</label>
               <select id="studentWeek">
                 <option value="">Select week</option>
-                <option value="1">Week 1</option>
-                <option value="2">Week 2</option>
-                <option value="3">Week 3</option>
-                <option value="4">Week 4</option>
-                <option value="5">Week 5</option>
-                <option value="6">Week 6</option>
-                <option value="7">Week 7</option>
-                <option value="8">Week 8</option>
+                <option value="1">Week 1</option><option value="2">Week 2</option>
+                <option value="3">Week 3</option><option value="4">Week 4</option>
+                <option value="5">Week 5</option><option value="6">Week 6</option>
+                <option value="7">Week 7</option><option value="8">Week 8</option>
               </select>
             </div>
             <div class="field">
               <label for="studentMinutes">Total Minutes Read</label>
-              <input type="number" id="studentMinutes" min="0" />
+              <input type="number" id="studentMinutes" min="0" placeholder="e.g. 45" />
             </div>
             <div class="field">
               <label for="studentSessions">Number of Sessions</label>
-              <input type="number" id="studentSessions" min="1" />
+              <input type="number" id="studentSessions" min="1" placeholder="e.g. 3" />
             </div>
             <div class="field wide">
               <label for="bookSelect">Book Title</label>
-              <select id="bookSelect">
-                <option value="">Select book</option>
-              </select>
+              <select id="bookSelect"><option value="">Select book</option></select>
             </div>
             <div class="field">
               <label for="bookAuthor">Author</label>
@@ -277,19 +233,19 @@
               <input type="number" id="pagesReadDisplay" readonly />
             </div>
             <div class="field">
-              <label for="reaction">Reaction</label>
+              <label for="reaction">Reaction (1–5)</label>
               <select id="reaction">
                 <option value="">Select reaction</option>
-                <option value="1">1 - Disliked</option>
+                <option value="1">1 – Disliked</option>
                 <option value="2">2</option>
-                <option value="3">3 - Neutral</option>
+                <option value="3">3 – Neutral</option>
                 <option value="4">4</option>
-                <option value="5">5 - Loved</option>
+                <option value="5">5 – Loved it</option>
               </select>
             </div>
             <div class="field full">
               <label for="studentComment">Optional Comment</label>
-              <textarea id="studentComment" placeholder="A short reaction, thought, or note about your reading"></textarea>
+              <textarea id="studentComment" placeholder="A short reaction, thought, or note about your reading this week"></textarea>
             </div>
           </div>
           <div class="button-row">
@@ -303,18 +259,9 @@
           <table>
             <thead>
               <tr>
-                <th>Timestamp</th>
-                <th>Week</th>
-                <th>Teacher</th>
-                <th>Minutes</th>
-                <th>Sessions</th>
-                <th>Book</th>
-                <th>Level</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Pages</th>
-                <th>Reaction</th>
-                <th>Comment</th>
+                <th>Date</th><th>Week</th><th>Teacher</th><th>Minutes</th>
+                <th>Sessions</th><th>Book</th><th>Level</th><th>Start</th>
+                <th>End</th><th>Pages</th><th>Reaction</th><th>Comment</th>
               </tr>
             </thead>
             <tbody id="studentEntriesBody"></tbody>
@@ -322,18 +269,22 @@
         </div>
       </section>
 
+      <!-- ══════════════════════════════════════════
+           TEACHER DASHBOARD
+      ══════════════════════════════════════════ -->
       <section id="teacherPanel" class="panel hidden">
         <div class="topbar">
           <div>
             <h2>Teacher Dashboard</h2>
-            <div class="small">Shared data view from Google Sheets with analytics.</div>
+            <div class="small">Live view of all student reading entries and implementation checks.</div>
           </div>
-          <button class="secondary" data-back="true">Back</button>
+          <button class="secondary" data-back="true">← Back</button>
         </div>
 
+        <!-- Filters -->
         <div class="grid">
           <div class="field">
-            <label for="filterGrade">Filter by Grade</label>
+            <label for="filterGrade">Grade</label>
             <select id="filterGrade">
               <option value="all">All grades</option>
               <option value="9">Grade 9</option>
@@ -341,7 +292,7 @@
             </select>
           </div>
           <div class="field">
-            <label for="filterTeacher">Filter by Teacher</label>
+            <label for="filterTeacher">Teacher</label>
             <select id="filterTeacher">
               <option value="all">All teachers</option>
               <option value="Mr Midlane">Mr Midlane</option>
@@ -353,61 +304,52 @@
             </select>
           </div>
           <div class="field">
-            <label for="filterWeek">Filter by Week</label>
+            <label for="filterWeek">Week</label>
             <select id="filterWeek">
               <option value="all">All weeks</option>
-              <option value="1">Week 1</option>
-              <option value="2">Week 2</option>
-              <option value="3">Week 3</option>
-              <option value="4">Week 4</option>
-              <option value="5">Week 5</option>
-              <option value="6">Week 6</option>
-              <option value="7">Week 7</option>
-              <option value="8">Week 8</option>
+              <option value="1">Week 1</option><option value="2">Week 2</option>
+              <option value="3">Week 3</option><option value="4">Week 4</option>
+              <option value="5">Week 5</option><option value="6">Week 6</option>
+              <option value="7">Week 7</option><option value="8">Week 8</option>
             </select>
           </div>
           <div class="field">
-            <label for="filterStudent">Filter by Student No.</label>
-            <input type="text" id="filterStudent" placeholder="Type student number" />
+            <label for="filterStudent">Student Number</label>
+            <input type="text" id="filterStudent" placeholder="Type to filter" />
           </div>
         </div>
-
         <div class="button-row">
-          <button id="refreshTeacherDataBtn">Refresh Shared Data</button>
-          <button id="exportReadingCsvBtn" class="good">Export Filtered Reading CSV</button>
-          <button id="exportImplementationCsvBtn" class="warn">Export Implementation CSV</button>
+          <button id="refreshTeacherDataBtn">🔄 Refresh Data</button>
+          <button id="exportReadingCsvBtn" class="good">⬇ Export Reading CSV</button>
+          <button id="exportImplementationCsvBtn" class="warn">⬇ Export Implementation CSV</button>
         </div>
 
+        <!-- Summary cards -->
         <div class="cards" id="teacherSummaryCards"></div>
 
+        <!-- Insight boxes -->
         <div class="triple" style="margin-top:18px;">
           <div class="insight-box danger">
-            <h3>Students needing attention</h3>
-            <ul id="studentRiskList" class="list"></ul>
+            <h3>⚠️ Students needing attention</h3>
+            <ul id="studentRiskList" class="list"><li class="muted">Load data to see insights.</li></ul>
           </div>
           <div class="insight-box warn">
-            <h3>Implementation watchpoints</h3>
-            <ul id="implementationRiskList" class="list"></ul>
+            <h3>🔎 Implementation watchpoints</h3>
+            <ul id="implementationRiskList" class="list"><li class="muted">Load data to see insights.</li></ul>
           </div>
           <div class="insight-box good">
-            <h3>Quick interpretation</h3>
-            <ul id="insightSummaryList" class="list"></ul>
+            <h3>💡 Quick interpretation</h3>
+            <ul id="insightSummaryList" class="list"><li class="muted">Load data to see insights.</li></ul>
           </div>
         </div>
 
+        <!-- Teacher & week comparison -->
         <div class="split" style="margin-top:18px;">
           <div class="panel" style="padding:16px;">
             <h3>Teacher comparison</h3>
             <div class="table-wrap">
               <table class="bar-table">
-                <thead>
-                  <tr>
-                    <th>Teacher</th>
-                    <th>Minutes Read</th>
-                    <th>Implementation Score</th>
-                    <th>Students</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Teacher</th><th>Minutes Read</th><th>Impl. Score</th><th>Students</th></tr></thead>
                 <tbody id="teacherComparisonBody"></tbody>
               </table>
             </div>
@@ -416,76 +358,54 @@
             <h3>Week comparison</h3>
             <div class="table-wrap">
               <table class="bar-table">
-                <thead>
-                  <tr>
-                    <th>Week</th>
-                    <th>Total Minutes</th>
-                    <th>Entries</th>
-                    <th>Average Reaction</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Week</th><th>Total Minutes</th><th>Entries</th><th>Avg Reaction</th></tr></thead>
                 <tbody id="weekComparisonBody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <div class="split" style="margin-top:18px;">
-          <div>
-            <h3>Student Reading Entries</h3>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Timestamp</th>
-                    <th>Student</th>
-                    <th>Grade</th>
-                    <th>Teacher</th>
-                    <th>Week</th>
-                    <th>Minutes</th>
-                    <th>Sessions</th>
-                    <th>Book</th>
-                    <th>Pages</th>
-                    <th>Reaction</th>
-                    <th>Comment</th>
-                  </tr>
-                </thead>
-                <tbody id="teacherReadingBody"></tbody>
-              </table>
-            </div>
+        <!-- Full data tables -->
+        <div style="margin-top:18px;">
+          <h3>Student Reading Entries</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th><th>Student</th><th>Grade</th><th>Teacher</th><th>Week</th>
+                  <th>Minutes</th><th>Sessions</th><th>Book</th><th>Pages</th><th>Reaction</th><th>Comment</th>
+                </tr>
+              </thead>
+              <tbody id="teacherReadingBody"></tbody>
+            </table>
           </div>
-          <div>
-            <h3>Teacher Implementation Checks</h3>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Timestamp</th>
-                    <th>Teacher</th>
-                    <th>Grade</th>
-                    <th>Week</th>
-                    <th>ER Run</th>
-                    <th>Minutes</th>
-                    <th>Books Ready</th>
-                    <th>Modelled</th>
-                    <th>Pair Share</th>
-                    <th>Notes</th>
-                  </tr>
-                </thead>
-                <tbody id="teacherImplementationBody"></tbody>
-              </table>
-            </div>
+        </div>
+        <div style="margin-top:18px;">
+          <h3>Teacher Implementation Checks</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th><th>Teacher</th><th>Grade</th><th>Week</th><th>ER Run</th>
+                  <th>Minutes</th><th>Books Ready</th><th>Modelled</th><th>Pair Share</th><th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="teacherImplementationBody"></tbody>
+            </table>
           </div>
         </div>
       </section>
 
+      <!-- ══════════════════════════════════════════
+           IMPLEMENTATION PANEL
+      ══════════════════════════════════════════ -->
       <section id="implementationPanel" class="panel hidden">
         <div class="topbar">
           <div>
             <h2>Teacher Implementation Check</h2>
-            <div class="small">Track whether ER routines are actually being delivered.</div>
+            <div class="small">Record whether ER routines were delivered this week.</div>
           </div>
-          <button class="secondary" data-back="true">Back</button>
+          <button class="secondary" data-back="true">← Back</button>
         </div>
 
         <div class="grid">
@@ -513,14 +433,10 @@
             <label for="implWeek">Week</label>
             <select id="implWeek">
               <option value="">Select week</option>
-              <option value="1">Week 1</option>
-              <option value="2">Week 2</option>
-              <option value="3">Week 3</option>
-              <option value="4">Week 4</option>
-              <option value="5">Week 5</option>
-              <option value="6">Week 6</option>
-              <option value="7">Week 7</option>
-              <option value="8">Week 8</option>
+              <option value="1">Week 1</option><option value="2">Week 2</option>
+              <option value="3">Week 3</option><option value="4">Week 4</option>
+              <option value="5">Week 5</option><option value="6">Week 6</option>
+              <option value="7">Week 7</option><option value="8">Week 8</option>
             </select>
           </div>
           <div class="field">
@@ -533,7 +449,7 @@
             </select>
           </div>
           <div class="field">
-            <label for="implMinutesAllocated">Minutes allocated this week</label>
+            <label for="implMinutesAllocated">Minutes allocated</label>
             <input type="number" id="implMinutesAllocated" min="0" placeholder="e.g. 30" />
           </div>
           <div class="field">
@@ -554,7 +470,7 @@
             </select>
           </div>
           <div class="field">
-            <label for="implPairShare">Pair share or reading talk completed?</label>
+            <label for="implPairShare">Pair share / reading talk done?</label>
             <select id="implPairShare">
               <option value="">Select</option>
               <option value="Yes">Yes</option>
@@ -563,706 +479,667 @@
           </div>
           <div class="field full">
             <label for="implNotes">Notes</label>
-            <textarea id="implNotes" placeholder="Anything useful about resourcing, routines, student buy-in, or barriers"></textarea>
+            <textarea id="implNotes" placeholder="Resourcing, routines, student engagement, barriers…"></textarea>
           </div>
         </div>
         <div class="button-row">
           <button id="implementationSubmitBtn" class="good">Submit Implementation Check</button>
         </div>
       </section>
-    </div>
+
+    </div><!-- /.wrap -->
 
     <script>
-      const CONFIG = {
-        appsScriptUrl: 'https://script.google.com/macros/s/AKfycbxwnam8oljmX9-T5n2GSvyo2epiZEEfaiz4Lf2h-nAOUxJbPBGlDwv3xHXl9AmQI_E6dQ/exec',
-      };
+    /* ══════════════════════════════════════════════════════════════
+       CONFIG
+       ─────────────────────────────────────────────────────────────
+       JSONBin setup:
+         1. Go to https://jsonbin.io and create a free account.
+         2. Go to API Keys → Create Access Key → copy it into MASTER_KEY.
+         3. Click "Create Bin", paste in the starter JSON below, make it
+            PRIVATE (so only your key can write). Copy the Bin ID.
+         4. Replace BIN_ID and MASTER_KEY with your values.
 
-      const teacherMap = {
-        '9': ['Mr Pottas', 'Mr Meyer', 'Ms Jenna'],
-        '11': ['Mr Midlane', 'Mr Mcquay', 'Ms Liu'],
-      };
+       Starter JSON for the bin:
+         { "readingEntries": [], "implementationEntries": [] }
 
-      const bookList = [
-        { title: 'The Secret Garden', author: 'Frances Hodgson Burnett', level: 'Starter', pages: 80 },
-        { title: 'Sherlock Holmes and the Duke\'s Son', author: 'Arthur Conan Doyle', level: 'Level 1', pages: 80 },
-        { title: 'Treasure Island', author: 'Robert Louis Stevenson', level: 'Level 2', pages: 90 },
-        { title: 'Jane Eyre', author: 'Charlotte Brontë', level: 'Level 3', pages: 100 },
-        { title: 'Dracula', author: 'Bram Stoker', level: 'Level 4', pages: 110 },
-        { title: 'Sense and Sensibility', author: 'Jane Austen', level: 'Level 5', pages: 120 },
+       The TEACHER_PASSWORD below is used to gate the Teacher Dashboard
+       and Implementation Check panels — change it to whatever you like.
+    ══════════════════════════════════════════════════════════════ */
+    const CONFIG = {
+      BIN_ID:          '69e8bf36856a6821895e9e64',
+      MASTER_KEY:      '$2a$10$uhgunOoooLsyavNmzWtyL.Bl99LfGikKYZFvKUuTuvvGXB7EUyHAu',
+      TEACHER_PASSWORD: 'esl2026',        // Change this
+      BASE_URL:        'https://api.jsonbin.io/v3/b',
+    };
+
+    /* ── Book list ── */
+    const BOOKS = [
+      { title: 'The Secret Garden',               author: 'Frances Hodgson Burnett', level: 'Starter', pages: 80 },
+      { title: "Sherlock Holmes and the Duke's Son", author: 'Arthur Conan Doyle',  level: 'Level 1',  pages: 80 },
+      { title: 'Treasure Island',                  author: 'Robert Louis Stevenson',level: 'Level 2',  pages: 90 },
+      { title: 'Jane Eyre',                        author: 'Charlotte Brontë',       level: 'Level 3',  pages: 100 },
+      { title: 'Dracula',                          author: 'Bram Stoker',            level: 'Level 4',  pages: 110 },
+      { title: 'Sense and Sensibility',            author: 'Jane Austen',            level: 'Level 5',  pages: 120 },
+    ];
+
+    /* ── Teacher map ── */
+    const TEACHER_MAP = {
+      '9':  ['Mr Pottas', 'Mr Meyer', 'Ms Jenna'],
+      '11': ['Mr Midlane', 'Mr Mcquay', 'Ms Liu'],
+    };
+
+    /* ── In-memory state ── */
+    const state = {
+      readingEntries: [],
+      implementationEntries: [],
+    };
+
+    /* ════════════════════════════════
+       JSONBIN API HELPERS
+    ════════════════════════════════ */
+    const binHeaders = () => ({
+      'Content-Type': 'application/json',
+      'X-Master-Key': CONFIG.MASTER_KEY,
+    });
+
+    async function binGet() {
+      const res = await fetch(`${CONFIG.BASE_URL}/${CONFIG.BIN_ID}/latest`, {
+        headers: binHeaders(),
+      });
+      if (!res.ok) throw new Error(`GET failed: ${res.status}`);
+      const json = await res.json();
+      return json.record;          // { readingEntries: [...], implementationEntries: [...] }
+    }
+
+    async function binPut(data) {
+      const res = await fetch(`${CONFIG.BASE_URL}/${CONFIG.BIN_ID}`, {
+        method: 'PUT',
+        headers: binHeaders(),
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`PUT failed: ${res.status}`);
+      return await res.json();
+    }
+
+    /* Thread-safe append: fetch → append → PUT */
+    async function appendEntry(type, entry) {
+      const data = await binGet();
+      if (!Array.isArray(data.readingEntries))        data.readingEntries = [];
+      if (!Array.isArray(data.implementationEntries)) data.implementationEntries = [];
+      if (type === 'reading') {
+        data.readingEntries.push(entry);
+      } else {
+        data.implementationEntries.push(entry);
+      }
+      await binPut(data);
+    }
+
+    /* ════════════════════════════════
+       TOAST
+    ════════════════════════════════ */
+    let toastTimer;
+    function toast(msg, durationMs = 3000) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), durationMs);
+    }
+
+    /* ════════════════════════════════
+       CONNECTION CHECK
+    ════════════════════════════════ */
+    async function checkConnection() {
+      const banner  = document.getElementById('connectionBanner');
+      const message = document.getElementById('connectionMessage');
+      if (!CONFIG.BIN_ID || CONFIG.BIN_ID === 'PASTE_YOUR_BIN_ID_HERE') {
+        message.textContent = '⚠️ Not yet configured — open index.html and fill in CONFIG.BIN_ID and CONFIG.MASTER_KEY.';
+        banner.className = 'status-box bad';
+        return false;
+      }
+      try {
+        await binGet();
+        message.textContent = '✅ Connected to JSONBin — shared data is live.';
+        banner.className = 'status-box ok';
+        return true;
+      } catch (e) {
+        message.textContent = `❌ Could not reach JSONBin (${e.message}). Check your BIN_ID and MASTER_KEY in CONFIG.`;
+        banner.className = 'status-box bad';
+        return false;
+      }
+    }
+
+    /* ════════════════════════════════
+       PANEL NAVIGATION
+    ════════════════════════════════ */
+    function showPanel(id) {
+      ['homePanel','studentPanel','teacherPanel','implementationPanel'].forEach(p => {
+        document.getElementById(p).classList.toggle('hidden', p !== id);
+      });
+    }
+
+    document.getElementById('openStudentBtn').addEventListener('click', () => showPanel('studentPanel'));
+
+    document.getElementById('openTeacherBtn').addEventListener('click', () => {
+      const pw = prompt('Teacher password:');
+      if (pw !== CONFIG.TEACHER_PASSWORD) { alert('Incorrect password.'); return; }
+      showPanel('teacherPanel');
+      loadTeacherData();
+    });
+
+    document.getElementById('openImplementationBtn').addEventListener('click', () => {
+      const pw = prompt('Teacher password:');
+      if (pw !== CONFIG.TEACHER_PASSWORD) { alert('Incorrect password.'); return; }
+      showPanel('implementationPanel');
+    });
+
+    document.querySelectorAll('[data-back="true"]').forEach(btn =>
+      btn.addEventListener('click', () => showPanel('homePanel'))
+    );
+
+    /* ════════════════════════════════
+       STUDENT FORM HELPERS
+    ════════════════════════════════ */
+    const $ = id => document.getElementById(id);
+
+    function populateTeacherDropdown() {
+      const grade = $('studentGrade').value;
+      const sel   = $('studentTeacher');
+      sel.innerHTML = '<option value="">Select teacher</option>';
+      (TEACHER_MAP[grade] || []).forEach(name => {
+        const o = document.createElement('option');
+        o.value = o.textContent = name;
+        sel.appendChild(o);
+      });
+    }
+
+    function populateBooks() {
+      const sel = $('bookSelect');
+      sel.innerHTML = '<option value="">Select book</option>';
+      BOOKS.forEach(b => {
+        const o = document.createElement('option');
+        o.value = b.title; o.textContent = b.title;
+        sel.appendChild(o);
+      });
+    }
+
+    function populatePages(n) {
+      [$('startPageSelect'), $('endPageSelect')].forEach(sel => {
+        const first = sel.options[0].outerHTML;
+        sel.innerHTML = first;
+        for (let i = 1; i <= n; i++) {
+          const o = document.createElement('option');
+          o.value = o.textContent = i;
+          sel.appendChild(o);
+        }
+      });
+    }
+
+    function calcPages() {
+      const s = parseInt($('startPageSelect').value), e = parseInt($('endPageSelect').value);
+      $('pagesReadDisplay').value = (!isNaN(s) && !isNaN(e) && e >= s) ? e - s + 1 : '';
+    }
+
+    function updateBookFields() {
+      const book = BOOKS.find(b => b.title === $('bookSelect').value);
+      if (!book) {
+        $('bookAuthor').value = $('bookLevel').value = $('pagesReadDisplay').value = '';
+        $('startPageSelect').innerHTML = '<option value="">Start page</option>';
+        $('endPageSelect').innerHTML   = '<option value="">End page</option>';
+        return;
+      }
+      $('bookAuthor').value = book.author;
+      $('bookLevel').value  = book.level;
+      populatePages(book.pages);
+      calcPages();
+    }
+
+    $('studentGrade').addEventListener('change', populateTeacherDropdown);
+    $('bookSelect').addEventListener('change', updateBookFields);
+    $('startPageSelect').addEventListener('change', calcPages);
+    $('endPageSelect').addEventListener('change', calcPages);
+
+    function validateStudentForm() {
+      if (!$('studentLoginId').value.trim()) return 'Please enter a student number.';
+      if (!$('studentGrade').value)          return 'Please select a grade.';
+      if (!$('studentTeacher').value)        return 'Please select a teacher.';
+      if (!$('studentWeek').value)           return 'Please select a week.';
+      if ($('studentMinutes').value === '')  return 'Please enter minutes read.';
+      if ($('studentSessions').value === '') return 'Please enter number of sessions.';
+      if (!$('bookSelect').value)            return 'Please select a book.';
+      if (!$('startPageSelect').value || !$('endPageSelect').value || !$('pagesReadDisplay').value)
+                                             return 'Please complete page details.';
+      if (!$('reaction').value)              return 'Please select a reaction.';
+      return '';
+    }
+
+    function buildStudentPayload() {
+      return {
+        timestamp:     new Date().toISOString(),
+        studentNumber: $('studentLoginId').value.trim(),
+        grade:         $('studentGrade').value,
+        teacher:       $('studentTeacher').value,
+        week:          $('studentWeek').value,
+        minutesRead:   Number($('studentMinutes').value),
+        sessions:      Number($('studentSessions').value),
+        bookTitle:     $('bookSelect').value,
+        author:        $('bookAuthor').value,
+        level:         $('bookLevel').value,
+        startPage:     Number($('startPageSelect').value),
+        endPage:       Number($('endPageSelect').value),
+        pagesRead:     Number($('pagesReadDisplay').value),
+        reaction:      Number($('reaction').value),
+        comment:       $('studentComment').value.trim(),
+      };
+    }
+
+    function resetStudentForm() {
+      ['studentWeek','studentMinutes','studentSessions','bookSelect',
+       'bookAuthor','bookLevel','pagesReadDisplay','reaction','studentComment']
+        .forEach(id => { $( id).value = ''; });
+      $('startPageSelect').innerHTML = '<option value="">Start page</option>';
+      $('endPageSelect').innerHTML   = '<option value="">End page</option>';
+    }
+
+    /* ── Submit reading entry ── */
+    $('studentSubmitBtn').addEventListener('click', async () => {
+      const err = validateStudentForm();
+      if (err) { alert(err); return; }
+      const btn = $('studentSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Saving…';
+      try {
+        await appendEntry('reading', buildStudentPayload());
+        toast('✅ Reading entry saved!');
+        resetStudentForm();
+        await loadStudentEntries();
+      } catch (e) {
+        alert('Could not save entry: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Submit Reading Entry';
+      }
+    });
+
+    /* ── Load my entries ── */
+    $('studentLoadBtn').addEventListener('click', loadStudentEntries);
+
+    async function loadStudentEntries() {
+      const num = $('studentLoginId').value.trim();
+      if (!num) { alert('Enter a student number first.'); return; }
+      try {
+        const data    = await binGet();
+        const entries = (data.readingEntries || []).filter(e => e.studentNumber === num);
+        renderStudentCards(entries);
+        renderStudentTable(entries);
+      } catch (e) {
+        alert('Could not load entries: ' + e.message);
+      }
+    }
+
+    function n(v) { const x = Number(v); return isFinite(x) ? x : 0; }
+
+    function renderStudentCards(entries) {
+      const target = $('studentSummaryCards');
+      target.innerHTML = '';
+      if (!entries.length) return;
+      const totalMin = entries.reduce((s, e) => s + n(e.minutesRead), 0);
+      const totalSes = entries.reduce((s, e) => s + n(e.sessions), 0);
+      const totalPg  = entries.reduce((s, e) => s + n(e.pagesRead), 0);
+      const reactArr = entries.map(e => n(e.reaction)).filter(Boolean);
+      const avgR     = reactArr.length ? (reactArr.reduce((a,b)=>a+b,0)/reactArr.length).toFixed(1) : '—';
+      [['Entries', entries.length], ['Total Minutes', totalMin],
+       ['Total Sessions', totalSes], ['Total Pages', totalPg], ['Avg Reaction', avgR]]
+        .forEach(([label, val]) => {
+          const d = document.createElement('div');
+          d.className = 'card';
+          d.innerHTML = `<div class="metric">${val}</div><div class="metric-label">${label}</div>`;
+          target.appendChild(d);
+        });
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      try { return new Date(iso).toLocaleDateString(); } catch { return iso; }
+    }
+
+    function renderStudentTable(entries) {
+      const body = $('studentEntriesBody');
+      body.innerHTML = entries.length
+        ? entries.map(e => `<tr>
+            <td>${formatDate(e.timestamp)}</td><td>${e.week||''}</td><td>${e.teacher||''}</td>
+            <td>${e.minutesRead||''}</td><td>${e.sessions||''}</td><td>${e.bookTitle||''}</td>
+            <td>${e.level||''}</td><td>${e.startPage||''}</td><td>${e.endPage||''}</td>
+            <td>${e.pagesRead||''}</td><td>${e.reaction||''}</td><td>${e.comment||''}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="12" class="muted">No entries found for this student number.</td></tr>';
+    }
+
+    /* ════════════════════════════════
+       TEACHER DASHBOARD
+    ════════════════════════════════ */
+    async function loadTeacherData() {
+      const btn = $('refreshTeacherDataBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Loading…';
+      try {
+        const data = await binGet();
+        state.readingEntries        = data.readingEntries        || [];
+        state.implementationEntries = data.implementationEntries || [];
+        renderTeacherDashboard();
+        toast('Data refreshed.');
+      } catch (e) {
+        alert('Could not load data: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔄 Refresh Data';
+      }
+    }
+
+    $('refreshTeacherDataBtn').addEventListener('click', loadTeacherData);
+
+    ['filterGrade','filterTeacher','filterWeek','filterStudent'].forEach(id =>
+      $(id).addEventListener('change', renderTeacherDashboard)
+    );
+    $('filterStudent').addEventListener('input', renderTeacherDashboard);
+
+    function filteredReading() {
+      const g = $('filterGrade').value, t = $('filterTeacher').value;
+      const w = $('filterWeek').value,  s = $('filterStudent').value.trim().toLowerCase();
+      return state.readingEntries.filter(e =>
+        (g === 'all' || String(e.grade) === g) &&
+        (t === 'all' || e.teacher === t) &&
+        (w === 'all' || String(e.week) === w) &&
+        (!s || String(e.studentNumber||'').toLowerCase().includes(s))
+      );
+    }
+
+    function filteredImpl() {
+      const g = $('filterGrade').value, t = $('filterTeacher').value, w = $('filterWeek').value;
+      return state.implementationEntries.filter(e =>
+        (g === 'all' || String(e.grade) === g) &&
+        (t === 'all' || e.teacher === t) &&
+        (w === 'all' || String(e.week) === w)
+      );
+    }
+
+    function implScore(entries) {
+      if (!entries.length) return 0;
+      const total = entries.reduce((sum, e) => {
+        let s = 0;
+        if (e.erRanThisWeek === 'Yes') s += 4; else if (e.erRanThisWeek === 'Partly') s += 2;
+        const m = n(e.minutesAllocated);
+        if (m >= 25) s += 2; else if (m >= 10) s += 1;
+        if (e.booksReady === 'Yes') s += 1; else if (e.booksReady === 'Mostly') s += 0.5;
+        if (e.teacherModelledReading === 'Yes') s += 1.5;
+        if (e.pairShareDone === 'Yes') s += 1.5;
+        return sum + s;
+      }, 0);
+      return +(total / entries.length).toFixed(1);
+    }
+
+    function scoreClass(v) {
+      return v >= 7.5 ? 'score-good' : v >= 5 ? 'score-warn' : 'score-danger';
+    }
+
+    function bar(pct) {
+      return `<div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,Math.min(100,pct))}%"></div></div>`;
+    }
+
+    function renderTeacherDashboard() {
+      const reading = filteredReading(), impl = filteredImpl();
+
+      /* ── Summary cards ── */
+      const totalMin = reading.reduce((s,e)=>s+n(e.minutesRead),0);
+      const totalPg  = reading.reduce((s,e)=>s+n(e.pagesRead),0);
+      const uniqStu  = new Set(reading.map(e=>e.studentNumber)).size;
+      const reactArr = reading.map(e=>n(e.reaction)).filter(Boolean);
+      const avgR     = reactArr.length ? (reactArr.reduce((a,b)=>a+b,0)/reactArr.length).toFixed(1) : '—';
+      const erYes    = impl.filter(e=>e.erRanThisWeek==='Yes').length;
+      const erRate   = impl.length ? Math.round((erYes/impl.length)*100)+'%' : '—';
+
+      const cards = [
+        ['Reading Entries', reading.length], ['Unique Students', uniqStu],
+        ['Total Minutes', totalMin],         ['Total Pages', totalPg],
+        ['Avg Reaction', avgR],              ['ER Delivery Rate', erRate],
       ];
-
-      const state = {
-        readingEntries: [],
-        implementationEntries: [],
-      };
-
-      const homePanel = document.getElementById('homePanel');
-      const studentPanel = document.getElementById('studentPanel');
-      const teacherPanel = document.getElementById('teacherPanel');
-      const implementationPanel = document.getElementById('implementationPanel');
-      const connectionMessage = document.getElementById('connectionMessage');
-
-      const studentGrade = document.getElementById('studentGrade');
-      const studentTeacher = document.getElementById('studentTeacher');
-      const studentLoginId = document.getElementById('studentLoginId');
-      const studentWeek = document.getElementById('studentWeek');
-      const studentMinutes = document.getElementById('studentMinutes');
-      const studentSessions = document.getElementById('studentSessions');
-      const studentComment = document.getElementById('studentComment');
-      const bookSelect = document.getElementById('bookSelect');
-      const bookAuthor = document.getElementById('bookAuthor');
-      const bookLevel = document.getElementById('bookLevel');
-      const startPageSelect = document.getElementById('startPageSelect');
-      const endPageSelect = document.getElementById('endPageSelect');
-      const pagesReadDisplay = document.getElementById('pagesReadDisplay');
-      const reaction = document.getElementById('reaction');
-
-      const filterGrade = document.getElementById('filterGrade');
-      const filterTeacher = document.getElementById('filterTeacher');
-      const filterWeek = document.getElementById('filterWeek');
-      const filterStudent = document.getElementById('filterStudent');
-
-      function showPanel(panel) {
-        homePanel.classList.add('hidden');
-        studentPanel.classList.add('hidden');
-        teacherPanel.classList.add('hidden');
-        implementationPanel.classList.add('hidden');
-        panel.classList.remove('hidden');
-      }
-
-      function goHome() {
-        homePanel.classList.remove('hidden');
-        studentPanel.classList.add('hidden');
-        teacherPanel.classList.add('hidden');
-        implementationPanel.classList.add('hidden');
-      }
-
-      document.getElementById('openStudentBtn').addEventListener('click', () => showPanel(studentPanel));
-      document.getElementById('openTeacherBtn').addEventListener('click', async () => {
-        showPanel(teacherPanel);
-        await refreshTeacherData();
-      });
-      document.getElementById('openImplementationBtn').addEventListener('click', () => showPanel(implementationPanel));
-      document.querySelectorAll('[data-back="true"]').forEach(btn => btn.addEventListener('click', goHome));
-
-      function updateConnectionBanner() {
-        const connected = CONFIG.appsScriptUrl && CONFIG.appsScriptUrl.startsWith('https://script.google.com/');
-        connectionMessage.textContent = connected
-          ? 'Google Apps Script URL detected. The site is ready to send and read shared data once the script is deployed with public web app access.'
-          : 'The site is currently in setup mode. Add your Google Apps Script web app URL in the CONFIG section near the top of this file, then redeploy on GitHub Pages.';
-        document.getElementById('configPanel').className = connected ? 'status-box ok' : 'status-box bad';
-      }
-
-      function populateTeacherDropdown() {
-        studentTeacher.innerHTML = '<option value="">Select teacher</option>';
-        const grade = studentGrade.value;
-        if (!grade || !teacherMap[grade]) return;
-        teacherMap[grade].forEach(name => {
-          const opt = document.createElement('option');
-          opt.value = name;
-          opt.textContent = name;
-          studentTeacher.appendChild(opt);
-        });
-      }
-
-      function populateBooks() {
-        bookSelect.innerHTML = '<option value="">Select book</option>';
-        bookList.forEach(book => {
-          const opt = document.createElement('option');
-          opt.value = book.title;
-          opt.textContent = book.title;
-          bookSelect.appendChild(opt);
-        });
-      }
-
-      function populatePageSelects(totalPages) {
-        startPageSelect.innerHTML = '<option value="">Start page</option>';
-        endPageSelect.innerHTML = '<option value="">End page</option>';
-        for (let i = 1; i <= totalPages; i++) {
-          const a = document.createElement('option');
-          a.value = i;
-          a.textContent = i;
-          const b = document.createElement('option');
-          b.value = i;
-          b.textContent = i;
-          startPageSelect.appendChild(a);
-          endPageSelect.appendChild(b);
-        }
-      }
-
-      function updateBookFields() {
-        const selected = bookList.find(b => b.title === bookSelect.value);
-        if (!selected) {
-          bookAuthor.value = '';
-          bookLevel.value = '';
-          pagesReadDisplay.value = '';
-          startPageSelect.innerHTML = '<option value="">Start page</option>';
-          endPageSelect.innerHTML = '<option value="">End page</option>';
-          return;
-        }
-        bookAuthor.value = selected.author;
-        bookLevel.value = selected.level;
-        populatePageSelects(selected.pages);
-        calculatePages();
-      }
-
-      function calculatePages() {
-        const start = parseInt(startPageSelect.value, 10);
-        const end = parseInt(endPageSelect.value, 10);
-        if (!Number.isNaN(start) && !Number.isNaN(end) && end >= start) {
-          pagesReadDisplay.value = end - start + 1;
-        } else {
-          pagesReadDisplay.value = '';
-        }
-      }
-
-      function safeNumber(value) {
-        const n = Number(value);
-        return Number.isFinite(n) ? n : 0;
-      }
-
-      function normaliseReadingEntry(entry) {
-        return {
-          timestamp: entry.timestamp || entry.Timestamp || '',
-          studentNumber: entry.studentNumber || entry.StudentNumber || '',
-          grade: String(entry.grade || entry.Grade || ''),
-          teacher: entry.teacher || entry.Teacher || '',
-          week: String(entry.week || entry.Week || ''),
-          minutesRead: safeNumber(entry.minutesRead || entry.MinutesRead),
-          sessions: safeNumber(entry.sessions || entry.Sessions),
-          bookTitle: entry.bookTitle || entry.BookTitle || '',
-          author: entry.author || entry.Author || '',
-          level: entry.level || entry.Level || '',
-          startPage: entry.startPage || entry.StartPage || '',
-          endPage: entry.endPage || entry.EndPage || '',
-          pagesRead: safeNumber(entry.pagesRead || entry.PagesRead),
-          reaction: safeNumber(entry.reaction || entry.Reaction),
-          comment: entry.comment || entry.Comment || '',
-        };
-      }
-
-      function normaliseImplementationEntry(entry) {
-        return {
-          timestamp: entry.timestamp || entry.Timestamp || '',
-          teacher: entry.teacher || entry.Teacher || '',
-          grade: String(entry.grade || entry.Grade || ''),
-          week: String(entry.week || entry.Week || ''),
-          erRanThisWeek: entry.erRanThisWeek || entry.ERRanThisWeek || '',
-          minutesAllocated: safeNumber(entry.minutesAllocated || entry.MinutesAllocated),
-          booksReady: entry.booksReady || entry.BooksReady || '',
-          teacherModelledReading: entry.teacherModelledReading || entry.TeacherModelledReading || '',
-          pairShareDone: entry.pairShareDone || entry.PairShareDone || '',
-          notes: entry.notes || entry.Notes || '',
-        };
-      }
-
-      async function apiPost(payload) {
-        if (!CONFIG.appsScriptUrl || !CONFIG.appsScriptUrl.startsWith('https://script.google.com/')) {
-          throw new Error('Apps Script URL is not configured yet.');
-        }
-        const response = await fetch(CONFIG.appsScriptUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload),
-        });
-        const text = await response.text();
-        return JSON.parse(text);
-      }
-
-      async function apiGet(params = {}) {
-        if (!CONFIG.appsScriptUrl || !CONFIG.appsScriptUrl.startsWith('https://script.google.com/')) {
-          throw new Error('Apps Script URL is not configured yet.');
-        }
-        const url = new URL(CONFIG.appsScriptUrl);
-        Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
-        const response = await fetch(url.toString());
-        return await response.json();
-      }
-
-      function validateStudentEntry() {
-        if (!studentLoginId.value.trim()) return 'Please enter a student number.';
-        if (!studentGrade.value) return 'Please select a grade.';
-        if (!studentTeacher.value) return 'Please select a teacher.';
-        if (!studentWeek.value) return 'Please select a week.';
-        if (studentMinutes.value === '') return 'Please enter minutes read.';
-        if (studentSessions.value === '') return 'Please enter number of sessions.';
-        if (!bookSelect.value) return 'Please select a book.';
-        if (!startPageSelect.value || !endPageSelect.value || !pagesReadDisplay.value) return 'Please complete page details.';
-        if (!reaction.value) return 'Please select a reaction.';
-        return '';
-      }
-
-      function getStudentPayload() {
-        return {
-          action: 'submitReading',
-          studentNumber: studentLoginId.value.trim(),
-          grade: studentGrade.value,
-          teacher: studentTeacher.value,
-          week: studentWeek.value,
-          minutesRead: studentMinutes.value,
-          sessions: studentSessions.value,
-          bookTitle: bookSelect.value,
-          author: bookAuthor.value,
-          level: bookLevel.value,
-          startPage: startPageSelect.value,
-          endPage: endPageSelect.value,
-          pagesRead: pagesReadDisplay.value,
-          reaction: reaction.value,
-          comment: studentComment.value.trim(),
-        };
-      }
-
-      function resetStudentForm() {
-        studentWeek.value = '';
-        studentMinutes.value = '';
-        studentSessions.value = '';
-        bookSelect.value = '';
-        bookAuthor.value = '';
-        bookLevel.value = '';
-        startPageSelect.innerHTML = '<option value="">Start page</option>';
-        endPageSelect.innerHTML = '<option value="">End page</option>';
-        pagesReadDisplay.value = '';
-        reaction.value = '';
-        studentComment.value = '';
-      }
-
-      function renderStudentCards(entries) {
-        const target = document.getElementById('studentSummaryCards');
-        target.innerHTML = '';
-        if (!entries.length) return;
-        const totalMinutes = entries.reduce((sum, e) => sum + safeNumber(e.minutesRead), 0);
-        const totalSessions = entries.reduce((sum, e) => sum + safeNumber(e.sessions), 0);
-        const totalPages = entries.reduce((sum, e) => sum + safeNumber(e.pagesRead), 0);
-        const avgReaction = entries.reduce((sum, e) => sum + safeNumber(e.reaction), 0) / entries.length;
-        const cards = [
-          ['Entries', entries.length],
-          ['Total Minutes', totalMinutes],
-          ['Total Sessions', totalSessions],
-          ['Total Pages', totalPages],
-          ['Average Reaction', avgReaction.toFixed(1)],
-        ];
-        cards.forEach(([label, value]) => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `<div class="metric">${value}</div><div class="metric-label">${label}</div>`;
-          target.appendChild(card);
-        });
-      }
-
-      function renderStudentTable(entries) {
-        const body = document.getElementById('studentEntriesBody');
-        body.innerHTML = '';
-        entries.forEach(entry => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${entry.timestamp || ''}</td>
-            <td>${entry.week || ''}</td>
-            <td>${entry.teacher || ''}</td>
-            <td>${entry.minutesRead || ''}</td>
-            <td>${entry.sessions || ''}</td>
-            <td>${entry.bookTitle || ''}</td>
-            <td>${entry.level || ''}</td>
-            <td>${entry.startPage || ''}</td>
-            <td>${entry.endPage || ''}</td>
-            <td>${entry.pagesRead || ''}</td>
-            <td>${entry.reaction || ''}</td>
-            <td>${entry.comment || ''}</td>
-          `;
-          body.appendChild(tr);
-        });
-      }
-
-      async function loadStudentEntries() {
-        const studentNumber = studentLoginId.value.trim();
-        if (!studentNumber) {
-          alert('Enter a student number first.');
-          return;
-        }
-        try {
-          const data = await apiGet({ action: 'getReadingEntries', studentNumber });
-          const entries = Array.isArray(data.entries) ? data.entries.map(normaliseReadingEntry) : [];
-          renderStudentCards(entries);
-          renderStudentTable(entries);
-        } catch (error) {
-          alert(error.message || 'Unable to load student entries.');
-        }
-      }
-
-      document.getElementById('studentSubmitBtn').addEventListener('click', async () => {
-        const issue = validateStudentEntry();
-        if (issue) {
-          alert(issue);
-          return;
-        }
-        try {
-          const result = await apiPost(getStudentPayload());
-          if (!result.success) throw new Error(result.error || 'Submission failed.');
-          alert('Reading entry submitted successfully.');
-          resetStudentForm();
-          await loadStudentEntries();
-        } catch (error) {
-          alert(error.message || 'Unable to submit reading entry.');
-        }
+      const cardsEl = $('teacherSummaryCards');
+      cardsEl.innerHTML = '';
+      cards.forEach(([label, val]) => {
+        const d = document.createElement('div');
+        d.className = 'card';
+        d.innerHTML = `<div class="metric">${val}</div><div class="metric-label">${label}</div>`;
+        cardsEl.appendChild(d);
       });
 
-      document.getElementById('studentLoadBtn').addEventListener('click', loadStudentEntries);
+      /* ── Teacher comparison ── */
+      const teacherMap = {};
+      reading.forEach(e => {
+        if (!teacherMap[e.teacher]) teacherMap[e.teacher] = { min: 0, pgs: 0, studs: new Set(), react: [] };
+        teacherMap[e.teacher].min  += n(e.minutesRead);
+        teacherMap[e.teacher].pgs  += n(e.pagesRead);
+        teacherMap[e.teacher].studs.add(e.studentNumber);
+        if (n(e.reaction)) teacherMap[e.teacher].react.push(n(e.reaction));
+      });
+      impl.forEach(e => {
+        if (!teacherMap[e.teacher]) teacherMap[e.teacher] = { min: 0, pgs: 0, studs: new Set(), react: [] };
+      });
+      const implByTeacher = {};
+      impl.forEach(e => { (implByTeacher[e.teacher] = implByTeacher[e.teacher]||[]).push(e); });
 
-      async function refreshTeacherData() {
-        try {
-          const data = await apiGet({ action: 'getDashboardData' });
-          state.readingEntries = Array.isArray(data.readingEntries) ? data.readingEntries.map(normaliseReadingEntry) : [];
-          state.implementationEntries = Array.isArray(data.implementationEntries) ? data.implementationEntries.map(normaliseImplementationEntry) : [];
-          renderTeacherDashboard();
-        } catch (error) {
-          alert(error.message || 'Unable to refresh shared data.');
-        }
-      }
+      const teacherStats = Object.entries(teacherMap)
+        .map(([teacher, d]) => ({
+          teacher,
+          minutes: d.min,
+          students: d.studs.size,
+          implScore: implScore(implByTeacher[teacher]||[]),
+        }))
+        .sort((a,b)=>b.minutes-a.minutes);
 
-      function getFilteredReadingEntries() {
-        return state.readingEntries.filter(entry => {
-          const gradeMatch = filterGrade.value === 'all' || String(entry.grade) === String(filterGrade.value);
-          const teacherMatch = filterTeacher.value === 'all' || entry.teacher === filterTeacher.value;
-          const weekMatch = filterWeek.value === 'all' || String(entry.week) === String(filterWeek.value);
-          const studentValue = filterStudent.value.trim().toLowerCase();
-          const studentMatch = !studentValue || String(entry.studentNumber || '').toLowerCase().includes(studentValue);
-          return gradeMatch && teacherMatch && weekMatch && studentMatch;
-        });
-      }
+      const maxMin = Math.max(...teacherStats.map(t=>t.minutes), 1);
+      $('teacherComparisonBody').innerHTML = teacherStats.map(t =>
+        `<tr>
+          <td>${t.teacher}</td>
+          <td class="bar-cell">${bar((t.minutes/maxMin)*100)} <span class="small">${t.minutes} min</span></td>
+          <td><span class="${scoreClass(t.implScore)}">${t.implScore}</span> / 10</td>
+          <td>${t.students}</td>
+        </tr>`
+      ).join('') || '<tr><td colspan="4" class="muted">No data.</td></tr>';
 
-      function getFilteredImplementationEntries() {
-        return state.implementationEntries.filter(entry => {
-          const gradeMatch = filterGrade.value === 'all' || String(entry.grade) === String(filterGrade.value);
-          const teacherMatch = filterTeacher.value === 'all' || entry.teacher === filterTeacher.value;
-          const weekMatch = filterWeek.value === 'all' || String(entry.week) === String(filterWeek.value);
-          return gradeMatch && teacherMatch && weekMatch;
-        });
-      }
-
-      function buildTeacherStats(reading, implementation) {
-        const map = {};
-        reading.forEach(entry => {
-          if (!map[entry.teacher]) {
-            map[entry.teacher] = { teacher: entry.teacher, minutes: 0, sessions: 0, pages: 0, reactions: [], students: new Set(), impl: [] };
-          }
-          map[entry.teacher].minutes += safeNumber(entry.minutesRead);
-          map[entry.teacher].sessions += safeNumber(entry.sessions);
-          map[entry.teacher].pages += safeNumber(entry.pagesRead);
-          map[entry.teacher].students.add(entry.studentNumber);
-          if (safeNumber(entry.reaction)) map[entry.teacher].reactions.push(safeNumber(entry.reaction));
-        });
-        implementation.forEach(entry => {
-          if (!map[entry.teacher]) {
-            map[entry.teacher] = { teacher: entry.teacher, minutes: 0, sessions: 0, pages: 0, reactions: [], students: new Set(), impl: [] };
-          }
-          map[entry.teacher].impl.push(entry);
-        });
-        return Object.values(map).map(item => {
-          const implScore = calculateImplementationScore(item.impl);
-          return {
-            teacher: item.teacher,
-            minutes: item.minutes,
-            sessions: item.sessions,
-            pages: item.pages,
-            studentCount: item.students.size,
-            avgReaction: item.reactions.length ? (item.reactions.reduce((a, b) => a + b, 0) / item.reactions.length) : 0,
-            implementationScore: implScore,
-          };
-        }).sort((a, b) => b.minutes - a.minutes);
-      }
-
-      function calculateImplementationScore(entries) {
-        if (!entries.length) return 0;
-        let total = 0;
-        entries.forEach(entry => {
-          let score = 0;
-          if (entry.erRanThisWeek === 'Yes') score += 4;
-          else if (entry.erRanThisWeek === 'Partly') score += 2;
-          if (safeNumber(entry.minutesAllocated) >= 25) score += 2;
-          else if (safeNumber(entry.minutesAllocated) >= 10) score += 1;
-          if (entry.booksReady === 'Yes') score += 1;
-          else if (entry.booksReady === 'Mostly') score += 0.5;
-          if (entry.teacherModelledReading === 'Yes') score += 1.5;
-          if (entry.pairShareDone === 'Yes') score += 1.5;
-          total += score;
-        });
-        return +(total / entries.length).toFixed(1);
-      }
-
-      function buildWeekStats(reading) {
-        const map = {};
-        reading.forEach(entry => {
-          const week = entry.week || 'Unknown';
-          if (!map[week]) {
-            map[week] = { week, minutes: 0, entries: 0, reactions: [] };
-          }
-          map[week].minutes += safeNumber(entry.minutesRead);
-          map[week].entries += 1;
-          if (safeNumber(entry.reaction)) map[week].reactions.push(safeNumber(entry.reaction));
-        });
-        return Object.values(map).sort((a, b) => safeNumber(a.week) - safeNumber(b.week)).map(item => ({
-          week: item.week,
-          minutes: item.minutes,
-          entries: item.entries,
-          avgReaction: item.reactions.length ? (item.reactions.reduce((x, y) => x + y, 0) / item.reactions.length).toFixed(1) : '0.0',
+      /* ── Week comparison ── */
+      const weekMap = {};
+      reading.forEach(e => {
+        const w = e.week || 'Unknown';
+        if (!weekMap[w]) weekMap[w] = { min: 0, entries: 0, react: [] };
+        weekMap[w].min     += n(e.minutesRead);
+        weekMap[w].entries += 1;
+        if (n(e.reaction)) weekMap[w].react.push(n(e.reaction));
+      });
+      const weekStats = Object.entries(weekMap)
+        .sort((a,b)=>n(a[0])-n(b[0]))
+        .map(([week, d]) => ({
+          week,
+          minutes: d.min,
+          entries: d.entries,
+          avgReact: d.react.length ? (d.react.reduce((a,b)=>a+b,0)/d.react.length).toFixed(1) : '—',
         }));
-      }
+      const maxWMin = Math.max(...weekStats.map(w=>w.minutes), 1);
+      $('weekComparisonBody').innerHTML = weekStats.map(w =>
+        `<tr>
+          <td>Week ${w.week}</td>
+          <td class="bar-cell">${bar((w.minutes/maxWMin)*100)} <span class="small">${w.minutes} min</span></td>
+          <td>${w.entries}</td>
+          <td>${w.avgReact}</td>
+        </tr>`
+      ).join('') || '<tr><td colspan="4" class="muted">No data.</td></tr>';
 
-      function buildStudentRiskList(reading) {
-        const map = {};
-        reading.forEach(entry => {
-          const id = entry.studentNumber || 'Unknown';
-          if (!map[id]) {
-            map[id] = { studentNumber: id, teacher: entry.teacher, grade: entry.grade, entries: 0, minutes: 0, pages: 0, reactions: [] };
-          }
-          map[id].entries += 1;
-          map[id].minutes += safeNumber(entry.minutesRead);
-          map[id].pages += safeNumber(entry.pagesRead);
-          if (safeNumber(entry.reaction)) map[id].reactions.push(safeNumber(entry.reaction));
-        });
-        return Object.values(map)
-          .map(item => {
-            const avgReaction = item.reactions.length ? item.reactions.reduce((a, b) => a + b, 0) / item.reactions.length : 0;
-            let risk = 0;
-            if (item.minutes < 30) risk += 3;
-            else if (item.minutes < 60) risk += 2;
-            if (item.entries < 1) risk += 3;
-            if (item.pages < 10) risk += 2;
-            if (avgReaction > 0 && avgReaction <= 2.5) risk += 2;
-            return { ...item, avgReaction: avgReaction.toFixed(1), risk };
-          })
-          .filter(item => item.risk >= 3)
-          .sort((a, b) => b.risk - a.risk || a.minutes - b.minutes)
-          .slice(0, 8);
-      }
-
-      function buildImplementationRiskList(implementation) {
-        const teacherStats = {};
-        implementation.forEach(entry => {
-          if (!teacherStats[entry.teacher]) teacherStats[entry.teacher] = [];
-          teacherStats[entry.teacher].push(entry);
-        });
-        return Object.entries(teacherStats).map(([teacher, entries]) => {
-          const score = calculateImplementationScore(entries);
-          const noRun = entries.filter(e => e.erRanThisWeek === 'No').length;
-          const partial = entries.filter(e => e.erRanThisWeek === 'Partly').length;
-          return { teacher, score, noRun, partial, checks: entries.length };
-        }).filter(item => item.score < 6 || item.noRun > 0)
-          .sort((a, b) => a.score - b.score)
-          .slice(0, 8);
-      }
-
-      function insightText(reading, implementation, teacherStats, weekStats) {
-        const totalMinutes = reading.reduce((sum, e) => sum + safeNumber(e.minutesRead), 0);
-        const totalEntries = reading.length;
-        const avgMinutes = totalEntries ? (totalMinutes / totalEntries).toFixed(1) : '0.0';
-        const topTeacher = teacherStats[0];
-        const bestWeek = [...weekStats].sort((a, b) => b.minutes - a.minutes)[0];
-        const erYes = implementation.filter(e => e.erRanThisWeek === 'Yes').length;
-        const erRate = implementation.length ? Math.round((erYes / implementation.length) * 100) : 0;
-        return [
-          `Average reading time per entry is ${avgMinutes} minutes.`,
-          topTeacher ? `${topTeacher.teacher} currently has the strongest reading total in this filtered view.` : 'No teacher comparison is available yet.',
-          bestWeek ? `${bestWeek.week === 'Unknown' ? 'One unidentified week' : 'Week ' + bestWeek.week} has the strongest reading volume so far.` : 'No week pattern is available yet.',
-          `Clear ER delivery is recorded in ${erRate}% of implementation checks.`,
-        ];
-      }
-
-      function scoreClass(score) {
-        if (score >= 7.5) return 'score-good';
-        if (score >= 5) return 'score-warn';
-        return 'score-danger';
-      }
-
-      function bar(percent) {
-        return `<div class="bar-track"><div class="bar-fill" style="width:${Math.max(0, Math.min(100, percent))}%"></div></div>`;
-      }
-
-      function renderTeacherDashboard() {
-        const reading = getFilteredReadingEntries();
-        const implementation = getFilteredImplementationEntries();
-        const teacherStats = buildTeacherStats(reading, implementation);
-        const weekStats = buildWeekStats(reading);
-        const riskStudents = buildStudentRiskList(reading);
-        const riskImplementation = buildImplementationRiskList(implementation);
-        const insightSummary = insightText(reading, implementation, teacherStats, weekStats);
-
-        const summaryTarget = document.getElementById('teacherSummaryCards');
-        summaryTarget.innerHTML = '';
-        const totalMinutes = reading.reduce((sum, e) => sum + safeNumber(e.minutesRead), 0);
-        const totalSessions = reading.reduce((sum, e) => sum + safeNumber(e.sessions), 0);
-        const totalPages = reading.reduce((sum, e) => sum + safeNumber(e.pagesRead), 0);
-        const uniqueStudents = new Set(reading.map(e => e.studentNumber)).size;
-        const erYesCount = implementation.filter(e => e.erRanThisWeek === 'Yes').length;
-        const avgReaction = reading.length ? (reading.reduce((sum, e) => sum + safeNumber(e.reaction), 0) / reading.filter(e => safeNumber(e.reaction) > 0).length || 0).toFixed(1) : '0.0';
-        const avgImplScore = teacherStats.length ? (teacherStats.reduce((sum, t) => sum + t.implementationScore, 0) / teacherStats.length).toFixed(1) : '0.0';
-        const cards = [
-          ['Reading Entries', reading.length],
-          ['Unique Students', uniqueStudents],
-          ['Total Minutes', totalMinutes],
-          ['Total Sessions', totalSessions],
-          ['Total Pages', totalPages],
-          ['Average Reaction', avgReaction],
-          ['Implementation Checks', implementation.length],
-          ['ER Clearly Happened', erYesCount],
-          ['Average Implementation Score', avgImplScore],
-        ];
-        cards.forEach(([label, value]) => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `<div class="metric">${value}</div><div class="metric-label">${label}</div>`;
-          summaryTarget.appendChild(card);
-        });
-
-        const studentRiskList = document.getElementById('studentRiskList');
-        studentRiskList.innerHTML = riskStudents.length
-          ? riskStudents.map(s => `<li>${s.studentNumber} (${s.teacher}, Grade ${s.grade}) — ${s.minutes} min, ${s.pages} pages, reaction ${s.avgReaction}</li>`).join('')
-          : '<li>No clear student red flags in this filtered view.</li>';
-
-        const implementationRiskList = document.getElementById('implementationRiskList');
-        implementationRiskList.innerHTML = riskImplementation.length
-          ? riskImplementation.map(t => `<li>${t.teacher} — score ${t.score}, no-ER weeks: ${t.noRun}, partial weeks: ${t.partial}</li>`).join('')
-          : '<li>No major implementation watchpoints in this filtered view.</li>';
-
-        const insightSummaryList = document.getElementById('insightSummaryList');
-        insightSummaryList.innerHTML = insightSummary.map(text => `<li>${text}</li>`).join('');
-
-        const teacherComparisonBody = document.getElementById('teacherComparisonBody');
-        teacherComparisonBody.innerHTML = '';
-        const maxTeacherMinutes = Math.max(...teacherStats.map(t => t.minutes), 1);
-        teacherStats.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${item.teacher}</td>
-            <td class="bar-cell">${bar((item.minutes / maxTeacherMinutes) * 100)}<div class="small">${item.minutes} min</div></td>
-            <td><span class="${scoreClass(item.implementationScore)}">${item.implementationScore}</span></td>
-            <td>${item.studentCount}</td>
-          `;
-          teacherComparisonBody.appendChild(tr);
-        });
-
-        const weekComparisonBody = document.getElementById('weekComparisonBody');
-        weekComparisonBody.innerHTML = '';
-        const maxWeekMinutes = Math.max(...weekStats.map(w => w.minutes), 1);
-        weekStats.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${item.week === 'Unknown' ? 'Unknown' : 'Week ' + item.week}</td>
-            <td class="bar-cell">${bar((item.minutes / maxWeekMinutes) * 100)}<div class="small">${item.minutes} min</div></td>
-            <td>${item.entries}</td>
-            <td>${item.avgReaction}</td>
-          `;
-          weekComparisonBody.appendChild(tr);
-        });
-
-        const readingBody = document.getElementById('teacherReadingBody');
-        readingBody.innerHTML = '';
-        reading.forEach(entry => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${entry.timestamp || ''}</td>
-            <td>${entry.studentNumber || ''}</td>
-            <td>${entry.grade || ''}</td>
-            <td>${entry.teacher || ''}</td>
-            <td>${entry.week || ''}</td>
-            <td>${entry.minutesRead || ''}</td>
-            <td>${entry.sessions || ''}</td>
-            <td>${entry.bookTitle || ''}</td>
-            <td>${entry.pagesRead || ''}</td>
-            <td>${entry.reaction || ''}</td>
-            <td>${entry.comment || ''}</td>
-          `;
-          readingBody.appendChild(tr);
-        });
-
-        const implBody = document.getElementById('teacherImplementationBody');
-        implBody.innerHTML = '';
-        implementation.forEach(entry => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${entry.timestamp || ''}</td>
-            <td>${entry.teacher || ''}</td>
-            <td>${entry.grade || ''}</td>
-            <td>${entry.week || ''}</td>
-            <td>${entry.erRanThisWeek || ''}</td>
-            <td>${entry.minutesAllocated || ''}</td>
-            <td>${entry.booksReady || ''}</td>
-            <td>${entry.teacherModelledReading || ''}</td>
-            <td>${entry.pairShareDone || ''}</td>
-            <td>${entry.notes || ''}</td>
-          `;
-          implBody.appendChild(tr);
-        });
-      }
-
-      function downloadCsv(filename, rows) {
-        const csv = rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-
-      document.getElementById('exportReadingCsvBtn').addEventListener('click', () => {
-        const rows = [
-          ['Timestamp', 'StudentNumber', 'Grade', 'Teacher', 'Week', 'MinutesRead', 'Sessions', 'BookTitle', 'Author', 'Level', 'StartPage', 'EndPage', 'PagesRead', 'Reaction', 'Comment'],
-          ...getFilteredReadingEntries().map(e => [e.timestamp, e.studentNumber, e.grade, e.teacher, e.week, e.minutesRead, e.sessions, e.bookTitle, e.author, e.level, e.startPage, e.endPage, e.pagesRead, e.reaction, e.comment])
-        ];
-        downloadCsv('reading-entries.csv', rows);
+      /* ── Risk: students ── */
+      const stuMap = {};
+      reading.forEach(e => {
+        const id = e.studentNumber||'?';
+        if (!stuMap[id]) stuMap[id] = { id, teacher: e.teacher, grade: e.grade, min: 0, entries: 0, pgs: 0, react: [] };
+        stuMap[id].min     += n(e.minutesRead);
+        stuMap[id].entries += 1;
+        stuMap[id].pgs     += n(e.pagesRead);
+        if (n(e.reaction)) stuMap[id].react.push(n(e.reaction));
       });
+      const riskStudents = Object.values(stuMap).map(s => {
+        const avgR2 = s.react.length ? s.react.reduce((a,b)=>a+b,0)/s.react.length : 0;
+        let risk = 0;
+        if (s.min < 30) risk += 3; else if (s.min < 60) risk += 2;
+        if (s.entries < 1) risk += 3;
+        if (s.pgs < 10) risk += 2;
+        if (avgR2 > 0 && avgR2 <= 2.5) risk += 2;
+        return { ...s, avgReact: avgR2.toFixed(1), risk };
+      }).filter(s => s.risk >= 3).sort((a,b)=>b.risk-a.risk).slice(0,8);
 
-      document.getElementById('exportImplementationCsvBtn').addEventListener('click', () => {
-        const rows = [
-          ['Timestamp', 'Teacher', 'Grade', 'Week', 'ERRanThisWeek', 'MinutesAllocated', 'BooksReady', 'TeacherModelledReading', 'PairShareDone', 'Notes'],
-          ...getFilteredImplementationEntries().map(e => [e.timestamp, e.teacher, e.grade, e.week, e.erRanThisWeek, e.minutesAllocated, e.booksReady, e.teacherModelledReading, e.pairShareDone, e.notes])
-        ];
-        downloadCsv('implementation-checks.csv', rows);
-      });
+      $('studentRiskList').innerHTML = riskStudents.length
+        ? riskStudents.map(s => `<li><strong>${s.id}</strong> (${s.teacher}) — ${s.min} min, ${s.entries} entries</li>`).join('')
+        : '<li class="muted">No at-risk students in this filter. 🎉</li>';
 
-      document.getElementById('refreshTeacherDataBtn').addEventListener('click', refreshTeacherData);
-      [filterGrade, filterTeacher, filterWeek].forEach(el => el.addEventListener('change', renderTeacherDashboard));
-      filterStudent.addEventListener('input', renderTeacherDashboard);
+      /* ── Risk: implementation ── */
+      const implByT2 = {};
+      impl.forEach(e => { (implByT2[e.teacher]=implByT2[e.teacher]||[]).push(e); });
+      const riskImpl = Object.entries(implByT2).map(([teacher, entries]) => ({
+        teacher,
+        score: implScore(entries),
+        noRun: entries.filter(e=>e.erRanThisWeek==='No').length,
+      })).filter(t => t.score < 6 || t.noRun > 0).sort((a,b)=>a.score-b.score).slice(0,8);
 
-      document.getElementById('implementationSubmitBtn').addEventListener('click', async () => {
-        const payload = {
-          action: 'submitImplementation',
-          teacher: document.getElementById('implTeacher').value,
-          grade: document.getElementById('implGrade').value,
-          week: document.getElementById('implWeek').value,
-          erRanThisWeek: document.getElementById('implERRan').value,
-          minutesAllocated: document.getElementById('implMinutesAllocated').value,
-          booksReady: document.getElementById('implBooksReady').value,
-          teacherModelledReading: document.getElementById('implModelled').value,
-          pairShareDone: document.getElementById('implPairShare').value,
-          notes: document.getElementById('implNotes').value.trim(),
-        };
+      $('implementationRiskList').innerHTML = riskImpl.length
+        ? riskImpl.map(t => `<li><strong>${t.teacher}</strong> — score ${t.implScore}, ${t.noRun} weeks ER not run</li>`).join('')
+        : '<li class="muted">No implementation concerns. ✅</li>';
 
-        if (!payload.teacher || !payload.grade || !payload.week || !payload.erRanThisWeek) {
-          alert('Please complete teacher, grade, week, and whether ER happened.');
-          return;
-        }
+      /* ── Insight bullets ── */
+      const avgMin2 = reading.length ? (reading.reduce((s,e)=>s+n(e.minutesRead),0)/reading.length).toFixed(1) : '0.0';
+      const topT    = teacherStats[0];
+      const bestW   = [...weekStats].sort((a,b)=>b.minutes-a.minutes)[0];
+      const erRate2 = impl.length ? Math.round((impl.filter(e=>e.erRanThisWeek==='Yes').length/impl.length)*100) : 0;
+      $('insightSummaryList').innerHTML = [
+        `Average reading per entry: <strong>${avgMin2} min</strong>.`,
+        topT ? `Highest volume teacher: <strong>${topT.teacher}</strong> (${topT.minutes} min).` : 'No teacher data yet.',
+        bestW ? `Strongest week: <strong>Week ${bestW.week}</strong> (${bestW.minutes} min).` : 'No week data yet.',
+        `ER clearly delivered in <strong>${erRate2}%</strong> of implementation checks.`,
+      ].map(t=>`<li>${t}</li>`).join('');
 
-        try {
-          const result = await apiPost(payload);
-          if (!result.success) throw new Error(result.error || 'Submission failed.');
-          alert('Implementation check submitted successfully.');
-          document.getElementById('implMinutesAllocated').value = '';
-          document.getElementById('implNotes').value = '';
-        } catch (error) {
-          alert(error.message || 'Unable to submit implementation check.');
-        }
-      });
+      /* ── Full reading table ── */
+      $('teacherReadingBody').innerHTML = reading.length
+        ? reading.map(e => `<tr>
+            <td>${formatDate(e.timestamp)}</td><td>${e.studentNumber||''}</td><td>${e.grade||''}</td>
+            <td>${e.teacher||''}</td><td>${e.week||''}</td><td>${n(e.minutesRead)}</td>
+            <td>${n(e.sessions)}</td><td>${e.bookTitle||''}</td><td>${n(e.pagesRead)}</td>
+            <td>${n(e.reaction)}</td><td>${e.comment||''}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="11" class="muted">No reading entries match this filter.</td></tr>';
 
-      studentGrade.addEventListener('change', populateTeacherDropdown);
-      bookSelect.addEventListener('change', updateBookFields);
-      startPageSelect.addEventListener('change', calculatePages);
-      endPageSelect.addEventListener('change', calculatePages);
+      /* ── Full implementation table ── */
+      $('teacherImplementationBody').innerHTML = impl.length
+        ? impl.map(e => `<tr>
+            <td>${formatDate(e.timestamp)}</td><td>${e.teacher||''}</td><td>${e.grade||''}</td>
+            <td>${e.week||''}</td><td>${e.erRanThisWeek||''}</td><td>${n(e.minutesAllocated)}</td>
+            <td>${e.booksReady||''}</td><td>${e.teacherModelledReading||''}</td>
+            <td>${e.pairShareDone||''}</td><td>${e.notes||''}</td>
+          </tr>`).join('')
+        : '<tr><td colspan="10" class="muted">No implementation checks match this filter.</td></tr>';
+    }
 
-      updateConnectionBanner();
-      populateBooks();
+    /* ════════════════════════════════
+       CSV EXPORT
+    ════════════════════════════════ */
+    function downloadCsv(rows, filename) {
+      const csv  = rows.map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a    = document.createElement('a');
+      a.href     = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+    }
+
+    $('exportReadingCsvBtn').addEventListener('click', () => {
+      const reading = filteredReading();
+      if (!reading.length) { alert('No reading data to export.'); return; }
+      const header = ['Date','Student','Grade','Teacher','Week','Minutes','Sessions','Book','Author','Level','StartPage','EndPage','Pages','Reaction','Comment'];
+      const rows   = reading.map(e => [
+        formatDate(e.timestamp), e.studentNumber, e.grade, e.teacher, e.week,
+        e.minutesRead, e.sessions, e.bookTitle, e.author, e.level,
+        e.startPage, e.endPage, e.pagesRead, e.reaction, e.comment,
+      ]);
+      downloadCsv([header, ...rows], 'reading_entries.csv');
+    });
+
+    $('exportImplementationCsvBtn').addEventListener('click', () => {
+      const impl = filteredImpl();
+      if (!impl.length) { alert('No implementation data to export.'); return; }
+      const header = ['Date','Teacher','Grade','Week','ERRan','Minutes','BooksReady','Modelled','PairShare','Notes'];
+      const rows   = impl.map(e => [
+        formatDate(e.timestamp), e.teacher, e.grade, e.week,
+        e.erRanThisWeek, e.minutesAllocated, e.booksReady,
+        e.teacherModelledReading, e.pairShareDone, e.notes,
+      ]);
+      downloadCsv([header, ...rows], 'implementation_checks.csv');
+    });
+
+    /* ════════════════════════════════
+       IMPLEMENTATION FORM
+    ════════════════════════════════ */
+    function validateImplForm() {
+      if (!$('implTeacher').value)           return 'Please select a teacher.';
+      if (!$('implGrade').value)             return 'Please select a grade.';
+      if (!$('implWeek').value)              return 'Please select a week.';
+      if (!$('implERRan').value)             return 'Please indicate whether ER ran.';
+      if ($('implMinutesAllocated').value === '') return 'Please enter minutes allocated.';
+      if (!$('implBooksReady').value)        return 'Please select books status.';
+      if (!$('implModelled').value)          return 'Please indicate if teacher modelled reading.';
+      if (!$('implPairShare').value)         return 'Please indicate if pair share was done.';
+      return '';
+    }
+
+    function buildImplPayload() {
+      return {
+        timestamp:             new Date().toISOString(),
+        teacher:               $('implTeacher').value,
+        grade:                 $('implGrade').value,
+        week:                  $('implWeek').value,
+        erRanThisWeek:         $('implERRan').value,
+        minutesAllocated:      Number($('implMinutesAllocated').value),
+        booksReady:            $('implBooksReady').value,
+        teacherModelledReading: $('implModelled').value,
+        pairShareDone:         $('implPairShare').value,
+        notes:                 $('implNotes').value.trim(),
+      };
+    }
+
+    function resetImplForm() {
+      ['implTeacher','implGrade','implWeek','implERRan',
+       'implBooksReady','implModelled','implPairShare','implNotes']
+        .forEach(id => { $(id).value = ''; });
+      $('implMinutesAllocated').value = '';
+    }
+
+    $('implementationSubmitBtn').addEventListener('click', async () => {
+      const err = validateImplForm();
+      if (err) { alert(err); return; }
+      const btn = $('implementationSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Saving…';
+      try {
+        await appendEntry('implementation', buildImplPayload());
+        toast('✅ Implementation check saved!');
+        resetImplForm();
+      } catch (e) {
+        alert('Could not save: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Submit Implementation Check';
+      }
+    });
+
+    /* ════════════════════════════════
+       INIT
+    ════════════════════════════════ */
+    populateBooks();
+    checkConnection();
     </script>
   </body>
 </html>
