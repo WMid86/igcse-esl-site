@@ -1,297 +1,601 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Igcse ESL Resources</title>
-  <style>
-    /* Local styles for the home page.  The global palette and layout variables
-       are defined in styles.css; this file simply adjusts layout and adds a
-       colourful hero section. */
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 1rem 1rem 3rem;
-      line-height: 1.6;
-      color: var(--text);
-    }
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .notice {
-      background: var(--accent-light);
-      border-left: 4px solid var(--accent);
-      padding: 1rem;
-      margin-bottom: 2rem;
-      border-radius: var(--radius);
-    }
-    /* Hero section styling */
-    .hero {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .hero-img {
-      width: 100%;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      /* Allow the full hero image to display without being cut off */
-      max-height: none;
-      height: auto;
-      object-fit: contain;
-    }
-    .hero-title {
-      font-size: 2rem;
-      margin-top: 1rem;
-      color: var(--primary);
-    }
-    .hero-tagline {
-      font-size: 1.1rem;
-      color: var(--text-light);
-    }
-    /* Icon row under the hero for quick navigation */
-    .icon-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .icon-row a {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0.5rem;
-      border-radius: var(--radius-sm, 10px);
-      text-decoration: none;
-      color: var(--accent);
-      transition: background 0.2s, transform 0.1s;
-    }
-    .icon-row a:hover {
-      background: var(--accent-light);
-      transform: translateY(-2px);
-    }
-    .icon {
-      font-size: 2rem;
-    }
-    .label {
-      font-size: 0.85rem;
-      margin-top: 0.25rem;
-    }
-    /* Language switcher styles */
-    .language-switcher {
-      text-align: right;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-    .language-switcher a {
-      margin: 0 0.25rem;
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .language-switcher a.active {
-      font-weight: bold;
-    }
-    /* Additional spacing for exam container */
-    .exam-container {
-      margin-top: 1rem;
-    }
-  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reading Log Tracker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f6f8fa;
+        color: #333;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="number"],
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .form-group {
+        flex: 1 1 200px;
+        min-width: 200px;
+      }
+      .buttons {
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #fff;
+        background-color: #007bff;
+      }
+      button.export {
+        background-color: #28a745;
+      }
+      button.reset {
+        background-color: #dc3545;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .summary {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .summary-card {
+        flex: 1 1 200px;
+        background-color: #fafafa;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .summary-card h3 {
+        margin: 0 0 5px;
+        font-size: 1.1em;
+      }
+      .summary-card p {
+        margin: 0;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      @media (max-width: 600px) {
+        .form-group {
+          min-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Mode selection panel -->
+      <div id="modeSelection">
+        <h1>Extensive Reading Log</h1>
+        <p>Choose whether you are a student or a teacher to proceed.</p>
+        <div class="buttons" style="justify-content: center; margin-top: 20px;">
+          <button type="button" id="studentMode">I am a Student</button>
+          <button type="button" id="teacherMode">I am a Teacher/Researcher</button>
+        </div>
+      </div>
 
-  <!-- Import shared colour palette and layout variables -->
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <!-- Hero banner with colourful illustration and tagline -->
-  <!-- Simple language switcher for English/Chinese versions -->
-  <nav class="language-switcher">
-    <a href="index.html" class="active">EN</a> | <a href="index-zh.html">中文</a>
-  </nav>
+      <!-- Student panel -->
+      <div id="studentPanel" style="display: none;">
+        <button type="button" id="backToModeFromStudent" style="margin-bottom: 15px; background-color: #6c757d;">Back</button>
+        <!-- Student login section -->
+        <div id="studentLoginSection">
+          <h2>Student Log-In</h2>
+          <p>Please enter your student number to begin logging your reading activity.</p>
+          <div class="form-group" style="max-width: 300px;">
+            <label for="studentLoginId">Student Number</label>
+            <input type="text" id="studentLoginId" />
+          </div>
+          <button type="button" id="studentLoginBtn">Continue</button>
+        </div>
+        <!-- Student form and summary section -->
+        <div id="studentFormSection" style="display: none;">
+          <h2 id="studentWelcome"></h2>
+          <p>
+            Enter your reading for the week below. Select your grade and teacher so your
+            entry is recorded correctly. After saving, you can see your progress over time.
+          </p>
+          <form id="studentForm">
+            <div class="form-group">
+              <label for="studentGrade">Grade</label>
+              <select id="studentGrade" required>
+                <option value="">Select Grade</option>
+                <option value="9">Grade 9</option>
+                <option value="11">Grade 11</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="studentTeacher">Teacher</label>
+              <select id="studentTeacher" required>
+                <option value="">Select Teacher</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="studentWeek">Week</label>
+              <select id="studentWeek" required>
+                <option value="">Select Week</option>
+                <option value="1">Week 1</option>
+                <option value="2">Week 2</option>
+                <option value="3">Week 3</option>
+                <option value="4">Week 4</option>
+                <option value="5">Week 5</option>
+                <option value="6">Week 6</option>
+                <option value="7">Week 7</option>
+                <option value="8">Week 8</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="studentMinutes">Total Minutes Read</label>
+              <input type="number" id="studentMinutes" min="0" required />
+            </div>
+            <div class="form-group">
+              <label for="studentSessions">Number of Sessions</label>
+              <input type="number" id="studentSessions" min="1" required />
+            </div>
+            <div class="buttons">
+              <button type="submit">Save Reading</button>
+            </div>
+          </form>
+          <h3>Your Progress</h3>
+          <div class="summary" id="studentSummary">
+            <!-- Student summary cards injected here -->
+          </div>
+          <table id="studentEntriesTable">
+            <thead>
+              <tr>
+                <th>Grade</th>
+                <th>Teacher</th>
+                <th>Week</th>
+                <th>Minutes</th>
+                <th>Sessions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
 
-  <section class="hero">
-    <img src="hero-image.png" alt="Colourful abstract illustration" class="hero-img" />
-    <h1 class="hero-title">Cambridge IGCSE ESL (0511)</h1>
-    <p class="hero-tagline">Dive into quizzes, labs and guides designed to make your English learning fun and effective.</p>
-    <!-- Interactive icon row linking to each exam paper and vocabulary labs -->
-    <div class="icon-row">
-      <!-- Updated icons: a pencil for reading & writing, an ear for listening, a mouth for speaking,
-           a speech bubble for vocabulary labs, and a book for textbook units -->
-      <a href="#paper1" title="Paper 1 – Reading &amp; Writing">
-        <span class="icon">📝</span>
-        <span class="label">Reading &amp; Writing</span>
-      </a>
-      <a href="#paper2" title="Paper 2 – Listening">
-        <span class="icon">👂</span>
-        <span class="label">Listening</span>
-      </a>
-      <a href="#paper3" title="Paper 3 – Speaking">
-        <span class="icon">👄</span>
-        <span class="label">Speaking</span>
-      </a>
-      <a href="#vocab" title="Vocabulary Labs">
-        <span class="icon">💬</span>
-        <span class="label">Vocabulary</span>
-      </a>
-      <a href="#units" title="Textbook Units">
-        <span class="icon">📘</span>
-        <span class="label">Textbook Units</span>
-      </a>
-    </div>
-  </section>
-
-  <div class="notice">
-    <p>This site hosts a growing collection of resources for the Cambridge IGCSE 0511 English as a Second Language course. Use the interactive panels below to explore materials aligned with the exam structure. New activities will be added over time.</p>
-    <p>Visitors must enter the shared username and password provided to you. Analytics are collected using GoatCounter (a privacy‑friendly, open‑source analytics tool).</p>
-  </div>
-  <!-- Exam structure panels -->
-  <div class="exam-container">
-    <!-- Paper 1: Reading & Writing -->
-    <div id="paper1" class="exam-section">
-      <!-- Include a friendly icon to make the section more inviting -->
-      <h2 class="section-header">📝 Paper 1 – Reading &amp; Writing</h2>
-      <div class="section-content hidden">
-        <p>Two-hour paper combining reading comprehension and writing tasks. 60 marks (50 % of total grade).</p>
-        <ul>
-          <li><strong>Reading:</strong>
-            <ul>
-              <li><a href="paper1-reading-tips.html">Reading Tips &amp; Strategies</a></li>
-              <li>Comprehension and multiple-matching tasks (coming soon)</li>
-            </ul>
-          </li>
-          <li><strong>Writing:</strong>
-            <ul>
-              <li><a href="igcse-0511-report-writer.html">Report Writing</a></li>
-              <li><a href="email-language-dashboard-fixed-v3.html">Email Writing</a></li>
-              <li><a href="writing-assistant.html">Writing Assistant (Grammar &amp; Style Checker)</a></li>
-              <li>Review/Article Writing (coming soon)</li>
-            </ul>
-          </li>
-        </ul>
+      <!-- Teacher panel -->
+      <div id="teacherPanel" style="display: none;">
+        <button type="button" id="backToModeFromTeacher" style="margin-bottom: 15px; background-color: #6c757d;">Back</button>
+        <h2>Teacher/Researcher Dashboard</h2>
+        <p>
+          View aggregated reading logs across all students. Use the filter options to narrow
+          down entries by grade, teacher or student number. You can also export all entries
+          to CSV or clear all data.
+        </p>
+        <!-- Filter controls -->
+        <div class="form-group" style="max-width: 200px;">
+          <label for="filterGrade">Filter by Grade</label>
+          <select id="filterGrade">
+            <option value="all">All Grades</option>
+            <option value="9">Grade 9</option>
+            <option value="11">Grade 11</option>
+          </select>
+        </div>
+        <div class="form-group" style="max-width: 200px;">
+          <label for="filterTeacher">Filter by Teacher</label>
+          <select id="filterTeacher">
+            <option value="all">All Teachers</option>
+            <option value="Mr M">Mr M</option>
+            <option value="Ms J">Ms J</option>
+            <option value="Mr D">Mr D</option>
+            <option value="Ms H">Ms H</option>
+            <option value="Mr T">Mr T</option>
+          </select>
+        </div>
+        <div class="form-group" style="max-width: 200px;">
+          <label for="filterStudent">Filter by Student No.</label>
+          <input type="text" id="filterStudent" placeholder="Enter Student Number" />
+        </div>
+        <div class="buttons" style="margin-top: 10px;">
+          <button type="button" class="export" id="teacherExportBtn">Export CSV</button>
+          <button type="button" class="reset" id="teacherResetBtn">Clear All Data</button>
+        </div>
+        <!-- Teacher summary and table -->
+        <div class="summary" id="teacherSummary">
+          <!-- Summary cards injected here -->
+        </div>
+        <table id="teacherEntriesTable">
+          <thead>
+            <tr>
+              <th>Grade</th>
+              <th>Teacher</th>
+              <th>Student No.</th>
+              <th>Student Name</th>
+              <th>Week</th>
+              <th>Minutes</th>
+              <th>Sessions</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
-    <!-- Paper 2: Listening -->
-    <div id="paper2" class="exam-section">
-      <!-- Headphones icon to symbolise listening tasks -->
-      <h2 class="section-header">👂 Paper 2 – Listening</h2>
-      <div class="section-content hidden">
-        <p>Approximately 50-minute listening paper with various short and long audio texts. 40 marks (25 % of total grade).</p>
-        <ul>
-          <li><a href="paper2-listening-tips.html">Listening Tips & Strategies</a></li>
-          <li>Listening practice & resources (coming soon)</li>
-        </ul>
-      </div>
-    </div>
-    <!-- Paper 3: Speaking -->
-    <div id="paper3" class="exam-section">
-      <!-- Mouth icon to symbolise speaking tasks -->
-      <h2 class="section-header">👄 Paper 3 – Speaking</h2>
-      <div class="section-content hidden">
-        <p>10–15 minute speaking test including an interview, short talk and discussion. 40 marks (25 % of total grade).</p>
-        <ul>
-          <li><a href="igcse-0511-speaking-guide.html">Speaking Exam Guide</a></li>
-          <li><a href="igcse-0511-speaking-guide-mic-practice.html">Speaking Exam Practice (Mic)</a></li>
-          <li><a href="paper3-speaking-tips.html">Speaking Tips & Strategies</a></li>
-          <li>Additional speaking activities (coming soon)</li>
-        </ul>
-      </div>
-    </div>
 
-    <!-- Vocabulary Labs -->
-    <div id="vocab" class="exam-section">
-      <!-- Speech bubble icon to represent vocabulary labs -->
-      <h2 class="section-header">💬 Vocabulary Labs</h2>
-      <div class="section-content hidden">
-        <p>Interactive vocabulary labs to strengthen your lexical range. Practice using words in context and discover idiomatic expressions.</p>
-        <ul>
-          <li><a href="interview-vocabulary-lab-branded.html">Unit 6: Interview Vocabulary Lab</a></li>
-          <li><a href="b2_vocab_interview.html">Unit 6: Interview Vocabulary (B2)</a></li>
-          <li>More unit vocabulary labs coming soon</li>
-        </ul>
-      </div>
-    </div>
-    <!-- Textbook units panel added to help students navigate textbook resources by unit -->
-    <div id="units" class="exam-section">
-      <h2 class="section-header">📘 Textbook Units</h2>
-      <div class="section-content hidden">
-        <p>Navigate the Cambridge IGCSE ESL textbook by unit. We'll be adding resources for every unit – start with Unit 6.</p>
-        <ul>
-          <li><a href="#vocab">Unit 6: Interview</a> (see Vocabulary Labs)</li>
-          <li>Units 1–5 &amp; 7–10 (coming soon)</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    <script>
+      /*
+       * Reading Log Web Application
+       *
+       * This script provides two modes of operation: Student and Teacher/Researcher.
+       * Students log in with their student number, select their grade and teacher,
+       * and record how many minutes they have read and how many sessions they have
+       * completed each week. After submission, they can view a personal summary
+       * of their reading and see a history of their entries. Teachers or
+       * researchers can view all entries, apply filters (grade, teacher, student
+       * number), export data to CSV, or clear the data. The data is stored in
+       * localStorage, so each browser maintains its own copy of the entries.
+       */
 
-  <style>
-    /* Layout and interactive panel styles */
-    .exam-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0;
-    }
-    .exam-section {
-      background: var(--card, #fff);
-      border-radius: var(--radius-sm, 10px);
-      box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.1));
-      margin-bottom: 1.5rem;
-      overflow: hidden;
-    }
-    .section-header {
-      margin: 0;
-      padding: 1rem 1.25rem;
-      font-size: 1.25rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--accent, #6366f1);
-      background: var(--bg-2, #f6f7fb);
-      position: relative;
-    }
-    .section-header::after {
-      content: '▼';
-      font-size: 1rem;
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      transition: transform 0.2s;
-    }
-    .section-header.open::after {
-      transform: translateY(-50%) rotate(180deg);
-    }
-    .section-content {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border, #e2e8f0);
-      background: var(--panel, rgba(255,255,255,0.72));
-    }
-    .hidden {
-      display: none;
-    }
-    ul { list-style-type: none; padding-left: 1.2rem; }
-    li { margin-bottom: 0.5rem; }
-    li ul { margin-top: 0.5rem; }
-  </style>
-  <script>
-    // Toggle open/close for exam sections
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.section-header').forEach(function(header) {
-        header.addEventListener('click', function() {
-          header.classList.toggle('open');
-          var content = header.nextElementSibling;
-          if (content) {
-            content.classList.toggle('hidden');
-          }
-        });
+      // Map of teachers by grade for populating dropdowns
+      const teacherMap = {
+        '9': ['Mr M', 'Ms J', 'Mr D'],
+        '11': ['Mr M', 'Ms H', 'Mr T'],
+      };
+
+      // Utility functions for localStorage
+      function loadEntries() {
+        const data = localStorage.getItem('readingEntries');
+        return data ? JSON.parse(data) : [];
+      }
+      function saveEntries(entries) {
+        localStorage.setItem('readingEntries', JSON.stringify(entries));
+      }
+
+      // Panels and selection elements
+      const modeSelection = document.getElementById('modeSelection');
+      const studentPanel = document.getElementById('studentPanel');
+      const teacherPanel = document.getElementById('teacherPanel');
+      const studentLoginSection = document.getElementById('studentLoginSection');
+      const studentFormSection = document.getElementById('studentFormSection');
+      const studentLoginIdInput = document.getElementById('studentLoginId');
+      const studentLoginBtn = document.getElementById('studentLoginBtn');
+      const studentGradeSelect = document.getElementById('studentGrade');
+      const studentTeacherSelect = document.getElementById('studentTeacher');
+      const studentForm = document.getElementById('studentForm');
+      const studentSummary = document.getElementById('studentSummary');
+      const studentEntriesTableBody = document.querySelector('#studentEntriesTable tbody');
+      const studentWelcome = document.getElementById('studentWelcome');
+      const filterGradeSelect = document.getElementById('filterGrade');
+      const filterTeacherSelect = document.getElementById('filterTeacher');
+      const filterStudentInput = document.getElementById('filterStudent');
+      const teacherSummary = document.getElementById('teacherSummary');
+      const teacherEntriesTableBody = document.querySelector('#teacherEntriesTable tbody');
+      let currentStudentId = '';
+
+      // Mode selection event handlers
+      document.getElementById('studentMode').addEventListener('click', () => {
+        modeSelection.style.display = 'none';
+        teacherPanel.style.display = 'none';
+        studentPanel.style.display = 'block';
+        // Reset student login and form sections
+        studentLoginSection.style.display = 'block';
+        studentFormSection.style.display = 'none';
+        studentLoginIdInput.value = '';
+        currentStudentId = '';
       });
-    });
-  </script>
+      document.getElementById('teacherMode').addEventListener('click', () => {
+        modeSelection.style.display = 'none';
+        studentPanel.style.display = 'none';
+        teacherPanel.style.display = 'block';
+        renderTeacherView();
+      });
 
-  <!-- GoatCounter analytics script -->
-  <script data-goatcounter="https://igcseeslweb1.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-  <!-- Multi-user authentication script -->
-  <script src="auth.js"></script>
-</body>
+      // Back buttons
+      document.getElementById('backToModeFromStudent').addEventListener('click', () => {
+        studentPanel.style.display = 'none';
+        modeSelection.style.display = 'block';
+      });
+      document.getElementById('backToModeFromTeacher').addEventListener('click', () => {
+        teacherPanel.style.display = 'none';
+        modeSelection.style.display = 'block';
+      });
+
+      // Student login handler
+      studentLoginBtn.addEventListener('click', () => {
+        const id = studentLoginIdInput.value.trim();
+        if (!id) {
+          alert('Please enter your student number.');
+          return;
+        }
+        currentStudentId = id;
+        studentLoginSection.style.display = 'none';
+        studentFormSection.style.display = 'block';
+        studentWelcome.textContent = `Welcome Student ${id}`;
+        updateStudentView();
+      });
+
+      // Populate teacher options when grade changes
+      studentGradeSelect.addEventListener('change', () => {
+        const grade = studentGradeSelect.value;
+        studentTeacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+        if (grade && teacherMap[grade]) {
+          teacherMap[grade].forEach((t) => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            studentTeacherSelect.appendChild(opt);
+          });
+        }
+      });
+
+      // Student form submission
+      studentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const grade = studentGradeSelect.value;
+        const teacher = studentTeacherSelect.value;
+        const week = document.getElementById('studentWeek').value;
+        const minutes = document.getElementById('studentMinutes').value;
+        const sessions = document.getElementById('studentSessions').value;
+        if (!grade || !teacher || !week || minutes === '' || sessions === '') {
+          alert('Please complete all required fields.');
+          return;
+        }
+        const entries = loadEntries();
+        entries.push({ grade, teacher, studentId: currentStudentId, week, minutes, sessions });
+        saveEntries(entries);
+        // Clear form and teacher dropdown
+        studentForm.reset();
+        studentTeacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+        updateStudentView();
+      });
+
+      // Update student summary and table for current student
+      function updateStudentView() {
+        // Filter entries for this student
+        const entries = loadEntries().filter((e) => e.studentId === currentStudentId);
+        // Update summary
+        studentSummary.innerHTML = '';
+        if (entries.length > 0) {
+          let totalMinutes = 0;
+          let totalSessions = 0;
+          entries.forEach((e) => {
+            totalMinutes += Number(e.minutes);
+            totalSessions += Number(e.sessions);
+          });
+          const card = document.createElement('div');
+          card.className = 'summary-card';
+          card.innerHTML = `
+            <h3>Your Reading Summary</h3>
+            <p>Total Minutes: ${totalMinutes}</p>
+            <p>Total Sessions: ${totalSessions}</p>
+            <p>Entries: ${entries.length}</p>
+            <p>Avg Minutes per Entry: ${(totalMinutes / entries.length).toFixed(1)}</p>
+            <p>Avg Sessions per Entry: ${(totalSessions / entries.length).toFixed(1)}</p>
+          `;
+          studentSummary.appendChild(card);
+        }
+        // Update table
+        studentEntriesTableBody.innerHTML = '';
+        entries.forEach((entry) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${entry.grade}</td>
+            <td>${entry.teacher}</td>
+            <td>${entry.week}</td>
+            <td>${entry.minutes}</td>
+            <td>${entry.sessions}</td>
+          `;
+          studentEntriesTableBody.appendChild(tr);
+        });
+      }
+
+      // Render teacher dashboard based on filters
+      function getFilteredEntries() {
+        let entries = loadEntries();
+        const gradeFilter = filterGradeSelect.value;
+        const teacherFilter = filterTeacherSelect.value;
+        const studentFilter = filterStudentInput.value.trim().toLowerCase();
+        return entries.filter((entry) => {
+          const gradeMatch = gradeFilter === 'all' || entry.grade === gradeFilter;
+          const teacherMatch = teacherFilter === 'all' || entry.teacher === teacherFilter;
+          const studentMatch = !studentFilter || entry.studentId.toLowerCase().includes(studentFilter);
+          return gradeMatch && teacherMatch && studentMatch;
+        });
+      }
+
+      function renderTeacherView() {
+        // Update summary and table for teacher dashboard
+        updateTeacherSummary();
+        updateTeacherTable();
+      }
+
+      function updateTeacherSummary() {
+        const entries = getFilteredEntries();
+        teacherSummary.innerHTML = '';
+        if (entries.length === 0) return;
+        // Aggregate by grade and teacher separately
+        const summaryByGrade = {};
+        const summaryByTeacher = {};
+        entries.forEach((e) => {
+          // Grade summarisation
+          if (!summaryByGrade[e.grade]) {
+            summaryByGrade[e.grade] = { minutes: 0, sessions: 0, count: 0 };
+          }
+          summaryByGrade[e.grade].minutes += Number(e.minutes);
+          summaryByGrade[e.grade].sessions += Number(e.sessions);
+          summaryByGrade[e.grade].count += 1;
+          // Teacher summarisation
+          if (!summaryByTeacher[e.teacher]) {
+            summaryByTeacher[e.teacher] = { minutes: 0, sessions: 0, count: 0 };
+          }
+          summaryByTeacher[e.teacher].minutes += Number(e.minutes);
+          summaryByTeacher[e.teacher].sessions += Number(e.sessions);
+          summaryByTeacher[e.teacher].count += 1;
+        });
+        // Create cards for each grade
+        Object.keys(summaryByGrade).forEach((grade) => {
+          const s = summaryByGrade[grade];
+          const card = document.createElement('div');
+          card.className = 'summary-card';
+          card.innerHTML = `
+            <h3>Grade ${grade}</h3>
+            <p>Total Minutes: ${s.minutes}</p>
+            <p>Total Sessions: ${s.sessions}</p>
+            <p>Entries: ${s.count}</p>
+            <p>Avg Minutes per Entry: ${(s.minutes / s.count).toFixed(1)}</p>
+            <p>Avg Sessions per Entry: ${(s.sessions / s.count).toFixed(1)}</p>
+          `;
+          teacherSummary.appendChild(card);
+        });
+        // Create cards for each teacher
+        Object.keys(summaryByTeacher).forEach((teacher) => {
+          const s = summaryByTeacher[teacher];
+          const card = document.createElement('div');
+          card.className = 'summary-card';
+          card.innerHTML = `
+            <h3>${teacher}</h3>
+            <p>Total Minutes: ${s.minutes}</p>
+            <p>Total Sessions: ${s.sessions}</p>
+            <p>Entries: ${s.count}</p>
+            <p>Avg Minutes: ${(s.minutes / s.count).toFixed(1)}</p>
+            <p>Avg Sessions: ${(s.sessions / s.count).toFixed(1)}</p>
+          `;
+          teacherSummary.appendChild(card);
+        });
+      }
+
+      function updateTeacherTable() {
+        const entries = getFilteredEntries();
+        teacherEntriesTableBody.innerHTML = '';
+        entries.forEach((entry, index) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${entry.grade}</td>
+            <td>${entry.teacher}</td>
+            <td>${entry.studentId}</td>
+            <td>${entry.studentName || ''}</td>
+            <td>${entry.week}</td>
+            <td>${entry.minutes}</td>
+            <td>${entry.sessions}</td>
+            <td><button class="delete-btn" data-index="${index}">Delete</button></td>
+          `;
+          teacherEntriesTableBody.appendChild(tr);
+        });
+      }
+
+      // Hook up filters
+      filterGradeSelect.addEventListener('change', renderTeacherView);
+      filterTeacherSelect.addEventListener('change', renderTeacherView);
+      filterStudentInput.addEventListener('input', renderTeacherView);
+
+      // Teacher export
+      document.getElementById('teacherExportBtn').addEventListener('click', () => {
+        const entries = getFilteredEntries();
+        if (entries.length === 0) {
+          alert('No data to export.');
+          return;
+        }
+        const header = ['Grade','Teacher','Student Number','Week','Minutes','Sessions'];
+        const rows = entries.map((e) => [e.grade, e.teacher, e.studentId, e.week, e.minutes, e.sessions]);
+        let csvContent = header.join(',') + '\n';
+        rows.forEach((row) => {
+          csvContent += row.map((item) => '"' + String(item).replace(/"/g, '""') + '"').join(',') + '\n';
+        });
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'reading-log.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+
+      // Teacher clear data
+      document.getElementById('teacherResetBtn').addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all entries? This cannot be undone.')) {
+          localStorage.removeItem('readingEntries');
+          // Re-render whichever panel is active
+          if (teacherPanel.style.display === 'block') {
+            renderTeacherView();
+          }
+          if (studentPanel.style.display === 'block' && currentStudentId) {
+            updateStudentView();
+          }
+        }
+      });
+
+      // Delete entry from teacher dashboard
+      teacherEntriesTableBody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-btn')) {
+          const index = parseInt(e.target.getAttribute('data-index'), 10);
+          // Note: getFilteredEntries returns a filtered list; deletion must be based on full array
+          // Determine which entry in the full array this corresponds to
+          const allEntries = loadEntries();
+          const filtered = getFilteredEntries();
+          const entryToDelete = filtered[index];
+          // Find the index of this entry in the full list
+          const fullIndex = allEntries.findIndex((e) => {
+            return (
+              e.grade === entryToDelete.grade &&
+              e.teacher === entryToDelete.teacher &&
+              e.studentId === entryToDelete.studentId &&
+              e.week === entryToDelete.week &&
+              e.minutes === entryToDelete.minutes &&
+              e.sessions === entryToDelete.sessions
+            );
+          });
+          if (fullIndex > -1) {
+            allEntries.splice(fullIndex, 1);
+            saveEntries(allEntries);
+            renderTeacherView();
+            if (studentPanel.style.display === 'block' && currentStudentId) {
+              updateStudentView();
+            }
+          }
+        }
+      });
+    </script>
+  </body>
 </html>
