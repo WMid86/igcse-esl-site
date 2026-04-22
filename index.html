@@ -4,185 +4,300 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reading Log Tracker</title>
+    <title>Extensive Reading Project Tracker</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f6f8fa;
-        color: #333;
+      :root {
+        --bg: #f3f6fb;
+        --card: #ffffff;
+        --ink: #243447;
+        --muted: #5f6b7a;
+        --line: #d9e1ea;
+        --brand: #234a7d;
+        --brand-2: #4f7fb8;
+        --good: #2f855a;
+        --warn: #c05621;
+        --danger: #c53030;
+        --soft: #eef4fb;
       }
-      h1 {
-        text-align: center;
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      .wrap {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      .hero,
+      .panel,
+      .card,
+      .status-box {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(36, 52, 71, 0.06);
+      }
+      .hero {
+        padding: 28px;
         margin-bottom: 20px;
       }
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      h1,
+      h2,
+      h3 {
+        margin-top: 0;
       }
-      form {
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      p {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      .hero-actions,
+      .button-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      button,
+      .button-link {
+        border: none;
+        border-radius: 10px;
+        padding: 12px 16px;
+        cursor: pointer;
+        background: var(--brand);
+        color: #fff;
+        font-size: 0.96rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button.secondary,
+      .button-link.secondary {
+        background: #6b7280;
+      }
+      button.good {
+        background: var(--good);
+      }
+      button.warn {
+        background: var(--warn);
+      }
+      button.danger {
+        background: var(--danger);
+      }
+      button.ghost {
+        background: #e8eef6;
+        color: var(--ink);
+      }
+      .hidden {
+        display: none !important;
+      }
+      .panel {
+        padding: 22px;
+        margin-bottom: 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 14px;
+      }
+      .field {
+        grid-column: span 4;
+      }
+      .field.wide {
+        grid-column: span 6;
+      }
+      .field.full {
+        grid-column: 1 / -1;
       }
       label {
         display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
+        margin-bottom: 6px;
+        font-size: 0.92rem;
+        font-weight: 700;
       }
-      input[type="text"],
-      input[type="number"],
-      select {
+      input,
+      select,
+      textarea {
         width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
+        border: 1px solid #cfd8e3;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        background: #fff;
       }
-      .form-group {
-        flex: 1 1 200px;
-        min-width: 200px;
+      textarea {
+        min-height: 110px;
+        resize: vertical;
       }
-      .buttons {
-        width: 100%;
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-top: 18px;
       }
-      button {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        color: #fff;
-        background-color: #007bff;
+      .card {
+        padding: 16px;
       }
-      button.export {
-        background-color: #28a745;
+      .metric {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: var(--brand);
+        margin: 6px 0 2px;
       }
-      button.reset {
-        background-color: #dc3545;
+      .metric-label {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .status-box {
+        padding: 14px 16px;
+        margin-bottom: 16px;
+      }
+      .status-box strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .ok {
+        border-left: 6px solid var(--good);
+      }
+      .bad {
+        border-left: 6px solid var(--danger);
+      }
+      .soft {
+        border-left: 6px solid var(--brand-2);
+      }
+      .table-wrap {
+        overflow-x: auto;
+        margin-top: 18px;
       }
       table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
+        min-width: 980px;
+        background: #fff;
       }
       th,
       td {
-        padding: 8px;
+        border-bottom: 1px solid #e7edf5;
+        padding: 10px 10px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        vertical-align: top;
+        font-size: 0.93rem;
       }
       th {
-        background-color: #f2f2f2;
+        background: #f7fafd;
+        color: #334155;
       }
-      .summary {
-        margin-top: 20px;
+      .small {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        background: var(--soft);
+        color: var(--brand);
+      }
+      .topbar {
         display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 12px;
       }
-      .summary-card {
-        flex: 1 1 200px;
-        background-color: #fafafa;
-        padding: 15px;
-        border: 1px solid #eee;
-        border-radius: 6px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      .muted {
+        color: var(--muted);
       }
-      .summary-card h3 {
-        margin: 0 0 5px;
-        font-size: 1.1em;
+      .note-list {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
       }
-      .summary-card p {
-        margin: 0;
-        font-size: 1.2em;
-        font-weight: bold;
-      }
-      @media (max-width: 600px) {
-        .form-group {
-          min-width: 100%;
+      @media (max-width: 900px) {
+        .field,
+        .field.wide {
+          grid-column: span 12;
+        }
+        .split {
+          grid-template-columns: 1fr;
         }
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <!-- Mode selection panel -->
-      <div id="modeSelection">
-        <!-- Welcome heading -->
-        <h1>Welcome to the Reading Project</h1>
-        <!-- Introduction and purpose of the project -->
+    <div class="wrap">
+      <div id="homePanel" class="hero">
+        <h1>Extensive Reading Project Tracker</h1>
         <p>
-          This reading project is all about helping you build the habit of
-          sustained reading.  By logging your reading minutes and sessions you
-          create a record of your progress and provide data that helps us
-          understand how well the programme is working.  In turn this data
-          enables teachers to identify strengths and areas for improvement and to
-          adjust support accordingly.  Reading for pleasure and fluency is the
-          focus here, not test preparation, so we encourage you to choose books
-          you enjoy and to track your reading honestly.
+          This website now supports a shared Google Sheets workflow. Student reading entries and teacher
+          implementation checks are designed to flow into one central spreadsheet so all staff can work from the
+          same data rather than isolated browser storage.
         </p>
         <p>
-          Students should log their reading minutes, sessions, books and
-          reactions each week to see their own progress.  Teachers will track
-          participation across their classes and use your feedback to refine the
-          project.  Participating teachers include Mr Midlane, Mr Mcquay,
-          Ms Liu, Mr Pottas, Mr Meyer and Ms Jenna.  Please choose whether you
-          are a student or a teacher to get started.
+          Use the student form to log reading. Use the teacher dashboard to review shared entries, export filtered
+          data, and monitor implementation. Use the implementation form to record whether ER routines are actually
+          happening in class.
         </p>
-        <p>Choose whether you are a student or a teacher to proceed.</p>
-        <div class="buttons" style="justify-content: center; margin-top: 20px;">
-          <button type="button" id="studentMode">I am a Student</button>
-          <button type="button" id="teacherMode">I am a Teacher/Researcher</button>
+        <div class="hero-actions">
+          <button id="openStudentBtn">Student Reading Log</button>
+          <button id="openTeacherBtn">Teacher Dashboard</button>
+          <button id="openImplementationBtn" class="good">Teacher Implementation Check</button>
         </div>
       </div>
 
-      <!-- Student panel -->
-      <div id="studentPanel" style="display: none;">
-        <button type="button" id="backToModeFromStudent" style="margin-bottom: 15px; background-color: #6c757d;">Back</button>
-        <!-- Student login section -->
-        <div id="studentLoginSection">
-          <h2>Student Log-In</h2>
-          <p>Please enter your student number to begin logging your reading activity.</p>
-          <div class="form-group" style="max-width: 300px;">
-            <label for="studentLoginId">Student Number</label>
-            <input type="text" id="studentLoginId" />
+      <div id="configPanel" class="status-box soft">
+        <strong>Connection status</strong>
+        <div id="connectionMessage">The site is currently in setup mode. Add your Google Apps Script web app URL in the CONFIG section near the top of this file, then redeploy on GitHub Pages.</div>
+      </div>
+
+      <section id="studentPanel" class="panel hidden">
+        <div class="topbar">
+          <div>
+            <h2>Student Reading Log</h2>
+            <div class="small">Shared submission form linked to the central project spreadsheet.</div>
           </div>
-          <button type="button" id="studentLoginBtn">Continue</button>
+          <button class="secondary" data-back="true">Back</button>
         </div>
-        <!-- Student form and summary section -->
-        <div id="studentFormSection" style="display: none;">
-          <h2 id="studentWelcome"></h2>
-          <p>
-            Enter your reading for the week below. Select your grade and teacher so your
-            entry is recorded correctly. After saving, you can see your progress over time.
-          </p>
-          <form id="studentForm">
-            <div class="form-group">
+
+        <div class="panel" style="padding:16px; background:#f9fbfe;">
+          <div class="grid">
+            <div class="field">
+              <label for="studentLoginId">Student Number</label>
+              <input type="text" id="studentLoginId" placeholder="Enter student number" />
+            </div>
+            <div class="field">
               <label for="studentGrade">Grade</label>
-              <select id="studentGrade" required>
-                <option value="">Select Grade</option>
+              <select id="studentGrade">
+                <option value="">Select grade</option>
                 <option value="9">Grade 9</option>
                 <option value="11">Grade 11</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="studentTeacher">Teacher</label>
-              <select id="studentTeacher" required>
-                <option value="">Select Teacher</option>
+              <select id="studentTeacher">
+                <option value="">Select teacher</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="studentWeek">Week</label>
-              <select id="studentWeek" required>
-                <option value="">Select Week</option>
+              <select id="studentWeek">
+                <option value="">Select week</option>
                 <option value="1">Week 1</option>
                 <option value="2">Week 2</option>
                 <option value="3">Week 3</option>
@@ -193,49 +308,44 @@
                 <option value="8">Week 8</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="studentMinutes">Total Minutes Read</label>
-              <input type="number" id="studentMinutes" min="0" required />
+              <input type="number" id="studentMinutes" min="0" />
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="studentSessions">Number of Sessions</label>
-              <input type="number" id="studentSessions" min="1" required />
+              <input type="number" id="studentSessions" min="1" />
             </div>
-            <!-- New fields for book logging -->
-            <div class="form-group">
+            <div class="field wide">
               <label for="bookSelect">Book Title</label>
-              <select id="bookSelect" required>
-                <option value="">Select Book</option>
+              <select id="bookSelect">
+                <option value="">Select book</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="bookAuthor">Author</label>
               <input type="text" id="bookAuthor" readonly />
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="bookLevel">Level</label>
               <input type="text" id="bookLevel" readonly />
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="startPageSelect">Start Page</label>
-              <select id="startPageSelect" required>
-                <option value="">Start Page</option>
-              </select>
+              <select id="startPageSelect"><option value="">Start page</option></select>
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="endPageSelect">End Page</label>
-              <select id="endPageSelect" required>
-                <option value="">End Page</option>
-              </select>
+              <select id="endPageSelect"><option value="">End page</option></select>
             </div>
-            <div class="form-group">
+            <div class="field">
               <label for="pagesReadDisplay">Pages Read</label>
               <input type="number" id="pagesReadDisplay" readonly />
             </div>
-            <div class="form-group">
-              <label for="reaction">Reaction (1-5)</label>
-              <select id="reaction" required>
-                <option value="">Select Reaction</option>
+            <div class="field">
+              <label for="reaction">Reaction</label>
+              <select id="reaction">
+                <option value="">Select reaction</option>
                 <option value="1">1 - Disliked</option>
                 <option value="2">2</option>
                 <option value="3">3 - Neutral</option>
@@ -243,20 +353,25 @@
                 <option value="5">5 - Loved</option>
               </select>
             </div>
-            <div class="buttons">
-              <button type="submit">Save Reading</button>
+            <div class="field full">
+              <label for="studentComment">Optional Comment</label>
+              <textarea id="studentComment" placeholder="A short reaction, thought, or note about your reading"></textarea>
             </div>
-          </form>
-          <h3>Your Progress</h3>
-          <div class="summary" id="studentSummary">
-            <!-- Student summary cards injected here -->
           </div>
-          <table id="studentEntriesTable">
+          <div class="button-row">
+            <button id="studentSubmitBtn" class="good">Submit Reading Entry</button>
+            <button id="studentLoadBtn" class="ghost">Load My Entries</button>
+          </div>
+        </div>
+
+        <div class="cards" id="studentSummaryCards"></div>
+        <div class="table-wrap">
+          <table>
             <thead>
               <tr>
-                <th>Grade</th>
-                <th>Teacher</th>
+                <th>Timestamp</th>
                 <th>Week</th>
+                <th>Teacher</th>
                 <th>Minutes</th>
                 <th>Sessions</th>
                 <th>Book</th>
@@ -265,106 +380,224 @@
                 <th>End</th>
                 <th>Pages</th>
                 <th>Reaction</th>
+                <th>Comment</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="studentEntriesBody"></tbody>
           </table>
         </div>
-      </div>
+      </section>
 
-      <!-- Teacher panel -->
-      <div id="teacherPanel" style="display: none;">
-        <button type="button" id="backToModeFromTeacher" style="margin-bottom: 15px; background-color: #6c757d;">Back</button>
-        <h2>Teacher/Researcher Dashboard</h2>
-        <p>
-          View aggregated reading logs across all students. Use the filter options to narrow
-          down entries by grade, teacher or student number. You can also export all entries
-          to CSV or clear all data.
-        </p>
-        <!-- Filter controls -->
-        <div class="form-group" style="max-width: 200px;">
-          <label for="filterGrade">Filter by Grade</label>
-          <select id="filterGrade">
-            <option value="all">All Grades</option>
-            <option value="9">Grade 9</option>
-            <option value="11">Grade 11</option>
-          </select>
+      <section id="teacherPanel" class="panel hidden">
+        <div class="topbar">
+          <div>
+            <h2>Teacher Dashboard</h2>
+            <div class="small">Shared data view from Google Sheets.</div>
+          </div>
+          <button class="secondary" data-back="true">Back</button>
         </div>
-        <div class="form-group" style="max-width: 200px;">
-          <label for="filterTeacher">Filter by Teacher</label>
-          <select id="filterTeacher">
-            <option value="all">All Teachers</option>
-            <!-- Teacher options reflect the current staff teaching Grades 9 and 11. -->
-            <option value="Mr Midlane">Mr Midlane</option>
-            <option value="Mr Mcquay">Mr Mcquay</option>
-            <option value="Ms Liu">Ms Liu</option>
-            <option value="Mr Pottas">Mr Pottas</option>
-            <option value="Mr Meyer">Mr Meyer</option>
-            <option value="Ms Jenna">Ms Jenna</option>
-          </select>
+
+        <div class="grid">
+          <div class="field">
+            <label for="filterGrade">Filter by Grade</label>
+            <select id="filterGrade">
+              <option value="all">All grades</option>
+              <option value="9">Grade 9</option>
+              <option value="11">Grade 11</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterTeacher">Filter by Teacher</label>
+            <select id="filterTeacher">
+              <option value="all">All teachers</option>
+              <option value="Mr Midlane">Mr Midlane</option>
+              <option value="Mr Mcquay">Mr Mcquay</option>
+              <option value="Ms Liu">Ms Liu</option>
+              <option value="Mr Pottas">Mr Pottas</option>
+              <option value="Mr Meyer">Mr Meyer</option>
+              <option value="Ms Jenna">Ms Jenna</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterWeek">Filter by Week</label>
+            <select id="filterWeek">
+              <option value="all">All weeks</option>
+              <option value="1">Week 1</option>
+              <option value="2">Week 2</option>
+              <option value="3">Week 3</option>
+              <option value="4">Week 4</option>
+              <option value="5">Week 5</option>
+              <option value="6">Week 6</option>
+              <option value="7">Week 7</option>
+              <option value="8">Week 8</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterStudent">Filter by Student No.</label>
+            <input type="text" id="filterStudent" placeholder="Type student number" />
+          </div>
         </div>
-        <div class="form-group" style="max-width: 200px;">
-          <label for="filterStudent">Filter by Student No.</label>
-          <input type="text" id="filterStudent" placeholder="Enter Student Number" />
+
+        <div class="button-row">
+          <button id="refreshTeacherDataBtn">Refresh Shared Data</button>
+          <button id="exportReadingCsvBtn" class="good">Export Filtered Reading CSV</button>
+          <button id="exportImplementationCsvBtn" class="warn">Export Implementation CSV</button>
         </div>
-        <div class="buttons" style="margin-top: 10px;">
-          <button type="button" class="export" id="teacherExportBtn">Export CSV</button>
-          <button type="button" class="reset" id="teacherResetBtn">Clear All Data</button>
+
+        <div class="cards" id="teacherSummaryCards"></div>
+
+        <div class="split" style="margin-top:18px;">
+          <div>
+            <h3>Student Reading Entries</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Student</th>
+                    <th>Grade</th>
+                    <th>Teacher</th>
+                    <th>Week</th>
+                    <th>Minutes</th>
+                    <th>Sessions</th>
+                    <th>Book</th>
+                    <th>Pages</th>
+                    <th>Reaction</th>
+                    <th>Comment</th>
+                  </tr>
+                </thead>
+                <tbody id="teacherReadingBody"></tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <h3>Teacher Implementation Checks</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Teacher</th>
+                    <th>Grade</th>
+                    <th>Week</th>
+                    <th>ER Run</th>
+                    <th>Minutes</th>
+                    <th>Books Ready</th>
+                    <th>Modelled</th>
+                    <th>Pair Share</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="teacherImplementationBody"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <!-- Teacher summary and table -->
-        <div class="summary" id="teacherSummary">
-          <!-- Summary cards injected here -->
+      </section>
+
+      <section id="implementationPanel" class="panel hidden">
+        <div class="topbar">
+          <div>
+            <h2>Teacher Implementation Check</h2>
+            <div class="small">Track whether ER routines are actually being delivered.</div>
+          </div>
+          <button class="secondary" data-back="true">Back</button>
         </div>
-        <table id="teacherEntriesTable">
-          <thead>
-            <tr>
-              <th>Grade</th>
-              <th>Teacher</th>
-              <th>Student No.</th>
-              <th>Student Name</th>
-              <th>Week</th>
-              <th>Minutes</th>
-              <th>Sessions</th>
-              <th>Book</th>
-              <th>Level</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Pages</th>
-              <th>Reaction</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="implTeacher">Teacher</label>
+            <select id="implTeacher">
+              <option value="">Select teacher</option>
+              <option value="Mr Midlane">Mr Midlane</option>
+              <option value="Mr Mcquay">Mr Mcquay</option>
+              <option value="Ms Liu">Ms Liu</option>
+              <option value="Mr Pottas">Mr Pottas</option>
+              <option value="Mr Meyer">Mr Meyer</option>
+              <option value="Ms Jenna">Ms Jenna</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="implGrade">Grade</label>
+            <select id="implGrade">
+              <option value="">Select grade</option>
+              <option value="9">Grade 9</option>
+              <option value="11">Grade 11</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="implWeek">Week</label>
+            <select id="implWeek">
+              <option value="">Select week</option>
+              <option value="1">Week 1</option>
+              <option value="2">Week 2</option>
+              <option value="3">Week 3</option>
+              <option value="4">Week 4</option>
+              <option value="5">Week 5</option>
+              <option value="6">Week 6</option>
+              <option value="7">Week 7</option>
+              <option value="8">Week 8</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="implERRan">Did ER happen this week?</label>
+            <select id="implERRan">
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="Partly">Partly</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="implMinutesAllocated">Minutes allocated this week</label>
+            <input type="number" id="implMinutesAllocated" min="0" placeholder="e.g. 30" />
+          </div>
+          <div class="field">
+            <label for="implBooksReady">Books available and ready?</label>
+            <select id="implBooksReady">
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="Mostly">Mostly</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="implModelled">Teacher modelled reading?</label>
+            <select id="implModelled">
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="implPairShare">Pair share or reading talk completed?</label>
+            <select id="implPairShare">
+              <option value="">Select</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="implNotes">Notes</label>
+            <textarea id="implNotes" placeholder="Anything useful about resourcing, routines, student buy-in, or barriers"></textarea>
+          </div>
+        </div>
+        <div class="button-row">
+          <button id="implementationSubmitBtn" class="good">Submit Implementation Check</button>
+        </div>
+      </section>
     </div>
 
     <script>
-      /*
-       * Reading Log Web Application
-       *
-       * This script provides two modes of operation: Student and Teacher/Researcher.
-       * Students log in with their student number, select their grade and teacher,
-       * and record how many minutes they have read and how many sessions they have
-       * completed each week. After submission, they can view a personal summary
-       * of their reading and see a history of their entries. Teachers or
-       * researchers can view all entries, apply filters (grade, teacher, student
-       * number), export data to CSV, or clear the data. The data is stored in
-       * localStorage, so each browser maintains its own copy of the entries.
-       */
+      const CONFIG = {
+        appsScriptUrl: 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE',
+      };
 
-      // Map of teachers by grade for populating dropdowns
-      // Map of teachers by grade for populating dropdowns.  These names correspond
-      // to the teachers involved in the project.  If your cohort structure
-      // changes, update this map accordingly.  Grade 11 is taught by Mr Midlane,
-      // Mr Mcquay and Ms Liu.  Grade 9 is taught by Mr Pottas, Mr Meyer and Ms Jenna.
       const teacherMap = {
         '9': ['Mr Pottas', 'Mr Meyer', 'Ms Jenna'],
         '11': ['Mr Midlane', 'Mr Mcquay', 'Ms Liu'],
       };
 
-      // List of available books with metadata. Update this array with your actual titles, authors,
-      // levels, and total page counts. Students will select from this list when logging their reading.
       const bookList = [
         { title: 'The Secret Garden', author: 'Frances Hodgson Burnett', level: 'Starter', pages: 80 },
         { title: 'Sherlock Holmes and the Duke\'s Son', author: 'Arthur Conan Doyle', level: 'Level 1', pages: 80 },
@@ -374,443 +607,450 @@
         { title: 'Sense and Sensibility', author: 'Jane Austen', level: 'Level 5', pages: 120 },
       ];
 
-      // Utility functions for localStorage
-      function loadEntries() {
-        const data = localStorage.getItem('readingEntries');
-        return data ? JSON.parse(data) : [];
-      }
-      function saveEntries(entries) {
-        localStorage.setItem('readingEntries', JSON.stringify(entries));
-      }
+      const state = {
+        readingEntries: [],
+        implementationEntries: [],
+      };
 
-      // Panels and selection elements
-      const modeSelection = document.getElementById('modeSelection');
+      const homePanel = document.getElementById('homePanel');
       const studentPanel = document.getElementById('studentPanel');
       const teacherPanel = document.getElementById('teacherPanel');
-      const studentLoginSection = document.getElementById('studentLoginSection');
-      const studentFormSection = document.getElementById('studentFormSection');
-      const studentLoginIdInput = document.getElementById('studentLoginId');
-      const studentLoginBtn = document.getElementById('studentLoginBtn');
-      const studentGradeSelect = document.getElementById('studentGrade');
-      const studentTeacherSelect = document.getElementById('studentTeacher');
-      const studentForm = document.getElementById('studentForm');
-      const studentSummary = document.getElementById('studentSummary');
-      const studentEntriesTableBody = document.querySelector('#studentEntriesTable tbody');
-      const studentWelcome = document.getElementById('studentWelcome');
+      const implementationPanel = document.getElementById('implementationPanel');
+      const connectionMessage = document.getElementById('connectionMessage');
+
+      const studentGrade = document.getElementById('studentGrade');
+      const studentTeacher = document.getElementById('studentTeacher');
+      const studentLoginId = document.getElementById('studentLoginId');
+      const studentWeek = document.getElementById('studentWeek');
+      const studentMinutes = document.getElementById('studentMinutes');
+      const studentSessions = document.getElementById('studentSessions');
+      const studentComment = document.getElementById('studentComment');
       const bookSelect = document.getElementById('bookSelect');
-      const bookAuthorInput = document.getElementById('bookAuthor');
-      const bookLevelInput = document.getElementById('bookLevel');
+      const bookAuthor = document.getElementById('bookAuthor');
+      const bookLevel = document.getElementById('bookLevel');
       const startPageSelect = document.getElementById('startPageSelect');
       const endPageSelect = document.getElementById('endPageSelect');
       const pagesReadDisplay = document.getElementById('pagesReadDisplay');
-      const reactionSelect = document.getElementById('reaction');
-      const filterGradeSelect = document.getElementById('filterGrade');
-      const filterTeacherSelect = document.getElementById('filterTeacher');
-      const filterStudentInput = document.getElementById('filterStudent');
-      const teacherSummary = document.getElementById('teacherSummary');
-      const teacherEntriesTableBody = document.querySelector('#teacherEntriesTable tbody');
-      let currentStudentId = '';
+      const reaction = document.getElementById('reaction');
 
-      // Mode selection event handlers
-      document.getElementById('studentMode').addEventListener('click', () => {
-        modeSelection.style.display = 'none';
-        teacherPanel.style.display = 'none';
-        studentPanel.style.display = 'block';
-        // Reset student login and form sections
-        studentLoginSection.style.display = 'block';
-        studentFormSection.style.display = 'none';
-        studentLoginIdInput.value = '';
-        currentStudentId = '';
-      });
-      document.getElementById('teacherMode').addEventListener('click', () => {
-        modeSelection.style.display = 'none';
-        studentPanel.style.display = 'none';
-        teacherPanel.style.display = 'block';
-        renderTeacherView();
-      });
+      const filterGrade = document.getElementById('filterGrade');
+      const filterTeacher = document.getElementById('filterTeacher');
+      const filterWeek = document.getElementById('filterWeek');
+      const filterStudent = document.getElementById('filterStudent');
 
-      // Back buttons
-      document.getElementById('backToModeFromStudent').addEventListener('click', () => {
-        studentPanel.style.display = 'none';
-        modeSelection.style.display = 'block';
-      });
-      document.getElementById('backToModeFromTeacher').addEventListener('click', () => {
-        teacherPanel.style.display = 'none';
-        modeSelection.style.display = 'block';
-      });
+      function showPanel(panel) {
+        homePanel.classList.add('hidden');
+        studentPanel.classList.add('hidden');
+        teacherPanel.classList.add('hidden');
+        implementationPanel.classList.add('hidden');
+        panel.classList.remove('hidden');
+      }
 
-      // Student login handler
-      studentLoginBtn.addEventListener('click', () => {
-        const id = studentLoginIdInput.value.trim();
-        if (!id) {
-          alert('Please enter your student number.');
-          return;
-        }
-        currentStudentId = id;
-        studentLoginSection.style.display = 'none';
-        studentFormSection.style.display = 'block';
-        studentWelcome.textContent = `Welcome Student ${id}`;
-        updateStudentView();
-      });
+      function goHome() {
+        homePanel.classList.remove('hidden');
+        studentPanel.classList.add('hidden');
+        teacherPanel.classList.add('hidden');
+        implementationPanel.classList.add('hidden');
+      }
 
-      // Populate teacher options when grade changes
-      studentGradeSelect.addEventListener('change', () => {
-        const grade = studentGradeSelect.value;
-        studentTeacherSelect.innerHTML = '<option value="">Select Teacher</option>';
-        if (grade && teacherMap[grade]) {
-          teacherMap[grade].forEach((t) => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            studentTeacherSelect.appendChild(opt);
-          });
-        }
+      document.getElementById('openStudentBtn').addEventListener('click', () => showPanel(studentPanel));
+      document.getElementById('openTeacherBtn').addEventListener('click', async () => {
+        showPanel(teacherPanel);
+        await refreshTeacherData();
       });
+      document.getElementById('openImplementationBtn').addEventListener('click', () => showPanel(implementationPanel));
+      document.querySelectorAll('[data-back="true"]').forEach(btn => btn.addEventListener('click', goHome));
 
-      // Populate book dropdown on initial load
-      function populateBookSelect() {
-        bookSelect.innerHTML = '<option value="">Select Book</option>';
-        bookList.forEach((b) => {
+      function updateConnectionBanner() {
+        const connected = CONFIG.appsScriptUrl && CONFIG.appsScriptUrl.startsWith('https://script.google.com/');
+        connectionMessage.textContent = connected
+          ? 'Google Apps Script URL detected. The site is ready to send and read shared data once the script is deployed with public web app access.'
+          : 'The site is currently in setup mode. Add your Google Apps Script web app URL in the CONFIG section near the top of this file, then redeploy on GitHub Pages.';
+        document.getElementById('configPanel').className = connected ? 'status-box ok' : 'status-box bad';
+      }
+
+      function populateTeacherDropdown() {
+        studentTeacher.innerHTML = '<option value="">Select teacher</option>';
+        const grade = studentGrade.value;
+        if (!grade || !teacherMap[grade]) return;
+        teacherMap[grade].forEach(name => {
           const opt = document.createElement('option');
-          opt.value = b.title;
-          opt.textContent = b.title;
+          opt.value = name;
+          opt.textContent = name;
+          studentTeacher.appendChild(opt);
+        });
+      }
+
+      function populateBooks() {
+        bookSelect.innerHTML = '<option value="">Select book</option>';
+        bookList.forEach(book => {
+          const opt = document.createElement('option');
+          opt.value = book.title;
+          opt.textContent = book.title;
           bookSelect.appendChild(opt);
         });
       }
-      // Populate page dropdowns based on selected book's total pages
+
       function populatePageSelects(totalPages) {
-        startPageSelect.innerHTML = '<option value="">Start Page</option>';
-        endPageSelect.innerHTML = '<option value="">End Page</option>';
+        startPageSelect.innerHTML = '<option value="">Start page</option>';
+        endPageSelect.innerHTML = '<option value="">End page</option>';
         for (let i = 1; i <= totalPages; i++) {
-          const opt1 = document.createElement('option');
-          opt1.value = i;
-          opt1.textContent = i;
-          startPageSelect.appendChild(opt1);
-          const opt2 = document.createElement('option');
-          opt2.value = i;
-          opt2.textContent = i;
-          endPageSelect.appendChild(opt2);
+          const a = document.createElement('option');
+          a.value = i;
+          a.textContent = i;
+          const b = document.createElement('option');
+          b.value = i;
+          b.textContent = i;
+          startPageSelect.appendChild(a);
+          endPageSelect.appendChild(b);
         }
       }
-      // Update author, level and pages when book changes
+
       function updateBookFields() {
-        const selectedTitle = bookSelect.value;
-        const book = bookList.find((b) => b.title === selectedTitle);
-        if (book) {
-          bookAuthorInput.value = book.author;
-          bookLevelInput.value = book.level;
-          populatePageSelects(book.pages);
-          computePagesRead();
-        } else {
-          bookAuthorInput.value = '';
-          bookLevelInput.value = '';
-          startPageSelect.innerHTML = '<option value="">Start Page</option>';
-          endPageSelect.innerHTML = '<option value="">End Page</option>';
+        const selected = bookList.find(b => b.title === bookSelect.value);
+        if (!selected) {
+          bookAuthor.value = '';
+          bookLevel.value = '';
           pagesReadDisplay.value = '';
-        }
-      }
-      // Compute pages read based on start and end pages
-      function computePagesRead() {
-        const start = parseInt(startPageSelect.value);
-        const end = parseInt(endPageSelect.value);
-        if (!isNaN(start) && !isNaN(end) && end >= start) {
-          const pagesRead = end - start + 1;
-          pagesReadDisplay.value = pagesRead;
-        } else {
-          pagesReadDisplay.value = '';
-        }
-      }
-
-      // Initialize book selection on page load
-      populateBookSelect();
-      // Hook up book and page events
-      bookSelect.addEventListener('change', updateBookFields);
-      startPageSelect.addEventListener('change', computePagesRead);
-      endPageSelect.addEventListener('change', computePagesRead);
-
-      // Student form submission
-      studentForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const grade = studentGradeSelect.value;
-        const teacher = studentTeacherSelect.value;
-        const week = document.getElementById('studentWeek').value;
-        const minutes = document.getElementById('studentMinutes').value;
-        const sessions = document.getElementById('studentSessions').value;
-        // New fields
-        const bookTitle = bookSelect.value;
-        const author = bookAuthorInput.value;
-        const level = bookLevelInput.value;
-        const startPage = startPageSelect.value;
-        const endPage = endPageSelect.value;
-        const pagesRead = pagesReadDisplay.value;
-        const reaction = reactionSelect.value;
-        // Validate required fields
-        if (!grade || !teacher || !week || minutes === '' || sessions === '' || !bookTitle || !startPage || !endPage || pagesRead === '' || !reaction) {
-          alert('Please complete all required fields.');
+          startPageSelect.innerHTML = '<option value="">Start page</option>';
+          endPageSelect.innerHTML = '<option value="">End page</option>';
           return;
         }
-        const entries = loadEntries();
-        entries.push({ grade, teacher, studentId: currentStudentId, week, minutes, sessions, bookTitle, author, level, startPage, endPage, pagesRead, reaction });
-        saveEntries(entries);
-        // Clear form and reset dependent fields
-        studentForm.reset();
-        studentTeacherSelect.innerHTML = '<option value="">Select Teacher</option>';
-        // Reset book-related fields
-        bookAuthorInput.value = '';
-        bookLevelInput.value = '';
-        startPageSelect.innerHTML = '<option value="">Start Page</option>';
-        endPageSelect.innerHTML = '<option value="">End Page</option>';
+        bookAuthor.value = selected.author;
+        bookLevel.value = selected.level;
+        populatePageSelects(selected.pages);
+        calculatePages();
+      }
+
+      function calculatePages() {
+        const start = parseInt(startPageSelect.value, 10);
+        const end = parseInt(endPageSelect.value, 10);
+        if (!Number.isNaN(start) && !Number.isNaN(end) && end >= start) {
+          pagesReadDisplay.value = end - start + 1;
+        } else {
+          pagesReadDisplay.value = '';
+        }
+      }
+
+      async function apiPost(payload) {
+        if (!CONFIG.appsScriptUrl || !CONFIG.appsScriptUrl.startsWith('https://script.google.com/')) {
+          throw new Error('Apps Script URL is not configured yet.');
+        }
+        const response = await fetch(CONFIG.appsScriptUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        const text = await response.text();
+        return JSON.parse(text);
+      }
+
+      async function apiGet(params = {}) {
+        if (!CONFIG.appsScriptUrl || !CONFIG.appsScriptUrl.startsWith('https://script.google.com/')) {
+          throw new Error('Apps Script URL is not configured yet.');
+        }
+        const url = new URL(CONFIG.appsScriptUrl);
+        Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+        const response = await fetch(url.toString());
+        return await response.json();
+      }
+
+      function validateStudentEntry() {
+        if (!studentLoginId.value.trim()) return 'Please enter a student number.';
+        if (!studentGrade.value) return 'Please select a grade.';
+        if (!studentTeacher.value) return 'Please select a teacher.';
+        if (!studentWeek.value) return 'Please select a week.';
+        if (studentMinutes.value === '') return 'Please enter minutes read.';
+        if (studentSessions.value === '') return 'Please enter number of sessions.';
+        if (!bookSelect.value) return 'Please select a book.';
+        if (!startPageSelect.value || !endPageSelect.value || !pagesReadDisplay.value) return 'Please complete page details.';
+        if (!reaction.value) return 'Please select a reaction.';
+        return '';
+      }
+
+      function getStudentPayload() {
+        return {
+          action: 'submitReading',
+          studentNumber: studentLoginId.value.trim(),
+          grade: studentGrade.value,
+          teacher: studentTeacher.value,
+          week: studentWeek.value,
+          minutesRead: studentMinutes.value,
+          sessions: studentSessions.value,
+          bookTitle: bookSelect.value,
+          author: bookAuthor.value,
+          level: bookLevel.value,
+          startPage: startPageSelect.value,
+          endPage: endPageSelect.value,
+          pagesRead: pagesReadDisplay.value,
+          reaction: reaction.value,
+          comment: studentComment.value.trim(),
+        };
+      }
+
+      function resetStudentForm() {
+        studentWeek.value = '';
+        studentMinutes.value = '';
+        studentSessions.value = '';
+        bookSelect.value = '';
+        bookAuthor.value = '';
+        bookLevel.value = '';
+        startPageSelect.innerHTML = '<option value="">Start page</option>';
+        endPageSelect.innerHTML = '<option value="">End page</option>';
         pagesReadDisplay.value = '';
-        updateStudentView();
-      });
+        reaction.value = '';
+        studentComment.value = '';
+      }
 
-      // Update student summary and table for current student
-      function updateStudentView() {
-        // Filter entries for this student
-        const entries = loadEntries().filter((e) => e.studentId === currentStudentId);
-        // Update summary
-        studentSummary.innerHTML = '';
-        if (entries.length > 0) {
-          let totalMinutes = 0;
-          let totalSessions = 0;
-          let totalPages = 0;
-          entries.forEach((e) => {
-            totalMinutes += Number(e.minutes);
-            totalSessions += Number(e.sessions);
-            if (e.pagesRead) totalPages += Number(e.pagesRead);
-          });
+      function renderStudentCards(entries) {
+        const target = document.getElementById('studentSummaryCards');
+        target.innerHTML = '';
+        if (!entries.length) return;
+        const totalMinutes = entries.reduce((sum, e) => sum + Number(e.minutesRead || 0), 0);
+        const totalSessions = entries.reduce((sum, e) => sum + Number(e.sessions || 0), 0);
+        const totalPages = entries.reduce((sum, e) => sum + Number(e.pagesRead || 0), 0);
+        const avgReaction = entries.reduce((sum, e) => sum + Number(e.reaction || 0), 0) / entries.length;
+        const cards = [
+          ['Entries', entries.length],
+          ['Total Minutes', totalMinutes],
+          ['Total Sessions', totalSessions],
+          ['Total Pages', totalPages],
+          ['Average Reaction', avgReaction.toFixed(1)],
+        ];
+        cards.forEach(([label, value]) => {
           const card = document.createElement('div');
-          card.className = 'summary-card';
-          card.innerHTML = `
-            <h3>Your Reading Summary</h3>
-            <p>Total Minutes: ${totalMinutes}</p>
-            <p>Total Sessions: ${totalSessions}</p>
-            <p>Total Pages: ${totalPages}</p>
-            <p>Entries: ${entries.length}</p>
-            <p>Avg Minutes per Entry: ${(totalMinutes / entries.length).toFixed(1)}</p>
-            <p>Avg Sessions per Entry: ${(totalSessions / entries.length).toFixed(1)}</p>
-            <p>Avg Pages per Entry: ${(totalPages / entries.length).toFixed(1)}</p>
-          `;
-          studentSummary.appendChild(card);
-        }
-        // Update table
-        studentEntriesTableBody.innerHTML = '';
-        entries.forEach((entry) => {
+          card.className = 'card';
+          card.innerHTML = `<div class="metric">${value}</div><div class="metric-label">${label}</div>`;
+          target.appendChild(card);
+        });
+      }
+
+      function renderStudentTable(entries) {
+        const body = document.getElementById('studentEntriesBody');
+        body.innerHTML = '';
+        entries.forEach(entry => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td>${entry.grade}</td>
-            <td>${entry.teacher}</td>
-            <td>${entry.week}</td>
-            <td>${entry.minutes}</td>
-            <td>${entry.sessions}</td>
+            <td>${entry.timestamp || ''}</td>
+            <td>${entry.week || ''}</td>
+            <td>${entry.teacher || ''}</td>
+            <td>${entry.minutesRead || ''}</td>
+            <td>${entry.sessions || ''}</td>
             <td>${entry.bookTitle || ''}</td>
             <td>${entry.level || ''}</td>
             <td>${entry.startPage || ''}</td>
             <td>${entry.endPage || ''}</td>
             <td>${entry.pagesRead || ''}</td>
             <td>${entry.reaction || ''}</td>
+            <td>${entry.comment || ''}</td>
           `;
-          studentEntriesTableBody.appendChild(tr);
+          body.appendChild(tr);
         });
       }
 
-      // Render teacher dashboard based on filters
-      function getFilteredEntries() {
-        let entries = loadEntries();
-        const gradeFilter = filterGradeSelect.value;
-        const teacherFilter = filterTeacherSelect.value;
-        const studentFilter = filterStudentInput.value.trim().toLowerCase();
-        return entries.filter((entry) => {
-          const gradeMatch = gradeFilter === 'all' || entry.grade === gradeFilter;
-          const teacherMatch = teacherFilter === 'all' || entry.teacher === teacherFilter;
-          const studentMatch = !studentFilter || entry.studentId.toLowerCase().includes(studentFilter);
-          return gradeMatch && teacherMatch && studentMatch;
-        });
-      }
-
-      function renderTeacherView() {
-        // Update summary and table for teacher dashboard
-        updateTeacherSummary();
-        updateTeacherTable();
-      }
-
-      function updateTeacherSummary() {
-        const entries = getFilteredEntries();
-        teacherSummary.innerHTML = '';
-        if (entries.length === 0) return;
-        // Aggregate by grade and teacher separately
-        const summaryByGrade = {};
-        const summaryByTeacher = {};
-        entries.forEach((e) => {
-          // Grade summarisation
-          if (!summaryByGrade[e.grade]) {
-            summaryByGrade[e.grade] = { minutes: 0, sessions: 0, pages: 0, count: 0 };
-          }
-          summaryByGrade[e.grade].minutes += Number(e.minutes);
-          summaryByGrade[e.grade].sessions += Number(e.sessions);
-          summaryByGrade[e.grade].pages += e.pagesRead ? Number(e.pagesRead) : 0;
-          summaryByGrade[e.grade].count += 1;
-          // Teacher summarisation
-          if (!summaryByTeacher[e.teacher]) {
-            summaryByTeacher[e.teacher] = { minutes: 0, sessions: 0, pages: 0, count: 0 };
-          }
-          summaryByTeacher[e.teacher].minutes += Number(e.minutes);
-          summaryByTeacher[e.teacher].sessions += Number(e.sessions);
-          summaryByTeacher[e.teacher].pages += e.pagesRead ? Number(e.pagesRead) : 0;
-          summaryByTeacher[e.teacher].count += 1;
-        });
-        // Create cards for each grade
-        Object.keys(summaryByGrade).forEach((grade) => {
-          const s = summaryByGrade[grade];
-          const card = document.createElement('div');
-          card.className = 'summary-card';
-          card.innerHTML = `
-            <h3>Grade ${grade}</h3>
-            <p>Total Minutes: ${s.minutes}</p>
-            <p>Total Sessions: ${s.sessions}</p>
-            <p>Total Pages: ${s.pages}</p>
-            <p>Entries: ${s.count}</p>
-            <p>Avg Minutes per Entry: ${(s.minutes / s.count).toFixed(1)}</p>
-            <p>Avg Sessions per Entry: ${(s.sessions / s.count).toFixed(1)}</p>
-            <p>Avg Pages per Entry: ${(s.pages / s.count).toFixed(1)}</p>
-          `;
-          teacherSummary.appendChild(card);
-        });
-        // Create cards for each teacher
-        Object.keys(summaryByTeacher).forEach((teacher) => {
-          const s = summaryByTeacher[teacher];
-          const card = document.createElement('div');
-          card.className = 'summary-card';
-          card.innerHTML = `
-            <h3>${teacher}</h3>
-            <p>Total Minutes: ${s.minutes}</p>
-            <p>Total Sessions: ${s.sessions}</p>
-            <p>Total Pages: ${s.pages}</p>
-            <p>Entries: ${s.count}</p>
-            <p>Avg Minutes per Entry: ${(s.minutes / s.count).toFixed(1)}</p>
-            <p>Avg Sessions per Entry: ${(s.sessions / s.count).toFixed(1)}</p>
-            <p>Avg Pages per Entry: ${(s.pages / s.count).toFixed(1)}</p>
-          `;
-          teacherSummary.appendChild(card);
-        });
-      }
-
-      function updateTeacherTable() {
-        const entries = getFilteredEntries();
-        teacherEntriesTableBody.innerHTML = '';
-        entries.forEach((entry, index) => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${entry.grade}</td>
-            <td>${entry.teacher}</td>
-            <td>${entry.studentId}</td>
-            <td>${entry.studentName || ''}</td>
-            <td>${entry.week}</td>
-            <td>${entry.minutes}</td>
-            <td>${entry.sessions}</td>
-            <td>${entry.bookTitle || ''}</td>
-            <td>${entry.level || ''}</td>
-            <td>${entry.startPage || ''}</td>
-            <td>${entry.endPage || ''}</td>
-            <td>${entry.pagesRead || ''}</td>
-            <td>${entry.reaction || ''}</td>
-            <td><button class="delete-btn" data-index="${index}">Delete</button></td>
-          `;
-          teacherEntriesTableBody.appendChild(tr);
-        });
-      }
-
-      // Hook up filters
-      filterGradeSelect.addEventListener('change', renderTeacherView);
-      filterTeacherSelect.addEventListener('change', renderTeacherView);
-      filterStudentInput.addEventListener('input', renderTeacherView);
-
-      // Teacher export
-      document.getElementById('teacherExportBtn').addEventListener('click', () => {
-        const entries = getFilteredEntries();
-        if (entries.length === 0) {
-          alert('No data to export.');
+      async function loadStudentEntries() {
+        const studentNumber = studentLoginId.value.trim();
+        if (!studentNumber) {
+          alert('Enter a student number first.');
           return;
         }
-        const header = ['Grade','Teacher','Student Number','Week','Minutes','Sessions','Book','Level','Start Page','End Page','Pages Read','Reaction'];
-        const rows = entries.map((e) => [
-          e.grade,
-          e.teacher,
-          e.studentId,
-          e.week,
-          e.minutes,
-          e.sessions,
-          e.bookTitle || '',
-          e.level || '',
-          e.startPage || '',
-          e.endPage || '',
-          e.pagesRead || '',
-          e.reaction || ''
-        ]);
-        let csvContent = header.join(',') + '\n';
-        rows.forEach((row) => {
-          csvContent += row.map((item) => '"' + String(item).replace(/"/g, '""') + '"').join(',') + '\n';
+        try {
+          const data = await apiGet({ action: 'getReadingEntries', studentNumber });
+          const entries = Array.isArray(data.entries) ? data.entries : [];
+          renderStudentCards(entries);
+          renderStudentTable(entries);
+        } catch (error) {
+          alert(error.message || 'Unable to load student entries.');
+        }
+      }
+
+      document.getElementById('studentSubmitBtn').addEventListener('click', async () => {
+        const issue = validateStudentEntry();
+        if (issue) {
+          alert(issue);
+          return;
+        }
+        try {
+          const result = await apiPost(getStudentPayload());
+          if (!result.success) throw new Error(result.error || 'Submission failed.');
+          alert('Reading entry submitted successfully.');
+          resetStudentForm();
+          await loadStudentEntries();
+        } catch (error) {
+          alert(error.message || 'Unable to submit reading entry.');
+        }
+      });
+
+      document.getElementById('studentLoadBtn').addEventListener('click', loadStudentEntries);
+
+      async function refreshTeacherData() {
+        try {
+          const data = await apiGet({ action: 'getDashboardData' });
+          state.readingEntries = Array.isArray(data.readingEntries) ? data.readingEntries : [];
+          state.implementationEntries = Array.isArray(data.implementationEntries) ? data.implementationEntries : [];
+          renderTeacherDashboard();
+        } catch (error) {
+          alert(error.message || 'Unable to refresh shared data.');
+        }
+      }
+
+      function getFilteredReadingEntries() {
+        return state.readingEntries.filter(entry => {
+          const gradeMatch = filterGrade.value === 'all' || String(entry.grade) === String(filterGrade.value);
+          const teacherMatch = filterTeacher.value === 'all' || entry.teacher === filterTeacher.value;
+          const weekMatch = filterWeek.value === 'all' || String(entry.week) === String(filterWeek.value);
+          const studentValue = filterStudent.value.trim().toLowerCase();
+          const studentMatch = !studentValue || String(entry.studentNumber || '').toLowerCase().includes(studentValue);
+          return gradeMatch && teacherMatch && weekMatch && studentMatch;
         });
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      }
+
+      function getFilteredImplementationEntries() {
+        return state.implementationEntries.filter(entry => {
+          const gradeMatch = filterGrade.value === 'all' || String(entry.grade) === String(filterGrade.value);
+          const teacherMatch = filterTeacher.value === 'all' || entry.teacher === filterTeacher.value;
+          const weekMatch = filterWeek.value === 'all' || String(entry.week) === String(filterWeek.value);
+          return gradeMatch && teacherMatch && weekMatch;
+        });
+      }
+
+      function renderTeacherDashboard() {
+        const reading = getFilteredReadingEntries();
+        const implementation = getFilteredImplementationEntries();
+
+        const summaryTarget = document.getElementById('teacherSummaryCards');
+        summaryTarget.innerHTML = '';
+
+        const totalMinutes = reading.reduce((sum, e) => sum + Number(e.minutesRead || 0), 0);
+        const totalSessions = reading.reduce((sum, e) => sum + Number(e.sessions || 0), 0);
+        const totalPages = reading.reduce((sum, e) => sum + Number(e.pagesRead || 0), 0);
+        const uniqueStudents = new Set(reading.map(e => e.studentNumber)).size;
+        const erYesCount = implementation.filter(e => e.erRanThisWeek === 'Yes').length;
+        const cards = [
+          ['Reading Entries', reading.length],
+          ['Unique Students', uniqueStudents],
+          ['Total Minutes', totalMinutes],
+          ['Total Sessions', totalSessions],
+          ['Total Pages', totalPages],
+          ['Implementation Checks', implementation.length],
+          ['ER Clearly Happened', erYesCount],
+        ];
+        cards.forEach(([label, value]) => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<div class="metric">${value}</div><div class="metric-label">${label}</div>`;
+          summaryTarget.appendChild(card);
+        });
+
+        const readingBody = document.getElementById('teacherReadingBody');
+        readingBody.innerHTML = '';
+        reading.forEach(entry => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${entry.timestamp || ''}</td>
+            <td>${entry.studentNumber || ''}</td>
+            <td>${entry.grade || ''}</td>
+            <td>${entry.teacher || ''}</td>
+            <td>${entry.week || ''}</td>
+            <td>${entry.minutesRead || ''}</td>
+            <td>${entry.sessions || ''}</td>
+            <td>${entry.bookTitle || ''}</td>
+            <td>${entry.pagesRead || ''}</td>
+            <td>${entry.reaction || ''}</td>
+            <td>${entry.comment || ''}</td>
+          `;
+          readingBody.appendChild(tr);
+        });
+
+        const implBody = document.getElementById('teacherImplementationBody');
+        implBody.innerHTML = '';
+        implementation.forEach(entry => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${entry.timestamp || ''}</td>
+            <td>${entry.teacher || ''}</td>
+            <td>${entry.grade || ''}</td>
+            <td>${entry.week || ''}</td>
+            <td>${entry.erRanThisWeek || ''}</td>
+            <td>${entry.minutesAllocated || ''}</td>
+            <td>${entry.booksReady || ''}</td>
+            <td>${entry.teacherModelledReading || ''}</td>
+            <td>${entry.pairShareDone || ''}</td>
+            <td>${entry.notes || ''}</td>
+          `;
+          implBody.appendChild(tr);
+        });
+      }
+
+      function downloadCsv(filename, rows) {
+        const csv = rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'reading-log.csv';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      document.getElementById('exportReadingCsvBtn').addEventListener('click', () => {
+        const rows = [
+          ['Timestamp', 'StudentNumber', 'Grade', 'Teacher', 'Week', 'MinutesRead', 'Sessions', 'BookTitle', 'Author', 'Level', 'StartPage', 'EndPage', 'PagesRead', 'Reaction', 'Comment'],
+          ...getFilteredReadingEntries().map(e => [e.timestamp, e.studentNumber, e.grade, e.teacher, e.week, e.minutesRead, e.sessions, e.bookTitle, e.author, e.level, e.startPage, e.endPage, e.pagesRead, e.reaction, e.comment])
+        ];
+        downloadCsv('reading-entries.csv', rows);
       });
 
-      // Teacher clear data
-      document.getElementById('teacherResetBtn').addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear all entries? This cannot be undone.')) {
-          localStorage.removeItem('readingEntries');
-          // Re-render whichever panel is active
-          if (teacherPanel.style.display === 'block') {
-            renderTeacherView();
-          }
-          if (studentPanel.style.display === 'block' && currentStudentId) {
-            updateStudentView();
-          }
+      document.getElementById('exportImplementationCsvBtn').addEventListener('click', () => {
+        const rows = [
+          ['Timestamp', 'Teacher', 'Grade', 'Week', 'ERRanThisWeek', 'MinutesAllocated', 'BooksReady', 'TeacherModelledReading', 'PairShareDone', 'Notes'],
+          ...getFilteredImplementationEntries().map(e => [e.timestamp, e.teacher, e.grade, e.week, e.erRanThisWeek, e.minutesAllocated, e.booksReady, e.teacherModelledReading, e.pairShareDone, e.notes])
+        ];
+        downloadCsv('implementation-checks.csv', rows);
+      });
+
+      document.getElementById('refreshTeacherDataBtn').addEventListener('click', refreshTeacherData);
+      [filterGrade, filterTeacher, filterWeek].forEach(el => el.addEventListener('change', renderTeacherDashboard));
+      filterStudent.addEventListener('input', renderTeacherDashboard);
+
+      document.getElementById('implementationSubmitBtn').addEventListener('click', async () => {
+        const payload = {
+          action: 'submitImplementation',
+          teacher: document.getElementById('implTeacher').value,
+          grade: document.getElementById('implGrade').value,
+          week: document.getElementById('implWeek').value,
+          erRanThisWeek: document.getElementById('implERRan').value,
+          minutesAllocated: document.getElementById('implMinutesAllocated').value,
+          booksReady: document.getElementById('implBooksReady').value,
+          teacherModelledReading: document.getElementById('implModelled').value,
+          pairShareDone: document.getElementById('implPairShare').value,
+          notes: document.getElementById('implNotes').value.trim(),
+        };
+
+        if (!payload.teacher || !payload.grade || !payload.week || !payload.erRanThisWeek) {
+          alert('Please complete teacher, grade, week, and whether ER happened.');
+          return;
+        }
+
+        try {
+          const result = await apiPost(payload);
+          if (!result.success) throw new Error(result.error || 'Submission failed.');
+          alert('Implementation check submitted successfully.');
+          document.getElementById('implMinutesAllocated').value = '';
+          document.getElementById('implNotes').value = '';
+        } catch (error) {
+          alert(error.message || 'Unable to submit implementation check.');
         }
       });
 
-      // Delete entry from teacher dashboard
-      teacherEntriesTableBody.addEventListener('click', (e) => {
-        if (e.target.classList.contains('delete-btn')) {
-          const index = parseInt(e.target.getAttribute('data-index'), 10);
-          // Note: getFilteredEntries returns a filtered list; deletion must be based on full array
-          // Determine which entry in the full array this corresponds to
-          const allEntries = loadEntries();
-          const filtered = getFilteredEntries();
-          const entryToDelete = filtered[index];
-          // Find the index of this entry in the full list
-          const fullIndex = allEntries.findIndex((entry) => {
-            return (
-              entry.grade === entryToDelete.grade &&
-              entry.teacher === entryToDelete.teacher &&
-              entry.studentId === entryToDelete.studentId &&
-              entry.week === entryToDelete.week &&
-              entry.minutes === entryToDelete.minutes &&
-              entry.sessions === entryToDelete.sessions &&
-              (entry.bookTitle || '') === (entryToDelete.bookTitle || '') &&
-              (entry.level || '') === (entryToDelete.level || '') &&
-              (entry.startPage || '') === (entryToDelete.startPage || '') &&
-              (entry.endPage || '') === (entryToDelete.endPage || '') &&
-              (entry.pagesRead || '') === (entryToDelete.pagesRead || '') &&
-              (entry.reaction || '') === (entryToDelete.reaction || '')
-            );
-          });
-          if (fullIndex > -1) {
-            allEntries.splice(fullIndex, 1);
-            saveEntries(allEntries);
-            renderTeacherView();
-            if (studentPanel.style.display === 'block' && currentStudentId) {
-              updateStudentView();
-            }
-          }
-        }
-      });
+      studentGrade.addEventListener('change', populateTeacherDropdown);
+      bookSelect.addEventListener('change', updateBookFields);
+      startPageSelect.addEventListener('change', calculatePages);
+      endPageSelect.addEventListener('change', calculatePages);
+
+      updateConnectionBanner();
+      populateBooks();
     </script>
   </body>
 </html>
