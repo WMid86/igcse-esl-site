@@ -968,6 +968,16 @@
       <div class="cards-row" id="tKpiCards"></div>
     </div>
 
+    <!-- Not logged this week alert -->
+    <div class="t-panel" id="notLoggedPanel" style="margin-bottom:18px;display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+        <h3 style="font-size:1rem;font-weight:700;color:#c05621;">⚠️ Not logged this week — <span id="notLoggedWeekLabel"></span></h3>
+        <span id="notLoggedCount" style="background:#fff4ea;border:1px solid #f1d4ba;color:#c05621;font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:20px;"></span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;" id="notLoggedGrid"></div>
+      <div style="margin-top:12px;font-size:.8rem;color:var(--muted);">These students have no reading entry for the current week. Filter by teacher above to narrow the list.</div>
+    </div>
+
     <!-- Class progress chart -->
     <div class="t-panel" style="margin-bottom:18px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
@@ -1713,6 +1723,34 @@ function renderTeacherDashboard(){
     ['Reading Entries',reading.length],['Unique Students',uniqStu],
     ['Total Minutes',totalMin],['Total Pages',totalPg],['Avg Reaction',avgR],['ER Delivery Rate',erRate]
   ].map(([l,v])=>`<div class="kpi"><div class="kpi-val">${v}</div><div class="kpi-lbl">${l}</div></div>`).join('');
+
+  // Not logged this week
+  const cw = getCurrentWeek();
+  if(cw){
+    const cwLabel = WEEKS.find(w=>w.value===cw)?.label.split('(')[0].trim() || `Week ${cw}`;
+    const loggedThisWeek = new Set(
+      state.allReading.filter(e=>String(e.week)===String(cw)).map(e=>e.studentNumber)
+    );
+    // Filter STUDENTS by teacher filter if set
+    const tf = $('filterTeacher').value;
+    const relevantStudents = STUDENTS.filter(s=>tf==='all'||s.teacher===tf);
+    const notLogged = relevantStudents.filter(s=>!loggedThisWeek.has(s.studentNumber));
+    $('notLoggedWeekLabel').textContent = cwLabel;
+    $('notLoggedCount').textContent = `${notLogged.length} of ${relevantStudents.length} students`;
+    if(notLogged.length){
+      $('notLoggedGrid').innerHTML = notLogged.map(s=>`
+        <div style="background:#fff4ea;border:1px solid #f1d4ba;border-radius:8px;padding:8px 12px;font-size:.82rem;">
+          <span style="font-weight:700;color:#c05621;">#${s.studentNumber}</span>
+          <span style="color:#744210;margin-left:6px;">${s.englishName}</span>
+          <span style="color:#a0522d;font-size:.75rem;margin-left:4px;">${s.teacher}</span>
+        </div>`).join('');
+      $('notLoggedPanel').style.display='block';
+    } else {
+      $('notLoggedPanel').style.display='none';
+    }
+  } else {
+    $('notLoggedPanel').style.display='none';
+  }
 
   // Teacher comparison
   const tMap={};
