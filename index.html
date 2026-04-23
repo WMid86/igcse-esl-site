@@ -4,6 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>DSAS Extensive Reading Program</title>
+  <!-- PWA -->
+  <meta name="theme-color" content="#234a7d"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="DSAS ER"/>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23234a7d'/%3E%3Cpath d='M48 56 Q96 44 144 56 L144 148 Q96 136 48 148 Z' fill='%23eef4fb' opacity='.9'/%3E%3Cline x1='96' y1='52' x2='96' y2='148' stroke='%23234a7d' stroke-width='4'/%3E%3Cpath d='M96 52 C94 36 97 20 96 8' stroke='%2348bb78' stroke-width='4' fill='none'/%3E%3Ccircle cx='96' cy='6' r='8' fill='%23f6e05e'/%3E%3C/svg%3E"/>
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22DSAS%20Extensive%20Reading%22%2C%22short_name%22%3A%22DSAS%20ER%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f3f6fb%22%2C%22theme_color%22%3A%22%23234a7d%22%7D"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {
@@ -769,6 +776,15 @@
       <div class="cards-row" id="tKpiCards"></div>
     </div>
 
+    <!-- Class progress chart -->
+    <div class="t-panel" style="margin-bottom:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <h3 style="font-size:1rem;font-weight:700;">📈 Minutes read per week — by teacher</h3>
+        <button id="researchSummaryBtn" class="btn" style="background:linear-gradient(135deg,#234a7d,#2f855a);color:#fff;font-size:.85rem;padding:7px 16px;">🔬 Action Research Summary</button>
+      </div>
+      <div style="height:260px;position:relative;"><canvas id="progressChart"></canvas></div>
+    </div>
+
     <!-- Insights -->
     <div class="triple" style="margin-bottom:18px;">
       <div class="insight-box danger">
@@ -825,6 +841,65 @@
           <tbody id="tImplBody"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ACTION RESEARCH SUMMARY
+══════════════════════════════════════════ -->
+<div id="actionResearchPanel" class="hidden">
+  <div class="t-wrap">
+    <div class="hero-t" style="background:linear-gradient(135deg,#234a7d 0%,#2f855a 100%);">
+      <div>
+        <h2>🔬 Action Research Summary</h2>
+        <p>Key metrics for the DSAS ER Project — Term 2, 2026.</p>
+      </div>
+      <button class="btn btn-ghost" id="arBackBtn" style="background:rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:8px 16px;">← Back</button>
+    </div>
+    <div style="max-width:960px;margin:0 auto;padding:24px 16px 48px;">
+
+      <!-- Snapshot cards -->
+      <div class="cards-row" id="arKpiCards" style="margin-bottom:24px;"></div>
+
+      <!-- Chart: avg minutes/student by week -->
+      <div class="t-panel" style="margin-bottom:20px;">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;">📊 Average minutes read per student — by week</h3>
+        <div style="height:240px;position:relative;"><canvas id="arWeekChart"></canvas></div>
+      </div>
+
+      <!-- Chart: teacher fidelity by week -->
+      <div class="t-panel" style="margin-bottom:20px;">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;">✅ ER implementation fidelity score — by teacher &amp; week</h3>
+        <div style="height:240px;position:relative;"><canvas id="arFidelityChart"></canvas></div>
+      </div>
+
+      <!-- Table: teacher-level summary -->
+      <div class="t-panel" style="margin-bottom:20px;">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;">👩‍🏫 Teacher summary</h3>
+        <div class="t-table-wrap">
+          <table class="t-table full-table">
+            <thead><tr><th>Teacher</th><th>Grade</th><th>Students logged</th><th>Total entries</th><th>Avg min/student</th><th>Avg ⭐</th><th>Impl. score</th></tr></thead>
+            <tbody id="arTeacherBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Table: week-level participation -->
+      <div class="t-panel" style="margin-bottom:20px;">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:14px;">📅 Weekly participation rate</h3>
+        <div class="t-table-wrap">
+          <table class="t-table full-table">
+            <thead><tr><th>Week</th><th>Students logged</th><th>Total students</th><th>Participation %</th><th>Avg minutes</th><th>ER ran (impl.)</th></tr></thead>
+            <tbody id="arWeekBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="background:#fffbeb;border:1px solid #f6d860;border-radius:12px;padding:16px 20px;color:#744210;font-size:.88rem;line-height:1.6;">
+        <strong>Research note:</strong> Participation rate = unique students who submitted a reading log ÷ total enrolled students (153). Implementation fidelity score is calculated from the implementation check entries (max 10 per teacher per week). Data refreshes each time this panel is opened.
+      </div>
+
     </div>
   </div>
 </div>
@@ -1001,11 +1076,27 @@ function toast(msg, ms=3000){
 }
 
 function showPanel(id){
-  ['landingPanel','studentPanel','teacherPanel','implementationPanel','researchPanel']
+  ['landingPanel','studentPanel','teacherPanel','implementationPanel','researchPanel','actionResearchPanel']
     .forEach(p=>$(p).classList.toggle('hidden', p!==id));
 }
 
 function fmtDate(iso){ try{return new Date(iso).toLocaleDateString();}catch{return iso||'';} }
+
+/* ── Auto-detect current week from today's date ── */
+function getCurrentWeek(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const ranges = [
+    {v:'1', s:new Date('2026-04-20'), e:new Date('2026-04-26')},
+    {v:'2', s:new Date('2026-04-27'), e:new Date('2026-05-03')},
+    {v:'3', s:new Date('2026-05-04'), e:new Date('2026-05-10')},
+    {v:'4', s:new Date('2026-05-11'), e:new Date('2026-05-17')},
+    {v:'5', s:new Date('2026-05-18'), e:new Date('2026-05-24')},
+    {v:'6', s:new Date('2026-05-25'), e:new Date('2026-05-31')},
+    {v:'7', s:new Date('2026-06-01'), e:new Date('2026-06-05')},
+  ];
+  const m = ranges.find(r=>today>=r.s&&today<=r.e);
+  return m ? m.v : '';
+}
 
 /* ══════════════════════════════════════════════════
    JSONBIN
@@ -1144,7 +1235,16 @@ function renderStudentDashboard(){
         <td>${n(e.pagesRead)}</td>
         <td class="reaction-star">${'★'.repeat(n(e.reaction))}${'☆'.repeat(5-n(e.reaction))}</td>
       </tr>`).join('')
-    : '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:20px;">No entries yet — log your first reading below!</td></tr>';
+    : `<tr><td colspan="5">
+        <div style="text-align:center;padding:32px 16px;">
+          <div style="font-size:3rem;margin-bottom:12px;">📖</div>
+          <div style="font-size:1.05rem;font-weight:700;color:var(--brand);margin-bottom:6px;">Welcome to your reading log!</div>
+          <div style="color:var(--muted);font-size:.92rem;margin-bottom:16px;">You haven't logged any reading yet this term.<br>欢迎！您还没有记录本学期的阅读。</div>
+          <div style="display:inline-flex;align-items:center;gap:8px;background:#e8f5e9;color:#2f855a;padding:10px 18px;border-radius:10px;font-size:.9rem;font-weight:600;">
+            👇 Tap the green button below to log your first entry
+          </div>
+        </div>
+      </td></tr>`;
 }
 
 $('stuBackBtn').addEventListener('click', ()=>{
@@ -1158,7 +1258,11 @@ $('stuBackBtn').addEventListener('click', ()=>{
 /* ── Add reading form ── */
 $('addToggleBtn').addEventListener('click', ()=>{
   $('addFormWrap').classList.toggle('hidden');
-  if(!$('addFormWrap').classList.contains('hidden')) populateBookSelect();
+  if(!$('addFormWrap').classList.contains('hidden')){
+    populateBookSelect();
+    const cw=getCurrentWeek();
+    if(cw && !$('fWeek').value) $('fWeek').value=cw;
+  }
 });
 $('cancelFormBtn').addEventListener('click', ()=>$('addFormWrap').classList.add('hidden'));
 
@@ -1205,6 +1309,14 @@ $('submitReadingBtn').addEventListener('click', async()=>{
   if(!$('fBook').value)    return alert('Please select a book.');
   if(!$('fStartPage').value||!$('fEndPage').value) return alert('Please select pages.');
   if(!$('fReaction').value)return alert('Please select a reaction.');
+
+  // Duplicate week check
+  const selWeek=$('fWeek').value;
+  const duplicate=state.readingEntries.find(e=>String(e.week)===selWeek);
+  if(duplicate){
+    const wLabel=WEEKS.find(w=>w.value===selWeek)?.label||`Week ${selWeek}`;
+    if(!confirm(`⚠️ You already have a reading entry for ${wLabel}.\n\nSubmit another entry for the same week?`)) return;
+  }
 
   const btn=$('submitReadingBtn');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
@@ -1355,7 +1467,158 @@ function renderTeacherDashboard(){
   // Full tables
   $('tReadingBody').innerHTML=reading.length?reading.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.studentNumber||''}</td><td>${e.grade||''}</td><td>${e.teacher||''}</td><td>W${e.week||''}</td><td>${n(e.minutesRead)}</td><td>${n(e.sessions)}</td><td>${e.bookTitle||''}</td><td>${n(e.pagesRead)}</td><td>${n(e.reaction)}</td><td>${e.comment||''}</td><td><button onclick="deleteReadingEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="12" style="color:var(--muted)">No entries match this filter.</td></tr>';
   $('tImplBody').innerHTML=impl.length?impl.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.teacher||''}</td><td>${e.grade||''}</td><td>W${e.week||''}</td><td>${e.erRanThisWeek||''}</td><td>${n(e.minutesAllocated)}</td><td>${e.booksReady||''}</td><td>${e.teacherModelledReading||''}</td><td>${e.pairShareDone||''}</td><td>${e.notes||''}</td><td><button onclick="deleteImplEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="11" style="color:var(--muted)">No entries match this filter.</td></tr>';
+
+  // Render progress chart using ALL reading entries (not just filtered)
+  renderProgressChart(state.readingEntries);
 }
+
+/* ── Teacher progress chart ── */
+let progressChart = null;
+function renderProgressChart(reading){
+  const teachers = [...new Set(STUDENTS.map(s=>s.teacher))].sort();
+  const colors = ['#234a7d','#2f855a','#c05621','#553c9a','#b7791f','#2c7a7b'];
+  const datasets = teachers.map((t,i)=>({
+    label: t,
+    data: WEEKS.map(w=>reading.filter(e=>e.teacher===t&&String(e.week)===w.value).reduce((s,e)=>s+n(e.minutesRead),0)),
+    backgroundColor: colors[i%colors.length]+'99',
+    borderColor: colors[i%colors.length],
+    borderWidth:1.5, borderRadius:4,
+  }));
+  if(progressChart) progressChart.destroy();
+  progressChart = new Chart($('progressChart'),{
+    type:'bar',
+    data:{ labels:WEEKS.map(w=>w.label.split('(')[0].trim()), datasets },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } } },
+      scales:{
+        x:{ stacked:false, grid:{display:false}, ticks:{font:{size:10}} },
+        y:{ beginAtZero:true, grid:{color:'#f1f5f9'}, ticks:{font:{size:10}}, title:{display:true,text:'Total minutes',font:{size:10}} }
+      }
+    }
+  });
+}
+
+/* ── Action Research Panel ── */
+let arWeekChart=null, arFidelityChart=null;
+
+function renderActionResearch(){
+  const reading = state.readingEntries;
+  const impl    = state.implementationEntries;
+  const totalStudents = STUDENTS.length; // 153
+
+  // KPI cards
+  const totalMin   = reading.reduce((s,e)=>s+n(e.minutesRead),0);
+  const uniqStu    = new Set(reading.map(e=>e.studentNumber)).size;
+  const partRate   = totalStudents ? Math.round(uniqStu/totalStudents*100) : 0;
+  const totalEntries = reading.length;
+  const erRanCount = impl.filter(e=>e.erRanThisWeek==='Yes').length;
+  const implRate   = impl.length ? Math.round(erRanCount/impl.length*100) : 0;
+
+  $('arKpiCards').innerHTML = [
+    ['Total minutes logged', totalMin.toLocaleString(), '#234a7d'],
+    ['Students participated', `${uniqStu} / ${totalStudents}`, '#2f855a'],
+    ['Participation rate', `${partRate}%`, '#c05621'],
+    ['ER ran (teacher reports)', `${implRate}%`, '#553c9a'],
+  ].map(([label,val,color])=>`
+    <div class="kpi-card" style="border-top:4px solid ${color};">
+      <div class="kpi-val" style="color:${color}">${val}</div>
+      <div class="kpi-label">${label}</div>
+    </div>`).join('');
+
+  // Avg minutes/student by week chart
+  const avgByWeek = WEEKS.map(w=>{
+    const wEntries = reading.filter(e=>String(e.week)===w.value);
+    const stuCount = new Set(wEntries.map(e=>e.studentNumber)).size;
+    const mins = wEntries.reduce((s,e)=>s+n(e.minutesRead),0);
+    return stuCount ? +(mins/stuCount).toFixed(1) : 0;
+  });
+  if(arWeekChart) arWeekChart.destroy();
+  arWeekChart = new Chart($('arWeekChart'),{
+    type:'line',
+    data:{
+      labels: WEEKS.map(w=>w.label.split('(')[0].trim()),
+      datasets:[{
+        label:'Avg min/student',
+        data: avgByWeek,
+        borderColor:'#234a7d', backgroundColor:'rgba(35,74,125,.12)',
+        borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#234a7d',
+        fill:true, tension:.3,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{size:10}} },
+        y:{ beginAtZero:true, grid:{color:'#f1f5f9'}, ticks:{font:{size:10}},
+            title:{display:true,text:'Minutes',font:{size:10}} }
+      }
+    }
+  });
+
+  // Fidelity chart — impl score per teacher per week
+  const teachers = [...new Set(impl.map(e=>e.teacher))].sort();
+  const colors2  = ['#234a7d','#2f855a','#c05621','#553c9a','#b7791f','#2c7a7b'];
+  const fidDatasets = teachers.map((t,i)=>({
+    label:t,
+    data: WEEKS.map(w=>{
+      const wImpl = impl.filter(e=>e.teacher===t&&String(e.week)===w.value);
+      return wImpl.length ? +implScore(wImpl) : null;
+    }),
+    borderColor: colors2[i%colors2.length],
+    backgroundColor: colors2[i%colors2.length]+'33',
+    borderWidth:2, pointRadius:4, fill:false, tension:.3, spanGaps:true,
+  }));
+  if(arFidelityChart) arFidelityChart.destroy();
+  arFidelityChart = new Chart($('arFidelityChart'),{
+    type:'line',
+    data:{ labels:WEEKS.map(w=>w.label.split('(')[0].trim()), datasets:fidDatasets },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } } },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{size:10}} },
+        y:{ beginAtZero:true, max:10, grid:{color:'#f1f5f9'}, ticks:{font:{size:10}},
+            title:{display:true,text:'Score (max 10)',font:{size:10}} }
+      }
+    }
+  });
+
+  // Teacher table
+  const allTeachers = [...new Set(STUDENTS.map(s=>s.teacher))].sort();
+  $('arTeacherBody').innerHTML = allTeachers.map(t=>{
+    const tStudents = STUDENTS.filter(s=>s.teacher===t);
+    const tReading  = reading.filter(e=>e.teacher===t);
+    const tImpl     = impl.filter(e=>e.teacher===t);
+    const uniq      = new Set(tReading.map(e=>e.studentNumber)).size;
+    const totalM    = tReading.reduce((s,e)=>s+n(e.minutesRead),0);
+    const avgM      = uniq ? Math.round(totalM/uniq) : 0;
+    const rArr      = tReading.map(e=>n(e.reaction)).filter(Boolean);
+    const avgRx     = rArr.length ? (rArr.reduce((a,b)=>a+b,0)/rArr.length).toFixed(1) : '—';
+    const fid       = tImpl.length ? implScore(tImpl) : '—';
+    const grade     = tStudents[0]?.grade||'';
+    return `<tr><td>${t}</td><td>G${grade}</td><td>${uniq} / ${tStudents.length}</td><td>${tReading.length}</td><td>${avgM}</td><td>${avgRx}</td><td>${fid}</td></tr>`;
+  }).join('');
+
+  // Week table
+  $('arWeekBody').innerHTML = WEEKS.map(w=>{
+    const wRead = reading.filter(e=>String(e.week)===w.value);
+    const wImpl = impl.filter(e=>String(e.week)===w.value);
+    const uniqW = new Set(wRead.map(e=>e.studentNumber)).size;
+    const pct   = totalStudents ? Math.round(uniqW/totalStudents*100) : 0;
+    const avgM  = uniqW ? Math.round(wRead.reduce((s,e)=>s+n(e.minutesRead),0)/uniqW) : 0;
+    const erRan = wImpl.filter(e=>e.erRanThisWeek==='Yes').length;
+    const erTot = wImpl.length;
+    return `<tr><td><span class="week-badge">W${w.value}</span> ${w.label.split('(')[0].trim()}</td><td>${uniqW}</td><td>${totalStudents}</td><td>${pct}%</td><td>${avgM} min</td><td>${erRan}/${erTot||'?'} teachers</td></tr>`;
+  }).join('');
+}
+
+$('arBackBtn').addEventListener('click',()=>showPanel('teacherPanel'));
+$('researchSummaryBtn').addEventListener('click',()=>{
+  showPanel('actionResearchPanel');
+  renderActionResearch();
+});
 
 /* ── Delete functions ── */
 async function deleteReadingEntry(ts){
