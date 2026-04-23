@@ -378,6 +378,52 @@
     .modal-btns{display:flex;gap:10px;margin-top:18px;}
     .modal-btns .btn{flex:1;}
 
+    /* ── Reading progress tracker ── */
+    .progress-tracker{
+      background:#fff;border:1px solid var(--line);border-radius:14px;
+      padding:20px 24px;margin-bottom:20px;box-shadow:var(--shadow);
+    }
+    .progress-tracker-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:14px;flex-wrap:wrap;gap:8px;
+    }
+    .progress-tracker-title{font-size:.9rem;font-weight:700;color:var(--ink);}
+    .progress-tracker-mins{font-size:.85rem;color:var(--muted);}
+    .progress-milestones{
+      display:flex;align-items:center;position:relative;margin-bottom:10px;
+    }
+    .progress-rail{
+      position:absolute;left:0;right:0;height:8px;
+      background:#e2e8f0;border-radius:99px;
+    }
+    .progress-fill{
+      position:absolute;left:0;height:8px;
+      background:linear-gradient(90deg,#2f855a,#48bb78);
+      border-radius:99px;transition:width .6s ease;
+    }
+    .progress-nodes{
+      display:flex;justify-content:space-between;
+      width:100%;position:relative;z-index:1;
+    }
+    .progress-node{
+      display:flex;flex-direction:column;align-items:center;gap:5px;
+    }
+    .progress-dot{
+      width:20px;height:20px;border-radius:50%;
+      border:3px solid #e2e8f0;background:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:.65rem;transition:all .3s;
+    }
+    .progress-dot.reached{border-color:#2f855a;background:#2f855a;color:#fff;}
+    .progress-dot.next{border-color:#4f7fb8;background:#fff;
+      box-shadow:0 0 0 3px rgba(79,127,184,.2);}
+    .progress-node-lbl{font-size:.7rem;color:var(--muted);text-align:center;white-space:nowrap;}
+    .progress-node-lbl.next-lbl{color:var(--brand);font-weight:700;}
+    .progress-next-msg{
+      font-size:.82rem;color:#4f7fb8;font-weight:600;margin-top:10px;
+      display:flex;align-items:center;gap:6px;
+    }
+
     /* ── Milestone banner ── */
     .milestone{
       background:linear-gradient(135deg,#fffbeb,#fef3c7);
@@ -755,6 +801,7 @@
 
     <!-- Milestone banner -->
     <div id="milestoneWrap"></div>
+    <div id="progressTrackerWrap"></div>
 
     <!-- Chart + recent week -->
     <div class="stu-cols">
@@ -1356,6 +1403,45 @@ function renderStudentDashboard(){
   $('statPages').textContent    = totalPg;
   $('statBooks').textContent    = books;
   $('statReaction').textContent = avgR;
+
+  // Progress tracker
+  const milestones = [
+    {min:0,   icon:'🌱', lbl:'Start'},
+    {min:60,  icon:'📖', lbl:'60 min'},
+    {min:100, icon:'🎉', lbl:'100 min'},
+    {min:200, icon:'🌟', lbl:'200 min'},
+    {min:300, icon:'🏆', lbl:'300 min'},
+  ];
+  const nextMs = milestones.find(m=>totalMin<m.min);
+  const pct    = nextMs ? Math.min(100,(totalMin/nextMs.min)*100) : 100;
+  const gapMsg = nextMs
+    ? `${nextMs.min - totalMin} more minutes to reach ${nextMs.lbl}`
+    : 'You\'ve reached every milestone! Outstanding! 🏆';
+
+  $('progressTrackerWrap').innerHTML = `
+    <div class="progress-tracker">
+      <div class="progress-tracker-header">
+        <div class="progress-tracker-title">📈 Reading progress this term</div>
+        <div class="progress-tracker-mins">${totalMin} minutes read so far</div>
+      </div>
+      <div class="progress-milestones">
+        <div class="progress-rail"></div>
+        <div class="progress-fill" style="width:${pct}%"></div>
+        <div class="progress-nodes">
+          ${milestones.map((m,i)=>{
+            const reached = totalMin >= m.min;
+            const isNext  = nextMs && m.min === nextMs.min;
+            return `<div class="progress-node">
+              <div class="progress-dot ${reached?'reached':isNext?'next':''}">
+                ${reached ? '✓' : isNext ? '→' : ''}
+              </div>
+              <div class="progress-node-lbl ${isNext?'next-lbl':''}">${m.lbl}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="progress-next-msg">→ ${gapMsg}</div>
+    </div>`;
 
   // Milestone banner
   const ms = getMilestone(entries, totalMin);
