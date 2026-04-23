@@ -2229,6 +2229,17 @@ $('stuDetailModal').addEventListener('click',e=>{if(e.target===$('stuDetailModal
    ER SLOT BOOKING
 ══════════════════════════════════════════════════ */
 const ER_LESSONS = [
+  // ── Grade 9 ──
+  {
+    id:'g9-mon',
+    label:'📗 Grade 9 — Monday (Periods 6 & 7)',
+    slots:[
+      {id:'g9-mon-1',time:'13:00 – 13:20'},
+      {id:'g9-mon-2',time:'13:20 – 13:40'},
+      {id:'g9-mon-3',time:'13:45 – 14:05'},
+      {id:'g9-mon-4',time:'14:05 – 14:25'},
+    ]
+  },
   {
     id:'g9-wed',
     label:'📗 Grade 9 — Wednesday (Periods 1 & 2)',
@@ -2240,6 +2251,17 @@ const ER_LESSONS = [
     ]
   },
   {
+    id:'g9-fri',
+    label:'📗 Grade 9 — Friday (Periods 8 & 9)',
+    slots:[
+      {id:'g9-fri-1',time:'14:30 – 14:50'},
+      {id:'g9-fri-2',time:'14:50 – 15:10'},
+      {id:'g9-fri-3',time:'15:15 – 15:35'},
+      {id:'g9-fri-4',time:'15:35 – 15:55'},
+    ]
+  },
+  // ── Grade 11 ──
+  {
     id:'g11-mon',
     label:'📘 Grade 11 — Monday (Period 1)',
     slots:[
@@ -2249,7 +2271,7 @@ const ER_LESSONS = [
   },
   {
     id:'g11-tue',
-    label:'📘 Grade 11 — Tuesday (Double, after lunch)',
+    label:'📘 Grade 11 — Tuesday (Periods 6 & 7, after lunch)',
     slots:[
       {id:'g11-tue-1',time:'13:00 – 13:20'},
       {id:'g11-tue-2',time:'13:20 – 13:40'},
@@ -2261,8 +2283,8 @@ const ER_LESSONS = [
     id:'g11-thu',
     label:'📘 Grade 11 — Thursday (Period 5)',
     slots:[
-      {id:'g11-thu-1',time:'11:35 – 11:55'},
-      {id:'g11-thu-2',time:'11:55 – 12:15'},
+      {id:'g11-thu-1',time:'11:30 – 11:50'},
+      {id:'g11-thu-2',time:'11:50 – 12:10'},
     ]
   },
   {
