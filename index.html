@@ -12,6 +12,7 @@
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%23234a7d'/%3E%3Cpath d='M48 56 Q96 44 144 56 L144 148 Q96 136 48 148 Z' fill='%23eef4fb' opacity='.9'/%3E%3Cline x1='96' y1='52' x2='96' y2='148' stroke='%23234a7d' stroke-width='4'/%3E%3Cpath d='M96 52 C94 36 97 20 96 8' stroke='%2348bb78' stroke-width='4' fill='none'/%3E%3Ccircle cx='96' cy='6' r='8' fill='%23f6e05e'/%3E%3C/svg%3E"/>
   <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22DSAS%20Extensive%20Reading%22%2C%22short_name%22%3A%22DSAS%20ER%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f3f6fb%22%2C%22theme_color%22%3A%22%23234a7d%22%7D"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --bg:      #f3f6fb;
@@ -566,6 +567,13 @@
       <div style="font-size:.75rem;color:#94a3b8;text-align:center;line-height:1.6;">
         Use your 3 or 4-digit school student number.<br>
         <span style="color:#cbd5e0;">使用你的学号（3或4位数字）</span>
+      </div>
+
+      <div class="lp-divider"></div>
+      <div style="text-align:center;">
+        <div style="font-size:.75rem;font-weight:600;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:.07em;">📱 Scan to open on iPad or phone</div>
+        <div id="qrcode" style="display:inline-block;padding:10px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;"></div>
+        <div style="font-size:.72rem;color:#94a3b8;margin-top:8px;">wmid86.github.io/igcse-esl-site</div>
       </div>
     </div>
 
@@ -2137,6 +2145,14 @@ function openStuDetail(studentNumber){
   $('stuDetailModal').classList.add('open');
 }
 $('stuDetailModal').addEventListener('click',e=>{if(e.target===$('stuDetailModal'))$('stuDetailModal').classList.remove('open');});
+
+/* ── QR Code ── */
+new QRCode($('qrcode'), {
+  text: 'https://wmid86.github.io/igcse-esl-site/',
+  width: 140, height: 140,
+  colorDark: '#0b1f3a', colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.M
+});
 
 /* ── Focus first pin box on load ── */
 pinInputs[0].focus();
