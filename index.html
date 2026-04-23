@@ -956,12 +956,25 @@ const STUDENT_MAP = {};
 STUDENTS.forEach(s => STUDENT_MAP[s.studentNumber] = s);
 
 const BOOKS = [
-  { title:'The Secret Garden',                author:'Frances Hodgson Burnett', level:'Starter', pages:80  },
-  { title:"Sherlock Holmes and the Duke's Son",author:'Arthur Conan Doyle',     level:'Level 1', pages:80  },
-  { title:'Treasure Island',                   author:'Robert Louis Stevenson', level:'Level 2', pages:90  },
-  { title:'Jane Eyre',                         author:'Charlotte Brontë',       level:'Level 3', pages:100 },
-  { title:'Dracula',                           author:'Bram Stoker',            level:'Level 4', pages:110 },
-  { title:'Sense and Sensibility',             author:'Jane Austen',            level:'Level 5', pages:120 },
+  /* ── Starter (250 headwords) ── */
+  { title:'King Arthur',                      author:'Janet Hardy-Gould',                              level:'Starter', pages:56 },
+  { title:'Vampire Killer',                   author:'Paul Shipton',                                   level:'Starter', pages:56 },
+  /* ── Stage 1 (400 headwords) ── */
+  { title:'Aladdin and the Enchanted Lamp',   author:'Judith Dean',                                    level:'Stage 1', pages:64 },
+  { title:'The Adventures of Tom Sawyer',     author:'Mark Twain / Nick Bullard',                      level:'Stage 1', pages:64 },
+  { title:'The Wizard of Oz',                 author:'L. Frank Baum / Rosemary Border',                level:'Stage 1', pages:64 },
+  /* ── Stage 2 (700 headwords) ── */
+  { title:'The Jungle Book',                  author:'Rudyard Kipling / Ralph Mowat',                  level:'Stage 2', pages:72 },
+  { title:'Romeo and Juliet',                 author:'William Shakespeare / Alistair McCallum',         level:'Stage 2', pages:72 },
+  { title:'The Prince and the Pauper',        author:'Mark Twain',                                     level:'Stage 2', pages:72 },
+  /* ── Stage 3 (1000 headwords) ── */
+  { title:'Frankenstein',                     author:'Mary Shelley / Patrick Nobes',                   level:'Stage 3', pages:88 },
+  { title:'A Midsummer Night\'s Dream',       author:'William Shakespeare',                            level:'Stage 3', pages:88 },
+  { title:'Space',                            author:'Tim Vicary',                                     level:'Stage 3', pages:88 },
+  { title:'Rabbit-Proof Fence',               author:'Doris Pilkington Garimara / Jennifer Bassett',   level:'Stage 3', pages:88 },
+  /* ── Stage 4 (1400 headwords) ── */
+  { title:'Dr Jekyll and Mr Hyde',            author:'Robert Louis Stevenson',                         level:'Stage 4', pages:96 },
+  { title:'20,000 Leagues Under the Sea',     author:'Jules Verne',                                    level:'Stage 4', pages:96 },
 ];
 
 /* ── State ── */
@@ -1144,8 +1157,19 @@ $('cancelFormBtn').addEventListener('click', ()=>$('addFormWrap').classList.add(
 
 function populateBookSelect(){
   const sel=$('fBook');
-  sel.innerHTML='<option value="">Select book</option>';
-  BOOKS.forEach(b=>{ const o=document.createElement('option'); o.value=b.title; o.textContent=b.title; sel.appendChild(o); });
+  sel.innerHTML='<option value="">Select book / 选择书目</option>';
+  const levels=[...new Set(BOOKS.map(b=>b.level))];
+  levels.forEach(lv=>{
+    const grp=document.createElement('optgroup');
+    grp.label='Oxford Bookworms — '+lv;
+    BOOKS.filter(b=>b.level===lv).forEach(b=>{
+      const o=document.createElement('option');
+      o.value=b.title;
+      o.textContent=b.title;
+      grp.appendChild(o);
+    });
+    sel.appendChild(grp);
+  });
 }
 
 function updateBookFields(){
