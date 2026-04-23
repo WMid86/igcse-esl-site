@@ -1107,6 +1107,29 @@
 </div>
 
 <!-- ══════════════════════════════════════════
+     STUDENT DETAIL MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="stuDetailModal">
+  <div class="modal-box" style="max-width:640px;width:95%;max-height:85vh;overflow-y:auto;padding:0;">
+    <div style="background:linear-gradient(135deg,#234a7d,#4f7fb8);padding:20px 24px;border-radius:14px 14px 0 0;color:#fff;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:1.2rem;font-weight:800;" id="sdName">—</div>
+        <div style="font-size:.85rem;opacity:.75;margin-top:2px;" id="sdMeta">—</div>
+      </div>
+      <button onclick="$('stuDetailModal').classList.remove('open')" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:.88rem;">✕ Close</button>
+    </div>
+    <div style="padding:20px 24px;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;" id="sdStats"></div>
+      <div style="position:relative;height:180px;margin-bottom:18px;"><canvas id="sdChart"></canvas></div>
+      <table class="t-table" style="width:100%;">
+        <thead><tr><th>Week</th><th>Book</th><th>Min</th><th>Pages</th><th>⭐</th><th>Comment</th></tr></thead>
+        <tbody id="sdBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
      IMPLEMENTATION CHECK
 ══════════════════════════════════════════ -->
 <div id="implementationPanel" class="hidden">
@@ -1798,7 +1821,7 @@ function renderTeacherDashboard(){
   ].map(t=>`<li>${t}</li>`).join('');
 
   // Full tables
-  $('tReadingBody').innerHTML=reading.length?reading.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.studentNumber||''}</td><td>${e.grade||''}</td><td>${e.teacher||''}</td><td>W${e.week||''}</td><td>${n(e.minutesRead)}</td><td>${n(e.sessions)}</td><td>${e.bookTitle||''}</td><td>${n(e.pagesRead)}</td><td>${n(e.reaction)}</td><td>${e.comment||''}</td><td><button onclick="deleteReadingEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="12" style="color:var(--muted)">No entries match this filter.</td></tr>';
+  $('tReadingBody').innerHTML=reading.length?reading.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td><span onclick="openStuDetail('${e.studentNumber}')" style="cursor:pointer;color:var(--brand);font-weight:700;text-decoration:underline;">${e.studentNumber||''}</span></td><td>${e.grade||''}</td><td>${e.teacher||''}</td><td>W${e.week||''}</td><td>${n(e.minutesRead)}</td><td>${n(e.sessions)}</td><td>${e.bookTitle||''}</td><td>${n(e.pagesRead)}</td><td>${n(e.reaction)}</td><td>${e.comment||''}</td><td><button onclick="deleteReadingEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="12" style="color:var(--muted)">No entries match this filter.</td></tr>';
   $('tImplBody').innerHTML=impl.length?impl.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.teacher||''}</td><td>${e.grade||''}</td><td>W${e.week||''}</td><td>${e.erRanThisWeek||''}</td><td>${n(e.minutesAllocated)}</td><td>${e.booksReady||''}</td><td>${e.teacherModelledReading||''}</td><td>${e.pairShareDone||''}</td><td>${e.notes||''}</td><td><button onclick="deleteImplEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="11" style="color:var(--muted)">No entries match this filter.</td></tr>';
 
   // Render progress chart using ALL reading entries (not just filtered)
@@ -2056,6 +2079,64 @@ $('implSubmitBtn').addEventListener('click', async()=>{
   } catch(e){ alert('Could not save: '+e.message); }
   finally{ btn.disabled=false; btn.innerHTML='Submit implementation check'; }
 });
+
+/* ── Student detail modal ── */
+let sdChartInst = null;
+function openStuDetail(studentNumber){
+  const stu = STUDENTS.find(s=>s.studentNumber===String(studentNumber));
+  if(!stu) return;
+  const entries = state.allReading.filter(e=>e.studentNumber===String(studentNumber));
+  const totalMin = entries.reduce((s,e)=>s+n(e.minutesRead),0);
+  const totalPg  = entries.reduce((s,e)=>s+n(e.pagesRead),0);
+  const books    = new Set(entries.map(e=>e.bookTitle).filter(Boolean)).size;
+  const rArr     = entries.map(e=>n(e.reaction)).filter(Boolean);
+  const avgR     = rArr.length?(rArr.reduce((a,b)=>a+b,0)/rArr.length).toFixed(1):'—';
+
+  $('sdName').textContent = `${stu.englishName}${stu.chineseName?' · '+stu.chineseName:''}`;
+  $('sdMeta').textContent = `Student #${stu.studentNumber} · ${stu.teacher} · Grade ${stu.grade}`;
+
+  $('sdStats').innerHTML = [
+    ['📖','Entries',entries.length],['⏱️','Minutes',totalMin],
+    ['📄','Pages',totalPg],['⭐','Avg ⭐',avgR]
+  ].map(([icon,lbl,val])=>`
+    <div style="background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center;">
+      <div style="font-size:1.3rem;">${icon}</div>
+      <div style="font-size:1.4rem;font-weight:800;color:var(--brand);">${val}</div>
+      <div style="font-size:.75rem;color:var(--muted);">${lbl}</div>
+    </div>`).join('');
+
+  // Mini chart
+  const weekMap={};
+  WEEKS.forEach(w=>{weekMap[w.value]=0;});
+  entries.forEach(e=>{if(weekMap[e.week]!==undefined)weekMap[e.week]+=n(e.minutesRead);});
+  if(sdChartInst) sdChartInst.destroy();
+  sdChartInst = new Chart($('sdChart'),{
+    type:'bar',
+    data:{
+      labels:WEEKS.map(w=>w.label.split('(')[0].trim()),
+      datasets:[{label:'Minutes',data:WEEKS.map(w=>weekMap[w.value]),
+        backgroundColor:WEEKS.map(w=>weekMap[w.value]>0?'rgba(47,133,90,.75)':'rgba(203,213,224,.4)'),
+        borderRadius:5}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}}
+  });
+
+  // History
+  const sorted=[...entries].sort((a,b)=>n(b.week)-n(a.week));
+  $('sdBody').innerHTML=sorted.length
+    ?sorted.map(e=>`<tr>
+        <td><span class="week-badge">W${e.week}</span></td>
+        <td>${e.bookTitle||'—'}</td><td>${n(e.minutesRead)}</td>
+        <td>${n(e.pagesRead)}</td>
+        <td class="reaction-star">${'★'.repeat(n(e.reaction))}${'☆'.repeat(5-n(e.reaction))}</td>
+        <td style="font-size:.8rem;color:var(--muted);">${e.comment||''}</td>
+      </tr>`).join('')
+    :'<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:20px;">No entries yet.</td></tr>';
+
+  $('stuDetailModal').classList.add('open');
+}
+$('stuDetailModal').addEventListener('click',e=>{if(e.target===$('stuDetailModal'))$('stuDetailModal').classList.remove('open');});
 
 /* ── Focus first pin box on load ── */
 pinInputs[0].focus();
