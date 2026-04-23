@@ -797,6 +797,7 @@
       <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-value" id="statPages">—</div><div class="stat-label">Pages read</div></div>
       <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-value" id="statBooks">—</div><div class="stat-label">Books read</div></div>
       <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="statReaction">—</div><div class="stat-label">Avg reaction</div></div>
+      <div class="stat-card"><div class="stat-icon" id="streakIcon">🔥</div><div class="stat-value" id="statStreak">—</div><div class="stat-label">Week streak</div></div>
     </div>
 
     <!-- Milestone banner -->
@@ -1403,6 +1404,17 @@ function renderStudentDashboard(){
   $('statPages').textContent    = totalPg;
   $('statBooks').textContent    = books;
   $('statReaction').textContent = avgR;
+
+  // Streak — count consecutive weeks logged up to the current week
+  const loggedWeeks = new Set(entries.map(e=>parseInt(e.week)).filter(Boolean));
+  const currentW = parseInt(getCurrentWeek()) || Math.max(...[...loggedWeeks, 0]);
+  let streak = 0;
+  for(let w = currentW; w >= 1; w--){
+    if(loggedWeeks.has(w)) streak++;
+    else break;
+  }
+  $('statStreak').textContent = streak;
+  $('streakIcon').textContent  = streak >= 5 ? '🔥🔥' : streak >= 3 ? '🔥' : streak >= 1 ? '⚡' : '💤';
 
   // Progress tracker
   const milestones = [
