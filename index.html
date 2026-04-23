@@ -1232,6 +1232,7 @@ const CONFIG = {
   BIN_ID:           '69e8bf36856a6821895e9e64',
   MASTER_KEY:       '$2a$10$uhgunOoooLsyavNmzWtyL.Bl99LfGikKYZFvKUuTuvvGXB7EUyHAu',
   TEACHER_PASSWORD: 'midlane2026',
+  ADMIN_PASSWORD:   'wmidlane2026',
   BASE_URL:         'https://api.jsonbin.io/v3/b',
 };
 
@@ -1659,8 +1660,10 @@ $('submitReadingBtn').addEventListener('click', async()=>{
    PASSWORD MODAL
 ══════════════════════════════════════════════════ */
 let _modalCallback = null;
-function openPasswordModal(subtitle, callback){
+let _modalRequiredPassword = null;
+function openPasswordModal(subtitle, callback, requiredPassword){
   _modalCallback = callback;
+  _modalRequiredPassword = requiredPassword || CONFIG.TEACHER_PASSWORD;
   $('pwModalSub').textContent = subtitle;
   $('pwModalInput').value = '';
   $('pwModalError').style.display = 'none';
@@ -1672,7 +1675,7 @@ function closePasswordModal(){ $('pwModal').classList.remove('open'); }
 $('pwModalCancel').addEventListener('click', closePasswordModal);
 $('pwModal').addEventListener('click', e=>{ if(e.target===$('pwModal')) closePasswordModal(); });
 $('pwModalConfirm').addEventListener('click', ()=>{
-  if($('pwModalInput').value !== CONFIG.TEACHER_PASSWORD){
+  if($('pwModalInput').value !== _modalRequiredPassword){
     $('pwModalError').style.display='block';
     $('pwModalInput').value='';
     $('pwModalInput').focus();
@@ -1984,49 +1987,55 @@ $('researchSummaryBtn').addEventListener('click',()=>{
   renderActionResearch();
 });
 
-/* ── Delete functions ── */
-async function deleteReadingEntry(ts){
-  if(!confirm('Delete this reading entry? This cannot be undone.')) return;
-  try{
-    toast('⏳ Deleting…');
-    const data=await binGet();
-    data.readingEntries=data.readingEntries.filter(e=>e.timestamp!==ts);
-    await binPut(data);
-    state.readingEntries=data.readingEntries;
-    toast('✅ Entry deleted.');
-    renderTeacherDashboard();
-  } catch(e){ alert('Could not delete: '+e.message); }
+/* ── Delete functions (master password required) ── */
+function deleteReadingEntry(ts){
+  openPasswordModal('Enter the master password to delete this entry.', async()=>{
+    if(!confirm('Delete this reading entry? This cannot be undone.')) return;
+    try{
+      toast('⏳ Deleting…');
+      const data=await binGet();
+      data.readingEntries=data.readingEntries.filter(e=>e.timestamp!==ts);
+      await binPut(data);
+      state.readingEntries=data.readingEntries;
+      toast('✅ Entry deleted.');
+      renderTeacherDashboard();
+    } catch(e){ alert('Could not delete: '+e.message); }
+  }, CONFIG.ADMIN_PASSWORD);
 }
 
-async function deleteImplEntry(ts){
-  if(!confirm('Delete this implementation entry? This cannot be undone.')) return;
-  try{
-    toast('⏳ Deleting…');
-    const data=await binGet();
-    data.implementationEntries=data.implementationEntries.filter(e=>e.timestamp!==ts);
-    await binPut(data);
-    state.implementationEntries=data.implementationEntries;
-    toast('✅ Entry deleted.');
-    renderTeacherDashboard();
-  } catch(e){ alert('Could not delete: '+e.message); }
+function deleteImplEntry(ts){
+  openPasswordModal('Enter the master password to delete this entry.', async()=>{
+    if(!confirm('Delete this implementation entry? This cannot be undone.')) return;
+    try{
+      toast('⏳ Deleting…');
+      const data=await binGet();
+      data.implementationEntries=data.implementationEntries.filter(e=>e.timestamp!==ts);
+      await binPut(data);
+      state.implementationEntries=data.implementationEntries;
+      toast('✅ Entry deleted.');
+      renderTeacherDashboard();
+    } catch(e){ alert('Could not delete: '+e.message); }
+  }, CONFIG.ADMIN_PASSWORD);
 }
 
-$('deleteStudentBtn').addEventListener('click', async()=>{
+$('deleteStudentBtn').addEventListener('click', ()=>{
   const sNum=$('deleteStudentInput').value.trim();
   if(!sNum) return alert('Please enter a student number.');
-  const count=state.readingEntries.filter(e=>String(e.studentNumber)===sNum).length;
-  if(!count) return alert(`No reading entries found for student #${sNum}.`);
-  if(!confirm(`Delete all ${count} reading entries for student #${sNum}? This cannot be undone.`)) return;
-  try{
-    toast('⏳ Deleting…');
-    const data=await binGet();
-    data.readingEntries=data.readingEntries.filter(e=>String(e.studentNumber)!==sNum);
-    await binPut(data);
-    state.readingEntries=data.readingEntries;
-    $('deleteStudentInput').value='';
-    toast(`✅ Deleted ${count} entries for student #${sNum}.`);
-    renderTeacherDashboard();
-  } catch(e){ alert('Could not delete: '+e.message); }
+  openPasswordModal('Enter the master password to delete student data.', async()=>{
+    const count=state.readingEntries.filter(e=>String(e.studentNumber)===sNum).length;
+    if(!count) return alert(`No reading entries found for student #${sNum}.`);
+    if(!confirm(`Delete all ${count} reading entries for student #${sNum}? This cannot be undone.`)) return;
+    try{
+      toast('⏳ Deleting…');
+      const data=await binGet();
+      data.readingEntries=data.readingEntries.filter(e=>String(e.studentNumber)!==sNum);
+      await binPut(data);
+      state.readingEntries=data.readingEntries;
+      $('deleteStudentInput').value='';
+      toast(`✅ Deleted ${count} entries for student #${sNum}.`);
+      renderTeacherDashboard();
+    } catch(e){ alert('Could not delete: '+e.message); }
+  }, CONFIG.ADMIN_PASSWORD);
 });
 
 // CSV export
@@ -2048,12 +2057,11 @@ $('exportImplBtn').addEventListener('click',()=>{
    IMPLEMENTATION CHECK
 ══════════════════════════════════════════════════ */
 $('implLoginLink').addEventListener('click',()=>{
-  openPasswordModal('Enter the teacher password to access the Implementation Check.', ()=>{
+  openPasswordModal('Enter the master password to access the Implementation Check.', ()=>{
     showPanel('implementationPanel');
-    // Auto-select current week
     const cw=getCurrentWeek();
     if(cw) $('implWeek').value=cw;
-  });
+  }, CONFIG.ADMIN_PASSWORD);
 });
 $('implBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
