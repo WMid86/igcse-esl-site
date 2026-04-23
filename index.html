@@ -266,10 +266,94 @@
 
     /* impl form */
     .impl-wrap{max-width:900px;margin:0 auto;padding:24px;}
+
+    /* ── Panel transitions ── */
+    .panel-page{animation:fadeSlide .25s ease both;}
+    @keyframes fadeSlide{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+    /* ── Teacher password modal ── */
+    .modal-overlay{
+      position:fixed;inset:0;background:rgba(15,23,42,.55);
+      display:flex;align-items:center;justify-content:center;
+      z-index:10000;backdrop-filter:blur(3px);
+      opacity:0;pointer-events:none;transition:opacity .2s;
+    }
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal-box{
+      background:#fff;border-radius:18px;padding:36px 40px;
+      max-width:380px;width:90%;box-shadow:0 24px 64px rgba(0,0,0,.25);
+      transform:scale(.94);transition:transform .2s;
+    }
+    .modal-overlay.open .modal-box{transform:scale(1);}
+    .modal-icon{font-size:2.5rem;text-align:center;margin-bottom:12px;}
+    .modal-title{font-size:1.2rem;font-weight:800;color:var(--brand);text-align:center;margin-bottom:4px;}
+    .modal-sub{font-size:.88rem;color:var(--muted);text-align:center;margin-bottom:20px;}
+    .modal-input{width:100%;border:2px solid var(--line);border-radius:10px;
+      padding:11px 14px;font-size:1rem;outline:none;transition:border-color .2s;}
+    .modal-input:focus{border-color:var(--brand);}
+    .modal-error{color:var(--danger);font-size:.85rem;margin-top:8px;display:none;text-align:center;}
+    .modal-btns{display:flex;gap:10px;margin-top:18px;}
+    .modal-btns .btn{flex:1;}
+
+    /* ── Milestone banner ── */
+    .milestone{
+      background:linear-gradient(135deg,#fffbeb,#fef3c7);
+      border:1px solid #f6d860;border-radius:12px;
+      padding:14px 18px;margin-bottom:16px;
+      display:flex;align-items:center;gap:12px;font-size:.92rem;
+      animation:fadeSlide .3s ease;
+    }
+    .milestone-icon{font-size:1.8rem;flex-shrink:0;}
+
+    /* ── KPI cards (action research + teacher) ── */
+    .kpi-card{background:#f8fafc;border:1px solid var(--line);border-radius:12px;
+      padding:16px;text-align:center;}
+    .kpi-val{font-size:1.6rem;font-weight:800;color:var(--brand);}
+    .kpi-label{font-size:.8rem;color:var(--muted);margin-top:3px;}
+
+    /* ── Mobile improvements ── */
+    @media(max-width:480px){
+      .landing-card{padding:24px 18px;}
+      .pin-boxes{gap:8px;}
+      .pin-box{width:48px;height:60px;font-size:1.5rem;}
+      .stat-grid{grid-template-columns:repeat(3,1fr);gap:10px;}
+      .stat-value{font-size:1.4rem;}
+      .stat-card{padding:12px 8px;}
+      .stu-cols{grid-template-columns:1fr;}
+      .add-form-wrap{padding:14px;}
+      .t-wrap{padding:12px;}
+      .wrap{padding:12px;}
+      .stu-header{padding:16px 14px;}
+    }
+
+    /* ── Print styles ── */
+    @media print{
+      #landingPanel,#studentPanel,#implementationPanel,#researchPanel,#actionResearchPanel,
+      .btn,.btn-row-t,#refreshBtn,#deleteStudentBtn,.modal-overlay{display:none!important;}
+      .t-table-wrap{overflow:visible!important;}
+      .full-table{min-width:0!important;}
+      body{background:#fff;}
+      .hero-t{background:#234a7d!important;-webkit-print-color-adjust:exact;color-adjust:exact;}
+    }
   </style>
 </head>
 <body>
 <div id="toast"></div>
+
+<!-- ── Teacher password modal ── -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal-box">
+    <div class="modal-icon">🔐</div>
+    <div class="modal-title">Teacher Access</div>
+    <div class="modal-sub" id="pwModalSub">Enter your password to continue.</div>
+    <input class="modal-input" id="pwModalInput" type="password" placeholder="Password" autocomplete="current-password"/>
+    <div class="modal-error" id="pwModalError">Incorrect password. Please try again.</div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" id="pwModalCancel">Cancel</button>
+      <button class="btn btn-green" id="pwModalConfirm">Enter →</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════
      LANDING PAGE
@@ -609,6 +693,9 @@
       <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="statReaction">—</div><div class="stat-label">Avg reaction</div></div>
     </div>
 
+    <!-- Milestone banner -->
+    <div id="milestoneWrap"></div>
+
     <!-- Chart + recent week -->
     <div class="stu-cols">
       <div class="panel">
@@ -765,6 +852,7 @@
         <button class="btn btn-muted" id="refreshBtn">🔄 Refresh data</button>
         <button class="btn btn-green" id="exportReadingBtn">⬇ Export reading CSV</button>
         <button class="btn" style="background:var(--warn);color:#fff;" id="exportImplBtn">⬇ Export implementation CSV</button>
+        <button class="btn" style="background:#553c9a;color:#fff;" onclick="window.print()">🖨️ Print</button>
       </div>
       <!-- Delete student history tool -->
       <div style="margin-top:12px;background:#fff5f5;border:1px solid #feb2b2;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -1077,7 +1165,11 @@ function toast(msg, ms=3000){
 
 function showPanel(id){
   ['landingPanel','studentPanel','teacherPanel','implementationPanel','researchPanel','actionResearchPanel']
-    .forEach(p=>$(p).classList.toggle('hidden', p!==id));
+    .forEach(p=>{
+      const el=$(p);
+      el.classList.toggle('hidden', p!==id);
+      if(p===id){ el.classList.remove('panel-page'); void el.offsetWidth; el.classList.add('panel-page'); }
+    });
 }
 
 function fmtDate(iso){ try{return new Date(iso).toLocaleDateString();}catch{return iso||'';} }
@@ -1168,6 +1260,8 @@ async function loginStudent(student){
   $('stuChinese').textContent  = student.chineseName || '';
   $('stuMeta').textContent     = `Grade ${student.grade} · ${student.teacher} · ${student.class} · #${student.studentNumber}`;
   showPanel('studentPanel');
+  // Show loading state
+  $('stuHistoryBody').innerHTML = `<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--muted);"><span class="spinner" style="border-top-color:var(--brand);border-color:var(--line);"></span> Loading your reading history…</td></tr>`;
   await loadStudentData();
 }
 
@@ -1177,6 +1271,19 @@ async function loadStudentData(){
     state.readingEntries = (data.readingEntries||[]).filter(e=>e.studentNumber===state.currentStudent.studentNumber);
     renderStudentDashboard();
   } catch(e){ toast('⚠️ Could not load data: '+e.message); }
+}
+
+function getMilestone(entries, totalMin){
+  if(!entries.length) return null;
+  const weeks = new Set(entries.map(e=>e.week)).size;
+  if(totalMin>=300) return {icon:'🏆', msg:'Amazing! You\'ve read for over 5 hours this term. Outstanding dedication! 太棒了！'};
+  if(totalMin>=200) return {icon:'🌟', msg:'Fantastic — over 200 minutes of reading! You\'re a reading star. 非常出色！'};
+  if(totalMin>=100) return {icon:'🎉', msg:'100 minutes read — you\'ve crossed a major milestone! Keep it up! 坚持加油！'};
+  if(totalMin>=60)  return {icon:'📈', msg:'Over an hour of reading logged. Great progress this term!'};
+  if(weeks>=3)      return {icon:'📅', msg:'You\'ve logged reading for 3 or more weeks — great consistency!'};
+  if(entries.length>=2) return {icon:'✨', msg:'You\'re building a great reading habit. Keep coming back each week!'};
+  if(entries.length===1)return {icon:'🌱', msg:'First entry logged — welcome to your reading journey! 开始阅读之旅！'};
+  return null;
 }
 
 function renderStudentDashboard(){
@@ -1193,6 +1300,12 @@ function renderStudentDashboard(){
   $('statPages').textContent    = totalPg;
   $('statBooks').textContent    = books;
   $('statReaction').textContent = avgR;
+
+  // Milestone banner
+  const ms = getMilestone(entries, totalMin);
+  $('milestoneWrap').innerHTML = ms
+    ? `<div class="milestone"><span class="milestone-icon">${ms.icon}</span><span>${ms.msg}</span></div>`
+    : '';
 
   // Weekly chart
   const weekMap = {};
@@ -1308,6 +1421,7 @@ $('submitReadingBtn').addEventListener('click', async()=>{
   if(!$('fSessions').value)return alert('Please enter sessions.');
   if(!$('fBook').value)    return alert('Please select a book.');
   if(!$('fStartPage').value||!$('fEndPage').value) return alert('Please select pages.');
+  if(n($('fEndPage').value) < n($('fStartPage').value)) return alert('⚠️ End page cannot be less than start page. Please check your entries.');
   if(!$('fReaction').value)return alert('Please select a reaction.');
 
   // Duplicate week check
@@ -1349,14 +1463,43 @@ $('submitReadingBtn').addEventListener('click', async()=>{
 });
 
 /* ══════════════════════════════════════════════════
+   PASSWORD MODAL
+══════════════════════════════════════════════════ */
+let _modalCallback = null;
+function openPasswordModal(subtitle, callback){
+  _modalCallback = callback;
+  $('pwModalSub').textContent = subtitle;
+  $('pwModalInput').value = '';
+  $('pwModalError').style.display = 'none';
+  $('pwModal').classList.add('open');
+  setTimeout(()=>$('pwModalInput').focus(), 100);
+}
+function closePasswordModal(){ $('pwModal').classList.remove('open'); }
+
+$('pwModalCancel').addEventListener('click', closePasswordModal);
+$('pwModal').addEventListener('click', e=>{ if(e.target===$('pwModal')) closePasswordModal(); });
+$('pwModalConfirm').addEventListener('click', ()=>{
+  if($('pwModalInput').value !== CONFIG.TEACHER_PASSWORD){
+    $('pwModalError').style.display='block';
+    $('pwModalInput').value='';
+    $('pwModalInput').focus();
+    return;
+  }
+  closePasswordModal();
+  if(_modalCallback) _modalCallback();
+});
+$('pwModalInput').addEventListener('keydown', e=>{ if(e.key==='Enter') $('pwModalConfirm').click(); });
+
+/* ══════════════════════════════════════════════════
    TEACHER DASHBOARD
 ══════════════════════════════════════════════════ */
 $('researchLink').addEventListener('click',()=>showPanel('researchPanel'));
 $('researchBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
 $('teacherLoginLink').addEventListener('click',()=>{
-  if(prompt('Teacher password:')!==CONFIG.TEACHER_PASSWORD){ alert('Incorrect.'); return; }
-  showPanel('teacherPanel'); loadTeacherData();
+  openPasswordModal('Enter the teacher password to access the dashboard.', ()=>{
+    showPanel('teacherPanel'); loadTeacherData();
+  });
 });
 $('tBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
@@ -1684,8 +1827,12 @@ $('exportImplBtn').addEventListener('click',()=>{
    IMPLEMENTATION CHECK
 ══════════════════════════════════════════════════ */
 $('implLoginLink').addEventListener('click',()=>{
-  if(prompt('Teacher password:')!==CONFIG.TEACHER_PASSWORD){ alert('Incorrect.'); return; }
-  showPanel('implementationPanel');
+  openPasswordModal('Enter the teacher password to access the Implementation Check.', ()=>{
+    showPanel('implementationPanel');
+    // Auto-select current week
+    const cw=getCurrentWeek();
+    if(cw) $('implWeek').value=cw;
+  });
 });
 $('implBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
