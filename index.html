@@ -469,6 +469,39 @@
       body{background:#fff;}
       .hero-t{background:#234a7d!important;-webkit-print-color-adjust:exact;color-adjust:exact;}
     }
+
+    /* ── ER Slot Booking ── */
+    .er-lesson-block{margin-bottom:22px;}
+    .er-lesson-hdr{
+      font-size:.88rem;font-weight:700;color:var(--brand);
+      margin-bottom:12px;padding:9px 14px;
+      background:linear-gradient(90deg,#f0f4ff,#f8faff);
+      border-radius:8px;border-left:4px solid var(--brand);
+      display:flex;align-items:center;gap:8px;
+    }
+    .er-slots{display:flex;flex-wrap:wrap;gap:10px;}
+    .er-slot{
+      border:2px solid var(--line);border-radius:12px;
+      padding:13px 18px;min-width:165px;cursor:pointer;
+      transition:all .15s;background:#fff;text-align:center;
+      box-shadow:0 1px 4px rgba(36,52,71,.06);
+    }
+    .er-slot:hover:not(.er-booked-other){
+      border-color:var(--brand2);
+      box-shadow:0 3px 10px rgba(35,74,125,.13);
+      transform:translateY(-1px);
+    }
+    .er-slot.er-booked-other{cursor:not-allowed;}
+    .er-slot.er-booked-mine{cursor:pointer;}
+    .er-slot.er-booked-mine:hover{opacity:.85;transform:none;}
+    .er-slot-time{font-size:.92rem;font-weight:700;margin-bottom:4px;}
+    .er-slot-name{font-size:.78rem;line-height:1.3;}
+    .er-slot-avail{font-size:.78rem;color:var(--muted);}
+    .er-week-header{
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:10px;margin-bottom:18px;
+      padding-bottom:14px;border-bottom:1px solid var(--line);
+    }
   </style>
 </head>
 <body>
@@ -986,6 +1019,40 @@
       <div style="margin-top:12px;font-size:.8rem;color:var(--muted);">These students have no reading entry for the current week. Filter by teacher above to narrow the list.</div>
     </div>
 
+    <!-- ER Slot Booking -->
+    <div class="t-panel" style="margin-bottom:18px;border-top:4px solid #234a7d;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+        <h3 style="font-size:1rem;font-weight:700;">📅 ER Slot Booking</h3>
+        <span style="font-size:.8rem;color:var(--muted);background:#f0f4ff;padding:4px 12px;border-radius:20px;border:1px solid #c7d7f0;">One teacher per 20-min slot — exclusive booking</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;align-items:flex-end;">
+        <div>
+          <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:4px;font-weight:600;">Your name</label>
+          <select id="erTeacher" style="padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.9rem;color:var(--ink);background:#fff;">
+            <option value="">Select your name</option>
+            <option>Mr Midlane</option><option>Mr Pottas</option><option>Ms Liu</option>
+            <option>Mr McQuay</option><option>Ms Wade-Dunn</option><option>Mr Meyer</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:4px;font-weight:600;">Week</label>
+          <select id="erWeek" style="padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:.9rem;color:var(--ink);background:#fff;">
+            <option value="">Select week</option>
+            <option value="1">Week 1 (20 Apr – 26 Apr)</option>
+            <option value="2">Week 2 (27 Apr – 3 May)</option>
+            <option value="3">Week 3 (4 May – 10 May)</option>
+            <option value="4">Week 4 (11 May – 17 May)</option>
+            <option value="5">Week 5 (18 May – 24 May)</option>
+            <option value="6">Week 6 (25 May – 31 May)</option>
+            <option value="7">Week 7 (1 Jun – 5 Jun)</option>
+          </select>
+        </div>
+      </div>
+      <div id="erBookingDisplay">
+        <div style="color:var(--muted);font-size:.9rem;text-align:center;padding:24px;background:#f8fafc;border-radius:10px;">Select your name and week above to view available slots.</div>
+      </div>
+    </div>
+
     <!-- Class progress chart -->
     <div class="t-panel" style="margin-bottom:18px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
@@ -1294,7 +1361,7 @@ const BOOKS = [
 ];
 
 /* ── State ── */
-const state = { readingEntries:[], implementationEntries:[], currentStudent:null };
+const state = { readingEntries:[], implementationEntries:[], erBookings:[], currentStudent:null };
 let weeklyChart = null;
 
 /* ══════════════════════════════════════════════════
@@ -1705,7 +1772,11 @@ async function loadTeacherData(){
     const data=await binGet();
     state.readingEntries        = data.readingEntries        ||[];
     state.implementationEntries = data.implementationEntries ||[];
+    state.erBookings            = data.erBookings            ||[];
+    // Auto-set ER week to current week
+    const cw2=getCurrentWeek(); if(cw2&&!$('erWeek').value) $('erWeek').value=cw2;
     renderTeacherDashboard();
+    renderERBooking();
     toast('Data refreshed.');
   } catch(e){ alert('Could not load: '+e.message); }
   finally{ btn.disabled=false; btn.innerHTML='🔄 Refresh data'; }
@@ -2153,6 +2224,148 @@ function openStuDetail(studentNumber){
   $('stuDetailModal').classList.add('open');
 }
 $('stuDetailModal').addEventListener('click',e=>{if(e.target===$('stuDetailModal'))$('stuDetailModal').classList.remove('open');});
+
+/* ══════════════════════════════════════════════════
+   ER SLOT BOOKING
+══════════════════════════════════════════════════ */
+const ER_LESSONS = [
+  {
+    id:'g9-wed',
+    label:'📗 Grade 9 — Wednesday (Periods 1 & 2)',
+    slots:[
+      {id:'g9-wed-1',time:'8:20 – 8:40'},
+      {id:'g9-wed-2',time:'8:40 – 9:00'},
+      {id:'g9-wed-3',time:'9:05 – 9:25'},
+      {id:'g9-wed-4',time:'9:25 – 9:45'},
+    ]
+  },
+  {
+    id:'g11-mon',
+    label:'📘 Grade 11 — Monday (Period 1)',
+    slots:[
+      {id:'g11-mon-1',time:'8:20 – 8:40'},
+      {id:'g11-mon-2',time:'8:40 – 9:00'},
+    ]
+  },
+  {
+    id:'g11-tue',
+    label:'📘 Grade 11 — Tuesday (Double, after lunch)',
+    slots:[
+      {id:'g11-tue-1',time:'13:00 – 13:20'},
+      {id:'g11-tue-2',time:'13:20 – 13:40'},
+      {id:'g11-tue-3',time:'13:45 – 14:05'},
+      {id:'g11-tue-4',time:'14:05 – 14:25'},
+    ]
+  },
+  {
+    id:'g11-thu',
+    label:'📘 Grade 11 — Thursday (Period 5)',
+    slots:[
+      {id:'g11-thu-1',time:'11:35 – 11:55'},
+      {id:'g11-thu-2',time:'11:55 – 12:15'},
+    ]
+  },
+  {
+    id:'g11-fri',
+    label:'📘 Grade 11 — Friday (Periods 6 & 7)',
+    slots:[
+      {id:'g11-fri-1',time:'13:00 – 13:20'},
+      {id:'g11-fri-2',time:'13:20 – 13:40'},
+      {id:'g11-fri-3',time:'13:45 – 14:05'},
+      {id:'g11-fri-4',time:'14:05 – 14:25'},
+    ]
+  },
+];
+
+const TEACHER_COLORS = {
+  'Mr Midlane':   {bg:'#234a7d',text:'#fff'},
+  'Mr Pottas':    {bg:'#276749',text:'#fff'},
+  'Ms Liu':       {bg:'#c05621',text:'#fff'},
+  'Mr McQuay':    {bg:'#553c9a',text:'#fff'},
+  'Ms Wade-Dunn': {bg:'#b7791f',text:'#fff'},
+  'Mr Meyer':     {bg:'#2c7a7b',text:'#fff'},
+};
+
+function renderERBooking(){
+  const teacher = $('erTeacher').value;
+  const week    = $('erWeek').value;
+  if(!teacher || !week){
+    $('erBookingDisplay').innerHTML = '<div style="color:var(--muted);font-size:.9rem;text-align:center;padding:24px;background:#f8fafc;border-radius:10px;">Select your name and week above to view available slots.</div>';
+    return;
+  }
+  const weekBookings = (state.erBookings||[]).filter(b=>String(b.week)===String(week));
+  const weekLabel = WEEKS.find(w=>w.value===String(week))?.label||`Week ${week}`;
+
+  const html = `
+    <div class="er-week-header">
+      <div style="font-size:.92rem;font-weight:700;color:var(--ink);">Bookings for <span style="color:var(--brand);">${weekLabel}</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">${Object.entries(TEACHER_COLORS).map(([t,c])=>`
+        <span style="background:${c.bg};color:${c.text};font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;">${t}</span>
+      `).join('')}</div>
+    </div>
+    ${ER_LESSONS.map(lesson=>{
+      const slotsHtml = lesson.slots.map(slot=>{
+        const bk = weekBookings.find(b=>b.slotId===slot.id);
+        if(bk){
+          const col = TEACHER_COLORS[bk.teacher]||{bg:'#718096',text:'#fff'};
+          const isMe = bk.teacher===teacher;
+          return `<div class="er-slot ${isMe?'er-booked-mine':'er-booked-other'}"
+            style="background:${col.bg};border-color:${col.bg};color:${col.text};"
+            ${isMe?`onclick="releaseERSlot('${slot.id}')" title="Click to release your booking"`:`title="Booked by ${bk.teacher}"`}>
+            <div class="er-slot-time">${slot.time}</div>
+            <div class="er-slot-name">${bk.teacher}${isMe?' <small style="opacity:.8;">(tap to release)</small>':''}</div>
+          </div>`;
+        } else {
+          return `<div class="er-slot" onclick="bookERSlot('${slot.id}')" title="Click to book this slot">
+            <div class="er-slot-time" style="color:var(--brand);">${slot.time}</div>
+            <div class="er-slot-avail">✦ Available</div>
+          </div>`;
+        }
+      }).join('');
+      return `<div class="er-lesson-block">
+        <div class="er-lesson-hdr">${lesson.label}</div>
+        <div class="er-slots">${slotsHtml}</div>
+      </div>`;
+    }).join('')}`;
+
+  $('erBookingDisplay').innerHTML = html;
+}
+
+async function bookERSlot(slotId){
+  const teacher = $('erTeacher').value;
+  const week    = $('erWeek').value;
+  if(!teacher) return alert('Please select your name first.');
+  if(!week)    return alert('Please select a week first.');
+  const existing = (state.erBookings||[]).find(b=>b.slotId===slotId&&String(b.week)===String(week));
+  if(existing) return alert(`This slot is already booked by ${existing.teacher}.`);
+  try{
+    toast('⏳ Booking slot…');
+    const data = await binGet();
+    if(!Array.isArray(data.erBookings)) data.erBookings=[];
+    data.erBookings.push({slotId, teacher, week:String(week), timestamp:new Date().toISOString()});
+    await binPut(data);
+    state.erBookings = data.erBookings;
+    toast('✅ Slot booked!');
+    renderERBooking();
+  } catch(e){ alert('Could not book slot: '+e.message); }
+}
+
+async function releaseERSlot(slotId){
+  const teacher = $('erTeacher').value;
+  const week    = $('erWeek').value;
+  if(!confirm('Release your booking for this slot?')) return;
+  try{
+    toast('⏳ Releasing slot…');
+    const data = await binGet();
+    data.erBookings = (data.erBookings||[]).filter(b=>!(b.slotId===slotId&&String(b.week)===String(week)&&b.teacher===teacher));
+    await binPut(data);
+    state.erBookings = data.erBookings;
+    toast('✅ Slot released.');
+    renderERBooking();
+  } catch(e){ alert('Could not release: '+e.message); }
+}
+
+['erTeacher','erWeek'].forEach(id=>$(id).addEventListener('change', renderERBooking));
 
 /* ── QR Code ── */
 new QRCode($('qrcode'), {
