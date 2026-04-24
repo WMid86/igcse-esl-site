@@ -1449,11 +1449,33 @@ async function binPut(data){
   if(!r.ok) throw new Error(`PUT ${r.status}`);
 }
 async function appendEntry(type, entry){
-  const data=await binGet();
-  if(!Array.isArray(data.readingEntries))        data.readingEntries=[];
-  if(!Array.isArray(data.implementationEntries)) data.implementationEntries=[];
-  (type==='reading' ? data.readingEntries : data.implementationEntries).push(entry);
-  await binPut(data);
+  // Retry loop guards against race conditions when two students submit simultaneously.
+  // Each attempt re-fetches the latest data before writing, so no entry is overwritten.
+  const MAX_TRIES = 4;
+  for(let attempt=1; attempt<=MAX_TRIES; attempt++){
+    try{
+      // Random jitter (0–800ms) spreads simultaneous requests apart
+      if(attempt > 1) await new Promise(r=>setTimeout(r, Math.random()*800 + 200*attempt));
+      const data=await binGet();
+      if(!Array.isArray(data.readingEntries))        data.readingEntries=[];
+      if(!Array.isArray(data.implementationEntries)) data.implementationEntries=[];
+      // Deduplicate: don't add if an identical entry (same student+week+book) already exists
+      const arr = type==='reading' ? data.readingEntries : data.implementationEntries;
+      const isDupe = type==='reading' && arr.some(e=>
+        e.studentNumber===entry.studentNumber &&
+        String(e.week)===String(entry.week) &&
+        e.bookTitle===entry.bookTitle &&
+        e.startPage===entry.startPage &&
+        e.endPage===entry.endPage
+      );
+      if(isDupe) return; // already saved (probably from a previous retry)
+      arr.push(entry);
+      await binPut(data);
+      return; // success
+    } catch(e){
+      if(attempt===MAX_TRIES) throw e;
+    }
+  }
 }
 
 /* ══════════════════════════════════════════════════
