@@ -1771,6 +1771,7 @@ async function loadTeacherData(){
   try{
     const data=await binGet();
     state.readingEntries        = data.readingEntries        ||[];
+    state.allReading            = data.readingEntries        ||[];
     state.implementationEntries = data.implementationEntries ||[];
     state.erBookings            = data.erBookings            ||[];
     // Auto-set ER week to current week
