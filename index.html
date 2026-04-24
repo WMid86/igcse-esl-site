@@ -915,14 +915,14 @@
           <input type="number" id="fPages" readonly/>
         </div>
         <div class="fg3">
-          <label for="fReaction">Reaction (1–5) / 感受</label>
+          <label for="fReaction">Reaction / 感受 (1–5)</label>
           <select id="fReaction">
-            <option value="">Select</option>
-            <option value="1">1 – Disliked</option>
-            <option value="2">2</option>
-            <option value="3">3 – Neutral</option>
-            <option value="4">4</option>
-            <option value="5">5 – Loved it</option>
+            <option value="">-- Select / 请选择 --</option>
+            <option value="1">⭐ 1 – Disliked it / 不喜欢</option>
+            <option value="2">⭐⭐ 2 – Didn't enjoy much / 不太喜欢</option>
+            <option value="3">⭐⭐⭐ 3 – It was OK / 还可以</option>
+            <option value="4">⭐⭐⭐⭐ 4 – Enjoyed it / 喜欢</option>
+            <option value="5">⭐⭐⭐⭐⭐ 5 – Loved it! / 非常喜欢</option>
           </select>
         </div>
         <div class="fg12">
@@ -1114,7 +1114,7 @@
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:12px;">Teacher implementation checks</h3>
       <div class="t-table-wrap">
         <table class="t-table full-table">
-          <thead><tr><th>Date</th><th>Teacher</th><th>Grade</th><th>Week</th><th>ER Run</th><th>Minutes</th><th>Books Ready</th><th>Modelled</th><th>Pair Share</th><th>Notes</th><th></th></tr></thead>
+          <thead><tr><th>Date</th><th>Teacher</th><th>Grade</th><th>Week</th><th>ER Run</th><th>Minutes</th><th>Books Ready</th><th>Modelled</th><th>Pair Share</th><th>Notes</th><th>Confidence</th><th>Reflection</th><th></th></tr></thead>
           <tbody id="tImplBody"></tbody>
         </table>
       </div>
@@ -1282,6 +1282,21 @@
         <div class="fg12">
           <label for="implNotes">Notes</label>
           <textarea id="implNotes" placeholder="Resourcing, student engagement, barriers…"></textarea>
+        </div>
+        <div class="fg4">
+          <label for="implConfidence">How confident do you feel about the programme this week? <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+          <select id="implConfidence" style="background:#f8fafc;">
+            <option value="">Select</option>
+            <option value="5">5 — Very confident, going really well</option>
+            <option value="4">4 — Confident, mostly on track</option>
+            <option value="3">3 — Mixed feelings, some concerns</option>
+            <option value="2">2 — Struggling, need support</option>
+            <option value="1">1 — Very difficult this week</option>
+          </select>
+        </div>
+        <div class="fg12">
+          <label for="implReflection">Weekly reflection — how is the programme going from your perspective? <span style="color:var(--muted);font-weight:400;">(optional, 1–2 sentences)</span></label>
+          <textarea id="implReflection" placeholder="What's working well? Any concerns? How are students responding?…" style="background:#f8fafc;min-height:80px;"></textarea>
         </div>
       </div>
       <div class="btn-row">
@@ -1464,7 +1479,14 @@ function getPinValue(){ return pinInputs.map(b=>b.value).join(''); }
 
 function tryAutoLogin(){
   const val = getPinValue();
-  if(val.length>=3 && STUDENT_MAP[val]) attemptLogin();
+  // Only auto-login if the typed ID is an exact match AND no student exists
+  // whose ID starts with these digits (i.e. typing more digits won't find someone else).
+  // This prevents a 3-digit student ID from hijacking a student typing a 4-digit ID.
+  if(val.length < 1) return;
+  if(!STUDENT_MAP[val]) return; // no match yet, keep waiting
+  const hasLongerMatch = STUDENTS.some(s => s.studentNumber !== val && s.studentNumber.startsWith(val));
+  if(hasLongerMatch) return; // a longer ID starts with these digits — wait for more input
+  attemptLogin();
 }
 
 function attemptLogin(){
@@ -1932,7 +1954,7 @@ function renderTeacherDashboard(){
 
   // Full tables
   $('tReadingBody').innerHTML=reading.length?reading.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td><span onclick="openStuDetail('${e.studentNumber}')" style="cursor:pointer;color:var(--brand);font-weight:700;text-decoration:underline;">${e.studentNumber||''}</span></td><td>${e.grade||''}</td><td>${e.teacher||''}</td><td>W${e.week||''}</td><td>${n(e.minutesRead)}</td><td>${n(e.sessions)}</td><td>${e.bookTitle||''}</td><td>${n(e.pagesRead)}</td><td>${n(e.reaction)}</td><td>${e.comment||''}</td><td><button onclick="deleteReadingEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="12" style="color:var(--muted)">No entries match this filter.</td></tr>';
-  $('tImplBody').innerHTML=impl.length?impl.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.teacher||''}</td><td>${e.grade||''}</td><td>W${e.week||''}</td><td>${e.erRanThisWeek||''}</td><td>${n(e.minutesAllocated)}</td><td>${e.booksReady||''}</td><td>${e.teacherModelledReading||''}</td><td>${e.pairShareDone||''}</td><td>${e.notes||''}</td><td><button onclick="deleteImplEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="11" style="color:var(--muted)">No entries match this filter.</td></tr>';
+  $('tImplBody').innerHTML=impl.length?impl.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.teacher||''}</td><td>${e.grade||''}</td><td>W${e.week||''}</td><td>${e.erRanThisWeek||''}</td><td>${n(e.minutesAllocated)}</td><td>${e.booksReady||''}</td><td>${e.teacherModelledReading||''}</td><td>${e.pairShareDone||''}</td><td>${e.notes||''}</td><td>${e.confidenceRating||'—'}</td><td style="font-size:.8rem;max-width:200px;white-space:pre-wrap;">${e.weeklyReflection||''}</td><td><button onclick="deleteImplEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="13" style="color:var(--muted)">No entries match this filter.</td></tr>';
 
   // Render progress chart using ALL reading entries (not just filtered)
   renderProgressChart(state.readingEntries);
@@ -2149,7 +2171,7 @@ $('exportReadingBtn').addEventListener('click',()=>{
 });
 $('exportImplBtn').addEventListener('click',()=>{
   const i=filteredImpl(); if(!i.length){alert('No data.');return;}
-  downloadCsv([['Date','Teacher','Grade','Week','ERRan','Minutes','BooksReady','Modelled','PairShare','Notes'],...i.map(e=>[fmtDate(e.timestamp),e.teacher,e.grade,e.week,e.erRanThisWeek,e.minutesAllocated,e.booksReady,e.teacherModelledReading,e.pairShareDone,e.notes])],'implementation_checks.csv');
+  downloadCsv([['Date','Teacher','Grade','Week','ERRan','Minutes','BooksReady','Modelled','PairShare','Notes','Confidence','Reflection'],...i.map(e=>[fmtDate(e.timestamp),e.teacher,e.grade,e.week,e.erRanThisWeek,e.minutesAllocated,e.booksReady,e.teacherModelledReading,e.pairShareDone,e.notes,e.confidenceRating||'',e.weeklyReflection||''])],'implementation_checks.csv');
 });
 
 /* ══════════════════════════════════════════════════
@@ -2187,9 +2209,11 @@ $('implSubmitBtn').addEventListener('click', async()=>{
       teacherModelledReading:$('implModelled').value,
       pairShareDone:         $('implPairShare').value,
       notes:                 $('implNotes').value.trim(),
+      confidenceRating:      $('implConfidence').value,
+      weeklyReflection:      $('implReflection').value.trim(),
     });
     toast('✅ Implementation check saved!');
-    ['implTeacher','implGrade','implWeek','implERRan','implBooks','implModelled','implPairShare','implNotes'].forEach(id=>$(id).value='');
+    ['implTeacher','implGrade','implWeek','implERRan','implBooks','implModelled','implPairShare','implNotes','implConfidence','implReflection'].forEach(id=>$(id).value='');
     $('implMinutes').value='';
   } catch(e){ alert('Could not save: '+e.message); }
   finally{ btn.disabled=false; btn.innerHTML='Submit implementation check'; }
