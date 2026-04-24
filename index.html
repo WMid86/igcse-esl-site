@@ -1686,12 +1686,22 @@ $('submitReadingBtn').addEventListener('click', async()=>{
   if(n($('fEndPage').value) < n($('fStartPage').value)) return alert('⚠️ End page cannot be less than start page. Please check your entries.');
   if(!$('fReaction').value)return alert('Please select a reaction.');
 
-  // Duplicate week check
+  // Max 2 entries per week check
   const selWeek=$('fWeek').value;
-  const duplicate=state.readingEntries.find(e=>String(e.week)===selWeek);
-  if(duplicate){
-    const wLabel=WEEKS.find(w=>w.value===selWeek)?.label||`Week ${selWeek}`;
-    if(!confirm(`⚠️ You already have a reading entry for ${wLabel}.\n\nSubmit another entry for the same week?`)) return;
+  const wLabel=WEEKS.find(w=>w.value===selWeek)?.label||`Week ${selWeek}`;
+  const weekEntries=state.readingEntries.filter(e=>String(e.week)===selWeek);
+  if(weekEntries.length>=2) return alert(`⚠️ You have already submitted 2 reading entries for ${wLabel}.\n\nThe maximum is 2 entries per week. Please speak to your teacher if you need help.`);
+  if(weekEntries.length===1){
+    if(!confirm(`⚠️ You already have one entry for ${wLabel}.\n\nThis will be your 2nd and final entry for this week. Are you sure you want to continue?`)) return;
+  }
+
+  // Page cap warning by level
+  const PAGE_CAPS={'Starter':12,'Stage 1':16,'Stage 2':20,'Stage 3':20,'Stage 4':28,'Stage 5':34,'Stage 6':40};
+  const lvl=$('fLevel').value;
+  const pgs=n($('fPages').value);
+  const cap=PAGE_CAPS[lvl];
+  if(cap&&pgs>cap){
+    if(!confirm(`⚠️ You've entered ${pgs} pages for a ${lvl} book.\n\nThat seems quite high for one week — please double-check your start and end pages are correct.\n\nClick OK only if you are sure this is right.`)) return;
   }
 
   const btn=$('submitReadingBtn');
@@ -2249,16 +2259,6 @@ const ER_LESSONS = [
       {id:'g9-wed-2',time:'8:40 – 9:00'},
       {id:'g9-wed-3',time:'9:05 – 9:25'},
       {id:'g9-wed-4',time:'9:25 – 9:45'},
-    ]
-  },
-  {
-    id:'g9-fri',
-    label:'📗 Grade 9 — Friday (Periods 8 & 9)',
-    slots:[
-      {id:'g9-fri-1',time:'14:30 – 14:50'},
-      {id:'g9-fri-2',time:'14:50 – 15:10'},
-      {id:'g9-fri-3',time:'15:15 – 15:35'},
-      {id:'g9-fri-4',time:'15:35 – 15:55'},
     ]
   },
   // ── Grade 11 ──
