@@ -2016,6 +2016,7 @@ function toggleNotLogged(){
 const LEVEL_ORDER = ['Starter','Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6'];
 
 function renderBookBox(){
+  const SPARE_BUFFER = 5; // extra copies added per box regardless of logged data
   const reading = state.allReading || [];
   const grid = $('bookBoxGrid');
   if(!reading.length){
@@ -2023,37 +2024,49 @@ function renderBookBox(){
     return;
   }
 
-  const teachers = [...new Set(STUDENTS.map(s=>s.teacher))].sort();
-
   // Build global title popularity by level (across all teachers) for stretch recommendations
-  const globalLevelTitles = {}; // level -> {title -> count}
+  const globalLevelTitles = {};
   reading.forEach(e=>{
     if(!e.level||!e.bookTitle) return;
     if(!globalLevelTitles[e.level]) globalLevelTitles[e.level]={};
     globalLevelTitles[e.level][e.bookTitle]=(globalLevelTitles[e.level][e.bookTitle]||0)+1;
   });
 
-  grid.innerHTML = teachers.map(teacher=>{
-    const teacherStudents = STUDENTS.filter(s=>s.teacher===teacher);
-    const teacherReading  = reading.filter(e=>e.teacher===teacher);
+  // Build list of boxes — split Mr Midlane by grade, everyone else stays whole
+  const boxes = [];
+  const teachers = [...new Set(STUDENTS.map(s=>s.teacher))].sort();
+  teachers.forEach(teacher=>{
+    const grades = [...new Set(STUDENTS.filter(s=>s.teacher===teacher).map(s=>s.grade))].sort();
+    if(teacher==='Mr Midlane' && grades.length>1){
+      grades.forEach(grade=>boxes.push({teacher, grade, label:`${teacher} — Grade ${grade}`}));
+    } else {
+      boxes.push({teacher, grade:null, label:teacher});
+    }
+  });
+
+  function buildBox({teacher, grade, label}){
+    const teacherStudents = STUDENTS.filter(s=>s.teacher===teacher&&(!grade||s.grade===grade));
+    const teacherReading  = reading.filter(e=>e.teacher===teacher&&(!grade||e.grade===grade));
     const color = (TEACHER_COLORS[teacher]||{bg:'#234a7d'}).bg;
+    const classSz = teacherStudents.length;
 
     if(!teacherReading.length){
       return `<div style="background:#fff;border:2px solid ${color}22;border-top:4px solid ${color};border-radius:12px;padding:18px;">
-        <div style="font-weight:700;color:${color};margin-bottom:8px;">📦 ${teacher}</div>
-        <div style="color:var(--muted);font-size:.85rem;">No reading entries yet from this teacher's students.</div>
+        <div style="font-weight:700;color:${color};margin-bottom:8px;">📦 ${label}</div>
+        <div style="color:var(--muted);font-size:.85rem;">No reading entries yet from this group's students.</div>
       </div>`;
     }
 
-    // Count unique students currently reading each title (most recent entry per student per title)
-    const stuTitles = {}; // studentNumber -> Set of titles
-    teacherReading.forEach(e=>{
-      if(!stuTitles[e.studentNumber]) stuTitles[e.studentNumber]=new Set();
-      stuTitles[e.studentNumber].add(e.bookTitle);
-    });
+    // Unique students who have logged at least one entry
+    const loggedStuSet = new Set(teacherReading.map(e=>e.studentNumber));
+    const loggedCount  = loggedStuSet.size;
 
-    // Build level -> title -> {students, level} map
-    const levelMap = {}; // level -> title -> {stuCount, level}
+    // Scale factor: project logged patterns onto full class size
+    // e.g. if 16/22 logged, scale by 22/16 = 1.375
+    const scaleFactor = loggedCount > 0 ? classSz / loggedCount : 1;
+
+    // Build level -> title -> unique students Set
+    const levelMap = {};
     teacherReading.forEach(e=>{
       if(!e.level||!e.bookTitle) return;
       if(!levelMap[e.level]) levelMap[e.level]={};
@@ -2061,7 +2074,7 @@ function renderBookBox(){
       levelMap[e.level][e.bookTitle].add(e.studentNumber);
     });
 
-    // Determine dominant levels for this teacher's students
+    // Dominant level for stretch recommendation
     const levelCounts = {};
     Object.entries(levelMap).forEach(([lv,titles])=>{
       levelCounts[lv]=Object.values(titles).reduce((s,set)=>s+set.size,0);
@@ -2069,25 +2082,35 @@ function renderBookBox(){
     const dominantLevel = Object.entries(levelCounts).sort((a,b)=>b[1]-a[1])[0]?.[0];
     const stretchLevel  = dominantLevel ? LEVEL_ORDER[Math.min(LEVEL_ORDER.indexOf(dominantLevel)+1, LEVEL_ORDER.length-1)] : null;
 
-    // Build box rows by level
+    // Total projected copies across all titles (for distributing spare buffer)
+    const allTitleEntries = Object.values(levelMap).flatMap(titles=>Object.entries(titles));
+    const totalProjected  = allTitleEntries.reduce((s,[,set])=>s+Math.ceil(set.size*scaleFactor),0);
+
+    // Build rows by level
     const rows = LEVEL_ORDER.filter(lv=>levelMap[lv]).map(lv=>{
-      const titles = Object.entries(levelMap[lv])
-        .sort((a,b)=>b[1].size-a[1].size)
-        .map(([title,stuSet])=>{
-          const copies = Math.max(1, stuSet.size);
-          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#f8fafc;border-radius:7px;margin-bottom:4px;font-size:.83rem;">
-            <span style="flex:1;color:var(--ink);">📖 ${title}</span>
-            <span style="background:${color}18;color:${color};font-weight:700;padding:2px 10px;border-radius:20px;white-space:nowrap;">${copies} cop${copies===1?'y':'ies'}</span>
-          </div>`;
-        }).join('');
-      const totalCopies = Object.values(levelMap[lv]).reduce((s,set)=>s+Math.max(1,set.size),0);
+      const titleEntries = Object.entries(levelMap[lv]).sort((a,b)=>b[1].size-a[1].size);
+      let levelTotal = 0;
+      const titleRows = titleEntries.map(([title,stuSet])=>{
+        const projected = Math.ceil(stuSet.size * scaleFactor);
+        // Distribute spare buffer proportionally across titles
+        const spare     = Math.round(SPARE_BUFFER * (stuSet.size / loggedCount));
+        const copies    = projected + spare;
+        levelTotal += copies;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#f8fafc;border-radius:7px;margin-bottom:4px;font-size:.83rem;">
+          <span style="flex:1;color:var(--ink);">📖 ${title}</span>
+          <div style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
+            <span style="font-size:.75rem;color:var(--muted);">${stuSet.size} logged →</span>
+            <span style="background:${color}18;color:${color};font-weight:700;padding:2px 10px;border-radius:20px;">${copies} cop${copies===1?'y':'ies'}</span>
+          </div>
+        </div>`;
+      }).join('');
       return `<div style="margin-bottom:10px;">
-        <div style="font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;padding:0 2px;">${lv} <span style="font-weight:400;color:#aaa;">— ${totalCopies} total</span></div>
-        ${titles}
+        <div style="font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;padding:0 2px;">${lv} <span style="font-weight:400;color:#aaa;">— ${levelTotal} total</span></div>
+        ${titleRows}
       </div>`;
     }).join('');
 
-    // Stretch recommendation — most popular title at next level not already in this teacher's box
+    // Stretch recommendation
     let stretchHtml = '';
     if(stretchLevel && globalLevelTitles[stretchLevel]){
       const alreadyHave = new Set(Object.keys(levelMap[stretchLevel]||{}));
@@ -2097,28 +2120,29 @@ function renderBookBox(){
       if(stretchRec){
         stretchHtml=`<div style="margin-top:10px;padding:10px 12px;background:#f0fff4;border:1px solid #c6f6d5;border-radius:8px;">
           <div style="font-size:.75rem;font-weight:700;color:#2f855a;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">💡 Stretch recommendation (${stretchLevel})</div>
-          <div style="font-size:.84rem;color:var(--ink);">📖 <strong>${stretchRec[0]}</strong> — popular with ${stretchRec[1]} student${stretchRec[1]!==1?'s':''} across the programme. Add 1–2 copies for higher ability students.</div>
+          <div style="font-size:.84rem;color:var(--ink);">📖 <strong>${stretchRec[0]}</strong> — popular with ${stretchRec[1]} student${stretchRec[1]!==1?'s':''} elsewhere in the programme. Add 1–2 copies for higher ability students.</div>
         </div>`;
       }
     }
 
-    // Total students with entries vs class size
-    const activeStu   = Object.keys(stuTitles).length;
-    const classSz     = teacherStudents.length;
-    const noEntries   = classSz - activeStu;
-    const summaryBar  = `<div style="font-size:.8rem;color:var(--muted);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line);">
-      <strong style="color:${color};">${activeStu}/${classSz}</strong> students have submitted entries
-      ${noEntries>0?`· <span style="color:#c05621;">${noEntries} not yet logged</span>`:'· <span style="color:#2f855a;">✅ all logged</span>'}
+    // Summary bar
+    const noEntries = classSz - loggedCount;
+    const summaryBar = `<div style="font-size:.8rem;color:var(--muted);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line);">
+      <strong style="color:${color};">${loggedCount}/${classSz}</strong> students logged
+      ${noEntries>0?`· <span style="color:#c05621;">${noEntries} absent/not yet logged</span>`:'· <span style="color:#2f855a;">✅ all logged</span>'}
+      · <span style="color:#718096;font-style:italic;">counts scaled to full class + ${SPARE_BUFFER} spare</span>
     </div>`;
 
     return `<div style="background:#fff;border:2px solid ${color}22;border-top:4px solid ${color};border-radius:12px;padding:18px;">
-      <div style="font-weight:700;color:${color};font-size:1rem;margin-bottom:4px;">📦 ${teacher}</div>
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px;">${teacherStudents[0]?.grade?`Grade ${teacherStudents[0].grade} · `:''}${teacherStudents[0]?.class||''}</div>
+      <div style="font-weight:700;color:${color};font-size:1rem;margin-bottom:4px;">📦 ${label}</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px;">${grade?`Grade ${grade} · `:''}${teacherStudents[0]?.class||''}</div>
       ${summaryBar}
       ${rows}
       ${stretchHtml}
     </div>`;
-  }).join('');
+  }
+
+  grid.innerHTML = boxes.map(buildBox).join('');
 }
 
 /* ── Teacher progress chart ── */
