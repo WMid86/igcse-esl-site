@@ -2014,10 +2014,6 @@ function toggleNotLogged(){
    BOOK BOX BUILDER
 ══════════════════════════════════════════════════ */
 const LEVEL_ORDER = ['Starter','Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6'];
-const TEACHER_COLORS = {
-  'Mr Midlane':'#234a7d','Mr Pottas':'#2f855a','Ms Liu':'#c05621',
-  'Mr McQuay':'#553c9a','Ms Wade-Dunn':'#b7791f','Mr Meyer':'#2c7a7b'
-};
 
 function renderBookBox(){
   const reading = state.allReading || [];
@@ -2040,7 +2036,7 @@ function renderBookBox(){
   grid.innerHTML = teachers.map(teacher=>{
     const teacherStudents = STUDENTS.filter(s=>s.teacher===teacher);
     const teacherReading  = reading.filter(e=>e.teacher===teacher);
-    const color = TEACHER_COLORS[teacher] || '#234a7d';
+    const color = (TEACHER_COLORS[teacher]||{bg:'#234a7d'}).bg;
 
     if(!teacherReading.length){
       return `<div style="background:#fff;border:2px solid ${color}22;border-top:4px solid ${color};border-radius:12px;padding:18px;">
