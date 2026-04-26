@@ -1009,16 +1009,6 @@
       <div class="cards-row" id="tKpiCards"></div>
     </div>
 
-    <!-- Not logged this week alert -->
-    <div class="t-panel" id="notLoggedPanel" style="margin-bottom:18px;display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-        <h3 style="font-size:1rem;font-weight:700;color:#c05621;">⚠️ Not logged this week — <span id="notLoggedWeekLabel"></span></h3>
-        <span id="notLoggedCount" style="background:#fff4ea;border:1px solid #f1d4ba;color:#c05621;font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:20px;"></span>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;" id="notLoggedGrid"></div>
-      <div style="margin-top:12px;font-size:.8rem;color:var(--muted);">These students have no reading entry for the current week. Filter by teacher above to narrow the list.</div>
-    </div>
-
     <!-- ER Slot Booking -->
     <div class="t-panel" style="margin-bottom:18px;border-top:4px solid #234a7d;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
@@ -1050,6 +1040,20 @@
       </div>
       <div id="erBookingDisplay">
         <div style="color:var(--muted);font-size:.9rem;text-align:center;padding:24px;background:#f8fafc;border-radius:10px;">Select your name and week above to view available slots.</div>
+      </div>
+    </div>
+
+    <!-- Book Box Builder -->
+    <div class="t-panel" style="margin-bottom:18px;border-top:4px solid #2f855a;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+        <div>
+          <h3 style="font-size:1rem;font-weight:700;">📦 Book Box Builder</h3>
+          <p style="font-size:.82rem;color:var(--muted);margin-top:3px;">Based on live reading data — what each teacher's box should contain this week.</p>
+        </div>
+        <button class="btn btn-muted" onclick="renderBookBox()" style="font-size:.85rem;padding:7px 14px;">🔄 Refresh boxes</button>
+      </div>
+      <div id="bookBoxGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
+        <div style="color:var(--muted);font-size:.9rem;padding:20px;background:#f8fafc;border-radius:10px;grid-column:1/-1;text-align:center;">Refresh data above to generate box recommendations.</div>
       </div>
     </div>
 
@@ -1097,6 +1101,21 @@
             <tbody id="tWeekBody"></tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- Not logged this week — collapsible, at bottom -->
+    <div class="t-panel" id="notLoggedPanel" style="margin-bottom:18px;display:none;border-top:4px solid #c05621;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;cursor:pointer;" onclick="toggleNotLogged()">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <h3 style="font-size:1rem;font-weight:700;color:#c05621;">⚠️ Not logged this week — <span id="notLoggedWeekLabel"></span></h3>
+          <span id="notLoggedCount" style="background:#fff4ea;border:1px solid #f1d4ba;color:#c05621;font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:20px;"></span>
+        </div>
+        <span id="notLoggedToggleIcon" style="color:#c05621;font-size:1.1rem;font-weight:700;">▼ Show</span>
+      </div>
+      <div id="notLoggedCollapsible" style="display:none;margin-top:14px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;" id="notLoggedGrid"></div>
+        <div style="margin-top:12px;font-size:.8rem;color:var(--muted);">These students have no reading entry for the current week. Filter by teacher above to narrow the list.</div>
       </div>
     </div>
 
@@ -1849,6 +1868,7 @@ async function loadTeacherData(){
     const cw2=getCurrentWeek(); if(cw2&&!$('erWeek').value) $('erWeek').value=cw2;
     renderTeacherDashboard();
     renderERBooking();
+    renderBookBox();
     toast('Data refreshed.');
   } catch(e){ alert('Could not load: '+e.message); }
   finally{ btn.disabled=false; btn.innerHTML='🔄 Refresh data'; }
@@ -1980,6 +2000,129 @@ function renderTeacherDashboard(){
 
   // Render progress chart using ALL reading entries (not just filtered)
   renderProgressChart(state.readingEntries);
+}
+
+function toggleNotLogged(){
+  const body=$('notLoggedCollapsible');
+  const icon=$('notLoggedToggleIcon');
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  icon.textContent=open?'▲ Hide':'▼ Show';
+}
+
+/* ══════════════════════════════════════════════════
+   BOOK BOX BUILDER
+══════════════════════════════════════════════════ */
+const LEVEL_ORDER = ['Starter','Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6'];
+const TEACHER_COLORS = {
+  'Mr Midlane':'#234a7d','Mr Pottas':'#2f855a','Ms Liu':'#c05621',
+  'Mr McQuay':'#553c9a','Ms Wade-Dunn':'#b7791f','Mr Meyer':'#2c7a7b'
+};
+
+function renderBookBox(){
+  const reading = state.allReading || [];
+  const grid = $('bookBoxGrid');
+  if(!reading.length){
+    grid.innerHTML='<div style="color:var(--muted);font-size:.9rem;padding:20px;background:#f8fafc;border-radius:10px;grid-column:1/-1;text-align:center;">No reading data yet — students need to submit entries first.</div>';
+    return;
+  }
+
+  const teachers = [...new Set(STUDENTS.map(s=>s.teacher))].sort();
+
+  // Build global title popularity by level (across all teachers) for stretch recommendations
+  const globalLevelTitles = {}; // level -> {title -> count}
+  reading.forEach(e=>{
+    if(!e.level||!e.bookTitle) return;
+    if(!globalLevelTitles[e.level]) globalLevelTitles[e.level]={};
+    globalLevelTitles[e.level][e.bookTitle]=(globalLevelTitles[e.level][e.bookTitle]||0)+1;
+  });
+
+  grid.innerHTML = teachers.map(teacher=>{
+    const teacherStudents = STUDENTS.filter(s=>s.teacher===teacher);
+    const teacherReading  = reading.filter(e=>e.teacher===teacher);
+    const color = TEACHER_COLORS[teacher] || '#234a7d';
+
+    if(!teacherReading.length){
+      return `<div style="background:#fff;border:2px solid ${color}22;border-top:4px solid ${color};border-radius:12px;padding:18px;">
+        <div style="font-weight:700;color:${color};margin-bottom:8px;">📦 ${teacher}</div>
+        <div style="color:var(--muted);font-size:.85rem;">No reading entries yet from this teacher's students.</div>
+      </div>`;
+    }
+
+    // Count unique students currently reading each title (most recent entry per student per title)
+    const stuTitles = {}; // studentNumber -> Set of titles
+    teacherReading.forEach(e=>{
+      if(!stuTitles[e.studentNumber]) stuTitles[e.studentNumber]=new Set();
+      stuTitles[e.studentNumber].add(e.bookTitle);
+    });
+
+    // Build level -> title -> {students, level} map
+    const levelMap = {}; // level -> title -> {stuCount, level}
+    teacherReading.forEach(e=>{
+      if(!e.level||!e.bookTitle) return;
+      if(!levelMap[e.level]) levelMap[e.level]={};
+      if(!levelMap[e.level][e.bookTitle]) levelMap[e.level][e.bookTitle]=new Set();
+      levelMap[e.level][e.bookTitle].add(e.studentNumber);
+    });
+
+    // Determine dominant levels for this teacher's students
+    const levelCounts = {};
+    Object.entries(levelMap).forEach(([lv,titles])=>{
+      levelCounts[lv]=Object.values(titles).reduce((s,set)=>s+set.size,0);
+    });
+    const dominantLevel = Object.entries(levelCounts).sort((a,b)=>b[1]-a[1])[0]?.[0];
+    const stretchLevel  = dominantLevel ? LEVEL_ORDER[Math.min(LEVEL_ORDER.indexOf(dominantLevel)+1, LEVEL_ORDER.length-1)] : null;
+
+    // Build box rows by level
+    const rows = LEVEL_ORDER.filter(lv=>levelMap[lv]).map(lv=>{
+      const titles = Object.entries(levelMap[lv])
+        .sort((a,b)=>b[1].size-a[1].size)
+        .map(([title,stuSet])=>{
+          const copies = Math.max(1, stuSet.size);
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#f8fafc;border-radius:7px;margin-bottom:4px;font-size:.83rem;">
+            <span style="flex:1;color:var(--ink);">📖 ${title}</span>
+            <span style="background:${color}18;color:${color};font-weight:700;padding:2px 10px;border-radius:20px;white-space:nowrap;">${copies} cop${copies===1?'y':'ies'}</span>
+          </div>`;
+        }).join('');
+      const totalCopies = Object.values(levelMap[lv]).reduce((s,set)=>s+Math.max(1,set.size),0);
+      return `<div style="margin-bottom:10px;">
+        <div style="font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;padding:0 2px;">${lv} <span style="font-weight:400;color:#aaa;">— ${totalCopies} total</span></div>
+        ${titles}
+      </div>`;
+    }).join('');
+
+    // Stretch recommendation — most popular title at next level not already in this teacher's box
+    let stretchHtml = '';
+    if(stretchLevel && globalLevelTitles[stretchLevel]){
+      const alreadyHave = new Set(Object.keys(levelMap[stretchLevel]||{}));
+      const stretchRec  = Object.entries(globalLevelTitles[stretchLevel])
+        .filter(([t])=>!alreadyHave.has(t))
+        .sort((a,b)=>b[1]-a[1])[0];
+      if(stretchRec){
+        stretchHtml=`<div style="margin-top:10px;padding:10px 12px;background:#f0fff4;border:1px solid #c6f6d5;border-radius:8px;">
+          <div style="font-size:.75rem;font-weight:700;color:#2f855a;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;">💡 Stretch recommendation (${stretchLevel})</div>
+          <div style="font-size:.84rem;color:var(--ink);">📖 <strong>${stretchRec[0]}</strong> — popular with ${stretchRec[1]} student${stretchRec[1]!==1?'s':''} across the programme. Add 1–2 copies for higher ability students.</div>
+        </div>`;
+      }
+    }
+
+    // Total students with entries vs class size
+    const activeStu   = Object.keys(stuTitles).length;
+    const classSz     = teacherStudents.length;
+    const noEntries   = classSz - activeStu;
+    const summaryBar  = `<div style="font-size:.8rem;color:var(--muted);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line);">
+      <strong style="color:${color};">${activeStu}/${classSz}</strong> students have submitted entries
+      ${noEntries>0?`· <span style="color:#c05621;">${noEntries} not yet logged</span>`:'· <span style="color:#2f855a;">✅ all logged</span>'}
+    </div>`;
+
+    return `<div style="background:#fff;border:2px solid ${color}22;border-top:4px solid ${color};border-radius:12px;padding:18px;">
+      <div style="font-weight:700;color:${color};font-size:1rem;margin-bottom:4px;">📦 ${teacher}</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px;">${teacherStudents[0]?.grade?`Grade ${teacherStudents[0].grade} · `:''}${teacherStudents[0]?.class||''}</div>
+      ${summaryBar}
+      ${rows}
+      ${stretchHtml}
+    </div>`;
+  }).join('');
 }
 
 /* ── Teacher progress chart ── */
