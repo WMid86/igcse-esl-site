@@ -462,12 +462,100 @@
 
     /* ── Print styles ── */
     @media print{
-      #landingPanel,#studentPanel,#implementationPanel,#researchPanel,#actionResearchPanel,
+      #landingPanel,#studentPanel,#teacherSurveyPanel,#researchPanel,#actionResearchPanel,
       .btn,.btn-row-t,#refreshBtn,#deleteStudentBtn,.modal-overlay{display:none!important;}
       .t-table-wrap{overflow:visible!important;}
       .full-table{min-width:0!important;}
       body{background:#fff;}
       .hero-t{background:#234a7d!important;-webkit-print-color-adjust:exact;color-adjust:exact;}
+    }
+
+    /* ── Landing page — teacher & admin access section ── */
+    .lp-access{
+      position:relative;z-index:2;
+      padding:0 40px 40px;max-width:1200px;width:100%;margin:0 auto;
+    }
+    @media(max-width:900px){.lp-access{padding:0 20px 32px;}}
+    .lp-access-inner{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:20px;padding:28px 32px;
+      display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+    }
+    @media(max-width:700px){.lp-access-inner{grid-template-columns:1fr;gap:16px;}}
+    .lp-access-label{
+      font-size:.72rem;font-weight:700;color:rgba(255,255,255,.4);
+      letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;
+    }
+    .lp-teacher-btns{display:flex;flex-wrap:wrap;gap:10px;}
+    .lp-teacher-btn{
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+      color:#fff;font-size:.88rem;font-weight:600;
+      padding:10px 20px;border-radius:10px;cursor:pointer;
+      transition:all .15s;white-space:nowrap;
+    }
+    .lp-teacher-btn:hover{
+      background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);
+      transform:translateY(-1px);
+    }
+    .lp-admin-btn{
+      background:rgba(240,180,41,.12);border:1px solid rgba(240,180,41,.35);
+      color:#f0b429;font-size:.85rem;font-weight:700;
+      padding:12px 24px;border-radius:10px;cursor:pointer;
+      transition:all .15s;white-space:nowrap;letter-spacing:.02em;
+    }
+    .lp-admin-btn:hover{
+      background:rgba(240,180,41,.22);border-color:rgba(240,180,41,.6);
+      transform:translateY(-1px);
+    }
+
+    /* ── Teacher Survey Page ── */
+    .survey-wrap{max-width:780px;margin:0 auto;padding:24px;}
+    .survey-hero{
+      background:linear-gradient(135deg,#234a7d 0%,#1a3a6b 100%);
+      border-radius:16px;padding:28px 32px;margin-bottom:24px;color:#fff;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    }
+    .survey-teacher-name{font-size:1.5rem;font-weight:800;margin-bottom:4px;}
+    .survey-sub{font-size:.88rem;opacity:.75;}
+    .survey-section{
+      background:#fff;border-radius:14px;padding:24px 28px;
+      box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--line);
+    }
+    .survey-section h3{font-size:.78rem;font-weight:700;color:var(--muted);
+      letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;
+      padding-bottom:10px;border-bottom:1px solid var(--line);}
+    .survey-q{margin-bottom:18px;}
+    .survey-q label{display:block;font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:8px;}
+    .survey-q label span{font-weight:400;color:var(--muted);}
+    .survey-q select,.survey-q input,.survey-q textarea{
+      width:100%;padding:10px 14px;border:1.5px solid var(--line);
+      border-radius:9px;font-size:.9rem;color:var(--ink);background:#f8fafc;
+      font-family:inherit;
+    }
+    .survey-q select:focus,.survey-q input:focus,.survey-q textarea:focus{
+      border-color:var(--brand2);outline:none;background:#fff;
+    }
+    .survey-q textarea{min-height:72px;resize:vertical;}
+    .survey-barriers{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+    .survey-barrier-chip{
+      display:flex;align-items:center;gap:7px;
+      padding:7px 14px;border:1.5px solid var(--line);border-radius:20px;
+      cursor:pointer;font-size:.83rem;font-weight:600;color:var(--muted);
+      background:#f8fafc;transition:all .12s;user-select:none;
+    }
+    .survey-barrier-chip input{display:none;}
+    .survey-barrier-chip.selected{
+      border-color:var(--brand);color:var(--brand);background:#eef4fb;
+    }
+    .survey-history{
+      background:#fff;border-radius:14px;padding:20px 24px;
+      box-shadow:var(--shadow);border:1px solid var(--line);margin-top:16px;
+    }
+    .survey-history h3{font-size:.85rem;font-weight:700;color:var(--ink);margin-bottom:12px;}
+    .survey-hist-entry{
+      padding:12px;background:#f8fafc;border-radius:8px;margin-bottom:8px;
+      font-size:.82rem;color:var(--ink);border-left:4px solid var(--brand);
     }
 
     /* ── ER Slot Booking ── */
@@ -612,11 +700,29 @@
 
   </div>
 
+  <!-- Teacher + Admin access -->
+  <div class="lp-access">
+    <div class="lp-access-inner">
+      <div>
+        <div class="lp-access-label">👩‍🏫 I'm a teacher — tap your name</div>
+        <div class="lp-teacher-btns">
+          <button class="lp-teacher-btn" onclick="openTeacherSurvey('Mr Midlane')">Mr Midlane</button>
+          <button class="lp-teacher-btn" onclick="openTeacherSurvey('Mr Pottas')">Mr Pottas</button>
+          <button class="lp-teacher-btn" onclick="openTeacherSurvey('Ms Liu')">Ms Liu</button>
+          <button class="lp-teacher-btn" onclick="openTeacherSurvey('Mr McQuay')">Mr McQuay</button>
+          <button class="lp-teacher-btn" onclick="openTeacherSurvey('Ms Wade-Dunn')">Ms Wade-Dunn</button>
+          <button class="lp-teacher-btn" onclick="openTeacherSurvey('Mr Meyer')">Mr Meyer</button>
+        </div>
+      </div>
+      <button class="lp-admin-btn" id="adminLoginBtn">🔐 Administrator</button>
+    </div>
+  </div>
+
   <!-- Footer links -->
   <div class="lp-footer">
     <a id="researchLink">📚 Research &amp; Resources</a>
-    <a id="teacherLoginLink">🔐 Teacher Dashboard</a>
-    <a id="implLoginLink">📋 Implementation Check</a>
+    <a id="teacherLoginLink" style="display:none;"></a>
+    <a id="implLoginLink" style="display:none;"></a>
   </div>
 
 </div>
@@ -996,7 +1102,7 @@
       <div class="btn-row-t">
         <button class="btn btn-muted" id="refreshBtn">🔄 Refresh data</button>
         <button class="btn btn-green" id="exportReadingBtn">⬇ Export reading CSV</button>
-        <button class="btn" style="background:var(--warn);color:#fff;" id="exportImplBtn">⬇ Export implementation CSV</button>
+        <button class="btn" style="background:var(--warn);color:#fff;" id="exportImplBtn">⬇ Export survey CSV</button>
         <button class="btn" style="background:#553c9a;color:#fff;" onclick="window.print()">🖨️ Print</button>
       </div>
       <!-- Delete student history tool -->
@@ -1130,7 +1236,9 @@
       </div>
     </div>
     <div class="t-panel">
-      <h3 style="font-size:1rem;font-weight:700;margin-bottom:12px;">Teacher implementation checks</h3>
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:12px;">📋 Teacher fortnightly surveys</h3>
+      <!-- Survey completion tracker -->
+      <div id="surveyTracker" style="margin-bottom:16px;"></div>
       <div class="t-table-wrap">
         <table class="t-table full-table">
           <thead><tr><th>Date</th><th>Teacher</th><th>Grade</th><th>Week</th><th>ER Run</th><th>Minutes</th><th>Books Ready</th><th>Modelled</th><th>Pair Share</th><th>Notes</th><th>Confidence</th><th>Reflection</th><th></th></tr></thead>
@@ -1226,100 +1334,132 @@
 <!-- ══════════════════════════════════════════
      IMPLEMENTATION CHECK
 ══════════════════════════════════════════ -->
-<div id="implementationPanel" class="hidden">
-  <div class="impl-wrap">
-    <div class="hero-t" style="margin-bottom:20px;">
+<div id="teacherSurveyPanel" class="hidden">
+  <div class="survey-wrap">
+    <div class="survey-hero">
       <div>
-        <h2>✅ Teacher Implementation Check</h2>
-        <p>Record whether ER routines were delivered this week.</p>
+        <div class="survey-teacher-name" id="surveyTeacherName">Mr Midlane</div>
+        <div class="survey-sub">Fortnightly ER Survey — takes about 3 minutes</div>
       </div>
-      <button class="btn btn-ghost" id="implBackBtn" style="background:rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:8px 16px;">← Back</button>
+      <button class="btn btn-ghost" id="surveyBackBtn" style="background:rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:8px 16px;">← Back</button>
     </div>
-    <div class="t-panel">
-      <div class="form-grid">
-        <div class="fg4">
-          <label for="implTeacher">Teacher</label>
-          <select id="implTeacher">
-            <option value="">Select teacher</option>
-            <option>Mr Midlane</option><option>Mr Pottas</option><option>Ms Liu</option>
-            <option>Mr McQuay</option><option>Ms Wade-Dunn</option><option>Mr Meyer</option>
-          </select>
-        </div>
-        <div class="fg4">
-          <label for="implGrade">Grade</label>
-          <select id="implGrade">
-            <option value="">Select grade</option>
-            <option value="9">Grade 9</option>
-            <option value="11">Grade 11</option>
-          </select>
-        </div>
-        <div class="fg4">
-          <label for="implWeek">Week</label>
-          <select id="implWeek">
-            <option value="">Select week</option>
-            <option value="1">Week 1 (20 Apr – 26 Apr)</option>
-            <option value="2">Week 2 (27 Apr – 3 May)</option>
-            <option value="3">Week 3 (4 May – 10 May)</option>
-            <option value="4">Week 4 (11 May – 17 May)</option>
-            <option value="5">Week 5 (18 May – 24 May)</option>
-            <option value="6">Week 6 (25 May – 31 May)</option>
-            <option value="7">Week 7 (1 Jun – 5 Jun)</option>
-          </select>
-        </div>
-        <div class="fg4">
-          <label for="implERRan">Did ER happen this week?</label>
-          <select id="implERRan">
-            <option value="">Select</option>
-            <option value="Yes">Yes</option><option value="Partly">Partly</option><option value="No">No</option>
-          </select>
-        </div>
-        <div class="fg4">
-          <label for="implMinutes">Minutes allocated</label>
-          <input type="number" id="implMinutes" min="0" placeholder="e.g. 30"/>
-        </div>
-        <div class="fg4">
-          <label for="implBooks">Books available?</label>
-          <select id="implBooks">
-            <option value="">Select</option>
-            <option value="Yes">Yes</option><option value="Mostly">Mostly</option><option value="No">No</option>
-          </select>
-        </div>
-        <div class="fg4">
-          <label for="implModelled">Teacher modelled reading?</label>
-          <select id="implModelled">
-            <option value="">Select</option>
-            <option value="Yes">Yes</option><option value="No">No</option>
-          </select>
-        </div>
-        <div class="fg4">
-          <label for="implPairShare">Pair share done?</label>
-          <select id="implPairShare">
-            <option value="">Select</option>
-            <option value="Yes">Yes</option><option value="No">No</option>
-          </select>
-        </div>
-        <div class="fg12">
-          <label for="implNotes">Notes</label>
-          <textarea id="implNotes" placeholder="Resourcing, student engagement, barriers…"></textarea>
-        </div>
-        <div class="fg4">
-          <label for="implConfidence">How confident do you feel about the programme this week? <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
-          <select id="implConfidence" style="background:#f8fafc;">
-            <option value="">Select</option>
-            <option value="5">5 — Very confident, going really well</option>
-            <option value="4">4 — Confident, mostly on track</option>
-            <option value="3">3 — Mixed feelings, some concerns</option>
-            <option value="2">2 — Struggling, need support</option>
-            <option value="1">1 — Very difficult this week</option>
-          </select>
-        </div>
-        <div class="fg12">
-          <label for="implReflection">Weekly reflection — how is the programme going from your perspective? <span style="color:var(--muted);font-weight:400;">(optional, 1–2 sentences)</span></label>
-          <textarea id="implReflection" placeholder="What's working well? Any concerns? How are students responding?…" style="background:#f8fafc;min-height:80px;"></textarea>
+
+    <!-- Previous surveys -->
+    <div class="survey-history" id="surveyHistory" style="display:none;">
+      <h3>📋 Your previous survey responses</h3>
+      <div id="surveyHistoryBody"></div>
+    </div>
+
+    <!-- Survey form -->
+    <div class="survey-section">
+      <h3>📝 Fortnightly survey — <span id="surveyFortnightLabel">Fortnight 1</span></h3>
+
+      <div class="survey-q">
+        <label>How many ER sessions did you complete in the last two weeks?</label>
+        <select id="svSessions">
+          <option value="">Select</option>
+          <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>Approximately how many minutes of ER did students complete in total? <span>(estimate)</span></label>
+        <input type="number" id="svMinutes" placeholder="e.g. 120" min="0"/>
+      </div>
+
+      <div class="survey-q">
+        <label>How well are students settling into the reading routine?<br><span>1 = not yet settled &nbsp;·&nbsp; 5 = very settled</span></label>
+        <select id="svSettling">
+          <option value="">Select</option>
+          <option value="1">1 — Not yet settled</option>
+          <option value="2">2</option>
+          <option value="3">3 — Getting there</option>
+          <option value="4">4</option>
+          <option value="5">5 — Very settled</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>Are students generally choosing books at an appropriate level?</label>
+        <select id="svLevel">
+          <option value="">Select</option>
+          <option>Yes</option><option>Mostly</option><option>Sometimes</option><option>No</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>How often did students need to change books because the level was too difficult or too easy?</label>
+        <select id="svLevelChanges">
+          <option value="">Select</option>
+          <option>Never</option><option>1–2 students</option><option>Several students</option><option>Many students</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>What level or type of books are students using most?</label>
+        <select id="svBookLevels">
+          <option value="">Select</option>
+          <option>Starter</option><option>Stage 1</option><option>Stage 2</option><option>Stage 3</option>
+          <option>Stage 4</option><option>Graphic novels</option><option>Magazines</option><option>Mixed</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>What was student engagement like overall?</label>
+        <select id="svEngagement">
+          <option value="">Select</option>
+          <option>Low</option><option>Mixed</option><option>Good</option><option>Very strong</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>What barriers affected implementation? <span>(tap all that apply)</span></label>
+        <div class="survey-barriers" id="svBarriersWrap">
+          <label class="survey-barrier-chip"><input type="checkbox" value="Time pressure"/> Time pressure</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Exams or assessments"/> Exams / assessments</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Students forgot books"/> Students forgot books</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Book level mismatch"/> Level mismatch</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Low motivation"/> Low motivation</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Classroom behaviour"/> Classroom behaviour</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Booking or resource issue"/> Booking/resource issue</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="No major barriers"/> No major barriers</label>
+          <label class="survey-barrier-chip"><input type="checkbox" value="Other"/> Other</label>
         </div>
       </div>
-      <div class="btn-row">
-        <button class="btn btn-green" id="implSubmitBtn">Submit implementation check</button>
+
+      <div class="survey-q">
+        <label>Did the website booking/log system work smoothly?</label>
+        <select id="svWebsite">
+          <option value="">Select</option>
+          <option>Yes</option><option>Mostly</option><option>Some issues</option><option>No</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>What is one thing that worked well?</label>
+        <textarea id="svWorkedWell" placeholder="e.g. Students settled quickly, a particular book was popular…"></textarea>
+      </div>
+
+      <div class="survey-q">
+        <label>What is one issue or support need for the next two weeks?</label>
+        <textarea id="svSupportNeeded" placeholder="e.g. Need more Stage 2 books, students unsure how to log…"></textarea>
+      </div>
+
+      <div class="survey-q">
+        <label>Do you think ER is beginning to support students' reading confidence or stamina?</label>
+        <select id="svConfidence">
+          <option value="">Select</option>
+          <option>Not yet</option><option>Slightly</option><option>Moderately</option><option>Clearly</option><option>Too early to tell</option>
+        </select>
+      </div>
+
+      <div class="survey-q">
+        <label>Any student comments, patterns, or observations worth noting? <span>(optional)</span></label>
+        <textarea id="svObservations" placeholder="e.g. Several students mentioned they read at home too…"></textarea>
+      </div>
+
+      <div style="margin-top:8px;">
+        <button class="btn btn-green" id="surveySubmitBtn" style="width:100%;padding:14px;font-size:1rem;">Submit fortnightly survey →</button>
       </div>
     </div>
   </div>
@@ -1336,6 +1476,19 @@ const CONFIG = {
   ADMIN_PASSWORD:   'wmidlane2026',
   BASE_URL:         'https://api.jsonbin.io/v3/b',
 };
+
+const FORTNIGHTS = [
+  { value:'1', label:'Fortnight 1 (20 Apr – 3 May)',  start:'2026-04-20' },
+  { value:'2', label:'Fortnight 2 (4 May – 17 May)',  start:'2026-05-04' },
+  { value:'3', label:'Fortnight 3 (18 May – 31 May)', start:'2026-05-18' },
+  { value:'4', label:'Fortnight 4 (1 Jun – 5 Jun)',   start:'2026-06-01' },
+];
+function getCurrentFortnight(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  let cur=null;
+  FORTNIGHTS.forEach(f=>{ const s=new Date(f.start); s.setHours(0,0,0,0); if(today>=s) cur=f.value; });
+  return cur;
+}
 
 const WEEKS = [
   { value:'1', label:'Week 1 (20 Apr – 26 Apr)', start:'2026-04-20' },
@@ -1415,7 +1568,7 @@ const BOOKS = [
 ];
 
 /* ── State ── */
-const state = { readingEntries:[], implementationEntries:[], erBookings:[], currentStudent:null };
+const state = { readingEntries:[], implementationEntries:[], erBookings:[], teacherSurveys:[], currentStudent:null, currentSurveyTeacher:null };
 let weeklyChart = null;
 
 /* ══════════════════════════════════════════════════
@@ -1431,7 +1584,7 @@ function toast(msg, ms=3000){
 }
 
 function showPanel(id){
-  ['landingPanel','studentPanel','teacherPanel','implementationPanel','researchPanel','actionResearchPanel']
+  ['landingPanel','studentPanel','teacherPanel','teacherSurveyPanel','researchPanel','actionResearchPanel']
     .forEach(p=>{
       const el=$(p);
       el.classList.toggle('hidden', p!==id);
@@ -1482,8 +1635,9 @@ async function appendEntry(type, entry){
       const data=await binGet();
       if(!Array.isArray(data.readingEntries))        data.readingEntries=[];
       if(!Array.isArray(data.implementationEntries)) data.implementationEntries=[];
+      if(!Array.isArray(data.teacherSurveys))        data.teacherSurveys=[];
       // Deduplicate: don't add if an identical entry (same student+week+book) already exists
-      const arr = type==='reading' ? data.readingEntries : data.implementationEntries;
+      const arr = type==='reading' ? data.readingEntries : type==='survey' ? data.teacherSurveys : data.implementationEntries;
       const isDupe = type==='reading' && arr.some(e=>
         e.studentNumber===entry.studentNumber &&
         String(e.week)===String(entry.week) &&
@@ -1853,10 +2007,17 @@ $('pwModalInput').addEventListener('keydown', e=>{ if(e.key==='Enter') $('pwModa
 $('researchLink').addEventListener('click',()=>showPanel('researchPanel'));
 $('researchBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
-$('teacherLoginLink').addEventListener('click',()=>{
-  openPasswordModal('Enter the teacher password to access the dashboard.', ()=>{
+// Admin login via button on landing page
+$('adminLoginBtn').addEventListener('click',()=>{
+  openPasswordModal('Enter the administrator password.', ()=>{
     showPanel('teacherPanel'); loadTeacherData();
-  });
+  }, CONFIG.ADMIN_PASSWORD);
+});
+// Keep hidden link working for backwards compat
+$('teacherLoginLink').addEventListener('click',()=>{
+  openPasswordModal('Enter the administrator password.', ()=>{
+    showPanel('teacherPanel'); loadTeacherData();
+  }, CONFIG.ADMIN_PASSWORD);
 });
 $('tBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
@@ -1868,6 +2029,7 @@ async function loadTeacherData(){
     state.allReading            = data.readingEntries        ||[];
     state.implementationEntries = data.implementationEntries ||[];
     state.erBookings            = data.erBookings            ||[];
+    state.teacherSurveys        = data.teacherSurveys        ||[];
     // Auto-set ER week to current week
     const cw2=getCurrentWeek(); if(cw2&&!$('erWeek').value) $('erWeek').value=cw2;
     renderTeacherDashboard();
@@ -2000,7 +2162,54 @@ function renderTeacherDashboard(){
 
   // Full tables
   $('tReadingBody').innerHTML=reading.length?reading.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td><span onclick="openStuDetail('${e.studentNumber}')" style="cursor:pointer;color:var(--brand);font-weight:700;text-decoration:underline;">${e.studentNumber||''}</span></td><td>${e.grade||''}</td><td>${e.teacher||''}</td><td>W${e.week||''}</td><td>${n(e.minutesRead)}</td><td>${n(e.sessions)}</td><td>${e.bookTitle||''}</td><td>${n(e.pagesRead)}</td><td>${n(e.reaction)}</td><td>${e.comment||''}</td><td><button onclick="deleteReadingEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="12" style="color:var(--muted)">No entries match this filter.</td></tr>';
-  $('tImplBody').innerHTML=impl.length?impl.map(e=>`<tr><td>${fmtDate(e.timestamp)}</td><td>${e.teacher||''}</td><td>${e.grade||''}</td><td>W${e.week||''}</td><td>${e.erRanThisWeek||''}</td><td>${n(e.minutesAllocated)}</td><td>${e.booksReady||''}</td><td>${e.teacherModelledReading||''}</td><td>${e.pairShareDone||''}</td><td>${e.notes||''}</td><td>${e.confidenceRating||'—'}</td><td style="font-size:.8rem;max-width:200px;white-space:pre-wrap;">${e.weeklyReflection||''}</td><td><button onclick="deleteImplEntry('${e.timestamp}')" style="background:none;border:none;cursor:pointer;font-size:1rem;opacity:.6;" title="Delete entry">🗑️</button></td></tr>`).join(''):'<tr><td colspan="13" style="color:var(--muted)">No entries match this filter.</td></tr>';
+  // Survey tracker
+  const surveys = state.teacherSurveys || [];
+  const allTeachers = [...new Set(STUDENTS.map(s=>s.teacher))].sort();
+  $('surveyTracker').innerHTML = `
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:.83rem;">
+        <thead><tr style="background:#f8fafc;">
+          <th style="padding:8px 12px;text-align:left;border-bottom:2px solid var(--line);">Teacher</th>
+          ${FORTNIGHTS.map(f=>`<th style="padding:8px 12px;text-align:center;border-bottom:2px solid var(--line);">${f.label}</th>`).join('')}
+        </tr></thead>
+        <tbody>${allTeachers.map(t=>`<tr>
+          <td style="padding:8px 12px;font-weight:600;border-bottom:1px solid var(--line);">${t}</td>
+          ${FORTNIGHTS.map(f=>{
+            const done=surveys.some(s=>s.teacher===t&&String(s.fortnight)===f.value);
+            return `<td style="padding:8px 12px;text-align:center;border-bottom:1px solid var(--line);">
+              ${done?'<span style="color:#2f855a;font-weight:700;">✅ Done</span>':'<span style="color:#c05621;opacity:.7;">⏳ Pending</span>'}
+            </td>`;
+          }).join('')}
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>
+    ${surveys.length?`<div style="margin-top:12px;overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:.8rem;">
+        <thead><tr style="background:#f8fafc;">
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Date</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Teacher</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Fortnight</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Sessions</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Settling</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Engagement</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Barriers</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Worked Well</th>
+          <th style="padding:6px 10px;text-align:left;border-bottom:2px solid var(--line);">Support Needed</th>
+        </tr></thead>
+        <tbody>${[...surveys].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp)).map(s=>`<tr>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);">${fmtDate(s.timestamp)}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);font-weight:600;">${s.teacher||''}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);">F${s.fortnight||''}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);">${s.sessions||''}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);">${s.settling||''}/5</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);">${s.engagement||''}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);max-width:140px;font-size:.75rem;">${s.barriers||''}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);max-width:160px;font-size:.75rem;font-style:italic;">${s.workedWell||''}</td>
+          <td style="padding:6px 10px;border-bottom:1px solid var(--line);max-width:160px;font-size:.75rem;">${s.supportNeeded||''}</td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>`:'<div style="color:var(--muted);font-size:.85rem;padding:12px 0;">No survey responses yet.</div>'}
+  `;
 
   // Render progress chart using ALL reading entries (not just filtered)
   renderProgressChart(state.readingEntries);
@@ -2359,53 +2568,94 @@ $('exportReadingBtn').addEventListener('click',()=>{
   downloadCsv([['Date','Student','Grade','Teacher','Week','Minutes','Sessions','Book','Author','Level','StartPage','EndPage','Pages','Reaction','Comment'],...r.map(e=>[fmtDate(e.timestamp),e.studentNumber,e.grade,e.teacher,e.week,e.minutesRead,e.sessions,e.bookTitle,e.author,e.level,e.startPage,e.endPage,e.pagesRead,e.reaction,e.comment])],'reading_entries.csv');
 });
 $('exportImplBtn').addEventListener('click',()=>{
-  const i=filteredImpl(); if(!i.length){alert('No data.');return;}
-  downloadCsv([['Date','Teacher','Grade','Week','ERRan','Minutes','BooksReady','Modelled','PairShare','Notes','Confidence','Reflection'],...i.map(e=>[fmtDate(e.timestamp),e.teacher,e.grade,e.week,e.erRanThisWeek,e.minutesAllocated,e.booksReady,e.teacherModelledReading,e.pairShareDone,e.notes,e.confidenceRating||'',e.weeklyReflection||''])],'implementation_checks.csv');
+  const s=state.teacherSurveys||[]; if(!s.length){alert('No survey data yet.');return;}
+  downloadCsv([['Date','Teacher','Fortnight','Sessions','Minutes','Settling','ApprLevel','LevelChanges','BookLevels','Engagement','Barriers','Website','WorkedWell','SupportNeeded','Confidence','Observations'],
+    ...s.map(e=>[fmtDate(e.timestamp),e.teacher,e.fortnight,e.sessions,e.minutesTotal,e.settling,e.appropriateLevel,e.levelChanges,e.bookLevels,e.engagement,e.barriers,e.websiteSmooth,e.workedWell,e.supportNeeded,e.confidence,e.observations])],'teacher_surveys.csv');
 });
 
 /* ══════════════════════════════════════════════════
-   IMPLEMENTATION CHECK
+   TEACHER SURVEY
 ══════════════════════════════════════════════════ */
-$('implLoginLink').addEventListener('click',()=>{
-  openPasswordModal('Enter the master password to access the Implementation Check.', ()=>{
-    showPanel('implementationPanel');
-    const cw=getCurrentWeek();
-    if(cw) $('implWeek').value=cw;
-  }, CONFIG.ADMIN_PASSWORD);
+// Chip toggle for barriers
+document.querySelectorAll('.survey-barrier-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>chip.classList.toggle('selected'));
 });
-$('implBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
 
-$('implSubmitBtn').addEventListener('click', async()=>{
-  if(!$('implTeacher').value) return alert('Please select a teacher.');
-  if(!$('implGrade').value)   return alert('Please select a grade.');
-  if(!$('implWeek').value)    return alert('Please select a week.');
-  if(!$('implERRan').value)   return alert('Please indicate whether ER ran.');
-  if(!$('implMinutes').value) return alert('Please enter minutes allocated.');
-  if(!$('implBooks').value)   return alert('Please select books status.');
-  if(!$('implModelled').value)return alert('Please indicate if teacher modelled reading.');
-  if(!$('implPairShare').value)return alert('Please indicate if pair share was done.');
+function getSelectedBarriers(){
+  return [...document.querySelectorAll('.survey-barrier-chip.selected')]
+    .map(c=>c.querySelector('input').value).join(', ');
+}
 
-  const btn=$('implSubmitBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
+async function openTeacherSurvey(teacher){
+  state.currentSurveyTeacher = teacher;
+  $('surveyTeacherName').textContent = teacher;
+  const cf = getCurrentFortnight();
+  const fn = FORTNIGHTS.find(f=>f.value===cf);
+  $('surveyFortnightLabel').textContent = fn ? fn.label : 'Current fortnight';
+
+  // Reset form
+  ['svSessions','svSettling','svLevel','svLevelChanges','svBookLevels','svEngagement','svWebsite','svConfidence']
+    .forEach(id=>$(id).value='');
+  ['svMinutes','svWorkedWell','svSupportNeeded','svObservations'].forEach(id=>$(id).value='');
+  document.querySelectorAll('.survey-barrier-chip').forEach(c=>c.classList.remove('selected'));
+
+  showPanel('teacherSurveyPanel');
+
+  // Load and show previous surveys for this teacher
   try{
-    await appendEntry('implementation',{
-      timestamp:             new Date().toISOString(),
-      teacher:               $('implTeacher').value,
-      grade:                 $('implGrade').value,
-      week:                  $('implWeek').value,
-      erRanThisWeek:         $('implERRan').value,
-      minutesAllocated:      n($('implMinutes').value),
-      booksReady:            $('implBooks').value,
-      teacherModelledReading:$('implModelled').value,
-      pairShareDone:         $('implPairShare').value,
-      notes:                 $('implNotes').value.trim(),
-      confidenceRating:      $('implConfidence').value,
-      weeklyReflection:      $('implReflection').value.trim(),
+    const data = await binGet();
+    state.teacherSurveys = data.teacherSurveys || [];
+    const mySurveys = state.teacherSurveys.filter(s=>s.teacher===teacher)
+      .sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    if(mySurveys.length){
+      $('surveyHistory').style.display='block';
+      $('surveyHistoryBody').innerHTML = mySurveys.map(s=>{
+        const ft = FORTNIGHTS.find(f=>f.value===String(s.fortnight));
+        return `<div class="survey-hist-entry">
+          <strong>${ft?ft.label:'Fortnight '+s.fortnight}</strong> — submitted ${fmtDate(s.timestamp)}<br>
+          <span style="color:var(--muted);">Sessions: ${s.sessions||'—'} · Engagement: ${s.engagement||'—'} · Settling: ${s.settling||'—'}/5</span><br>
+          ${s.workedWell?`<em>"${s.workedWell}"</em>`:''}
+        </div>`;
+      }).join('');
+    } else {
+      $('surveyHistory').style.display='none';
+    }
+  } catch(e){ /* non-fatal */ }
+}
+
+$('surveyBackBtn').addEventListener('click',()=>showPanel('landingPanel'));
+
+$('surveySubmitBtn').addEventListener('click', async()=>{
+  if(!$('svSessions').value)   return alert('Please select number of sessions completed.');
+  if(!$('svSettling').value)   return alert('Please rate how well students are settling.');
+  if(!$('svLevel').value)      return alert('Please answer the book level question.');
+  if(!$('svEngagement').value) return alert('Please rate student engagement.');
+
+  const cf = getCurrentFortnight();
+  const btn=$('surveySubmitBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving…';
+  try{
+    await appendEntry('survey',{
+      timestamp:      new Date().toISOString(),
+      teacher:        state.currentSurveyTeacher,
+      fortnight:      cf||'1',
+      sessions:       $('svSessions').value,
+      minutesTotal:   $('svMinutes').value,
+      settling:       $('svSettling').value,
+      appropriateLevel: $('svLevel').value,
+      levelChanges:   $('svLevelChanges').value,
+      bookLevels:     $('svBookLevels').value,
+      engagement:     $('svEngagement').value,
+      barriers:       getSelectedBarriers(),
+      websiteSmooth:  $('svWebsite').value,
+      workedWell:     $('svWorkedWell').value.trim(),
+      supportNeeded:  $('svSupportNeeded').value.trim(),
+      confidence:     $('svConfidence').value,
+      observations:   $('svObservations').value.trim(),
     });
-    toast('✅ Implementation check saved!');
-    ['implTeacher','implGrade','implWeek','implERRan','implBooks','implModelled','implPairShare','implNotes','implConfidence','implReflection'].forEach(id=>$(id).value='');
-    $('implMinutes').value='';
+    toast('✅ Survey submitted — thank you!');
+    showPanel('landingPanel');
   } catch(e){ alert('Could not save: '+e.message); }
-  finally{ btn.disabled=false; btn.innerHTML='Submit implementation check'; }
+  finally{ btn.disabled=false; btn.innerHTML='Submit fortnightly survey →'; }
 });
 
 /* ── Student detail modal ── */
