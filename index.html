@@ -1404,16 +1404,28 @@
       <!-- KPI strip -->
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:16px 0;" id="tpKpis"></div>
 
+      <!-- Participation by week -->
+      <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:16px;">
+        <div style="font-size:.95rem;font-weight:700;margin-bottom:14px;">📅 Weekly participation &amp; average minutes</div>
+        <div id="tpWeekTable" style="overflow-x:auto;"></div>
+      </div>
+
       <!-- Chart -->
       <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:16px;">
         <div style="font-size:.95rem;font-weight:700;margin-bottom:14px;">📈 Weekly reading minutes — your class</div>
         <div style="height:220px;position:relative;"><canvas id="tpChart"></canvas></div>
       </div>
 
-      <!-- Most popular books -->
-      <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:16px;">
-        <div style="font-size:.95rem;font-weight:700;margin-bottom:14px;">📚 Most popular books in your class</div>
-        <div id="tpPopularBooks"></div>
+      <!-- Books: most read + top rated -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line);">
+          <div style="font-size:.95rem;font-weight:700;margin-bottom:14px;">📚 Most-read books</div>
+          <div id="tpPopularBooks"></div>
+        </div>
+        <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line);">
+          <div style="font-size:.95rem;font-weight:700;margin-bottom:14px;">⭐ Top-rated by your students</div>
+          <div id="tpTopRated"></div>
+        </div>
       </div>
 
       <!-- Students not logged this week -->
@@ -1426,8 +1438,8 @@
       <div style="background:#fff;border-radius:14px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:16px;">
         <div style="font-size:.95rem;font-weight:700;margin-bottom:12px;">👥 All students — term summary</div>
         <div style="overflow-x:auto;">
-          <table class="t-table" style="min-width:500px;">
-            <thead><tr><th>Student</th><th>Grade</th><th>Entries</th><th>Total min</th><th>Avg ⭐</th><th>Last logged</th></tr></thead>
+          <table class="t-table" style="min-width:560px;">
+            <thead><tr><th>Student</th><th>Grade</th><th>Health</th><th>Entries</th><th>Total min</th><th>Avg min/wk</th><th>Avg ⭐</th><th>Last logged</th></tr></thead>
             <tbody id="tpStudentBody"></tbody>
           </table>
         </div>
@@ -1619,11 +1631,44 @@
 
     <!-- ── TAB: BOOK BOX ── -->
     <div id="tpBookBox" class="tp-tab-content" style="display:none;">
-      <div style="padding:16px 0;">
-        <div style="font-size:.9rem;color:var(--muted);margin-bottom:16px;">Based on your students' reading data — what your book box should contain this week.</div>
-        <div id="tpBookBoxContent" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
-          <div style="color:var(--muted);font-size:.9rem;padding:20px;background:#f8fafc;border-radius:10px;text-align:center;">Loading your book box data…</div>
+
+      <!-- Teacher reminders panel -->
+      <div style="background:linear-gradient(135deg,#1a3a5c,#234a7d);border-radius:14px;padding:22px 24px;margin-bottom:20px;color:#fff;">
+        <div style="font-size:1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.3rem;">🎯</span> Teacher reminders — ER best practice
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;font-size:.83rem;line-height:1.5;">
+            <div style="font-weight:700;margin-bottom:4px;">⏱️ Protected time</div>
+            Provide <strong>2 × 15-minute sessions</strong> of protected silent reading time each week — non-negotiable.
+          </div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;font-size:.83rem;line-height:1.5;">
+            <div style="font-weight:700;margin-bottom:4px;">📖 Model the habit</div>
+            Read your own book alongside students. When you read, they read. Your behaviour sets the tone.
+          </div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;font-size:.83rem;line-height:1.5;">
+            <div style="font-weight:700;margin-bottom:4px;">🚶 Walk &amp; connect</div>
+            Circulate quietly during reading. Lean in and ask: <em>"What's happening in your book?"</em> or <em>"Are you enjoying it?"</em>
+          </div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;font-size:.83rem;line-height:1.5;">
+            <div style="font-weight:700;margin-bottom:4px;">💬 Share your knowledge</div>
+            If you know their book, mention a character or idea — even one sentence builds a reading relationship.
+          </div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;font-size:.83rem;line-height:1.5;">
+            <div style="font-weight:700;margin-bottom:4px;">📊 Check the log</div>
+            Remind students to log their reading each session. Use this portal to spot students who have gone quiet.
+          </div>
+          <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;font-size:.83rem;line-height:1.5;">
+            <div style="font-weight:700;margin-bottom:4px;">🔄 Support book changes</div>
+            If a student isn't engaged, encourage them to swap — the right book matters more than finishing the wrong one.
+          </div>
+        </div>
+      </div>
+
+      <!-- Book box content -->
+      <div style="font-size:.9rem;color:var(--muted);margin-bottom:16px;">Based on your students' reading data — what your book box should contain this fortnight.</div>
+      <div id="tpBookBoxContent">
+        <div style="color:var(--muted);font-size:.9rem;padding:20px;background:#f8fafc;border-radius:10px;text-align:center;">Loading your book box data…</div>
       </div>
     </div>
 
@@ -2959,24 +3004,31 @@ function renderTeacherMyData(){
   const readings  = getFilteredReadings();
   const now       = new Date();
 
-  // Determine current week label
+  // Determine current week
   let currentWeek = WEEKS[WEEKS.length-1]?.value || '1';
   for(const w of WEEKS){
     const sd = new Date(w.start); sd.setHours(0,0,0,0);
     if(now >= sd) currentWeek = w.value;
   }
 
-  // KPIs
+  // Weeks that have started (for display)
+  const startedWeeks = WEEKS.filter(w=>{ const sd=new Date(w.start); sd.setHours(0,0,0,0); return now>=sd; });
+
+  // ── KPIs ──
   const totalMin  = readings.reduce((s,e)=>s+n(e.minutesRead),0);
   const totalPg   = readings.reduce((s,e)=>s+n(e.pagesRead),0);
   const totalEnt  = readings.length;
   const loggedStu = new Set(readings.map(e=>e.studentNumber)).size;
+  const avgMinPerStu = students.length
+    ? Math.round(totalMin / students.length)
+    : 0;
   const kpis = [
-    {val:students.length, lbl:'Students'},
-    {val:loggedStu,       lbl:'Logged at least once'},
-    {val:totalEnt,        lbl:'Total entries'},
-    {val:totalMin,        lbl:'Total minutes'},
-    {val:totalPg,         lbl:'Total pages'},
+    {val:students.length,  lbl:'Students'},
+    {val:loggedStu,        lbl:'Logged at least once'},
+    {val:totalEnt,         lbl:'Total entries'},
+    {val:totalMin,         lbl:'Total minutes'},
+    {val:avgMinPerStu,     lbl:'Avg min / student'},
+    {val:totalPg,          lbl:'Total pages'},
   ];
   $('tpKpis').innerHTML = kpis.map(k=>`
     <div class="tp-kpi">
@@ -2984,12 +3036,36 @@ function renderTeacherMyData(){
       <div class="tp-kpi-lbl">${k.lbl}</div>
     </div>`).join('');
 
-  // Chart — minutes per week for this teacher's class
+  // ── Weekly participation + avg minutes table ──
+  const wkTableRows = startedWeeks.map(w=>{
+    const wkReads = readings.filter(e=>e.week===w.value);
+    const wkStuds = new Set(wkReads.map(e=>e.studentNumber)).size;
+    const pct     = students.length ? Math.round(wkStuds/students.length*100) : 0;
+    const wkMins  = wkReads.reduce((a,e)=>a+n(e.minutesRead),0);
+    const avgMins = wkStuds ? Math.round(wkMins/wkStuds) : 0;
+    const bar     = `<div style="height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;">
+      <div style="height:100%;width:${pct}%;background:${pct>=80?'var(--green2)':pct>=50?'#f6ad55':'#fc8181'};border-radius:4px;transition:width .4s;"></div></div>`;
+    return `<tr>
+      <td style="font-size:.82rem;white-space:nowrap;">${w.label}</td>
+      <td style="text-align:center;">${wkStuds}/${students.length}</td>
+      <td style="min-width:100px;">${bar}</td>
+      <td style="text-align:center;font-weight:700;color:${pct>=80?'var(--green)':pct>=50?'#c05621':'var(--danger)'};">${pct}%</td>
+      <td style="text-align:center;">${avgMins} min</td>
+    </tr>`;
+  }).join('');
+  $('tpWeekTable').innerHTML = wkTableRows.length
+    ? `<table class="t-table" style="width:100%;font-size:.85rem;">
+        <thead><tr><th>Week</th><th style="text-align:center;">Students logged</th><th>Participation</th><th style="text-align:center;">Rate</th><th style="text-align:center;">Avg min/student</th></tr></thead>
+        <tbody>${wkTableRows}</tbody>
+      </table>`
+    : '<div style="color:var(--muted);font-size:.85rem;">No weekly data yet.</div>';
+
+  // ── Chart — minutes per week ──
   const weekMap={};
   WEEKS.forEach(w=>{ weekMap[w.value]=0; });
   readings.forEach(e=>{ if(weekMap[e.week]!==undefined) weekMap[e.week]+=n(e.minutesRead); });
-  const labels = WEEKS.map(w=>w.label||('Wk '+w.value));
-  const vals   = WEEKS.map(w=>weekMap[w.value]||0);
+  const labels = startedWeeks.map(w=>'Wk '+w.value);
+  const vals   = startedWeeks.map(w=>weekMap[w.value]||0);
 
   if(tpChartInst) tpChartInst.destroy();
   const ctx = $('tpChart');
@@ -3001,32 +3077,59 @@ function renderTeacherMyData(){
         datasets:[{
           label:'Minutes read',
           data:vals,
-          backgroundColor:'rgba(35,74,125,.7)',
+          backgroundColor:vals.map(v=>v>0?'rgba(35,74,125,.75)':'rgba(226,232,240,.6)'),
           borderRadius:6,
         }]
       },
       options:{
         responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+c.parsed.y+' minutes'}}},
         scales:{y:{beginAtZero:true,ticks:{font:{size:11}}},x:{ticks:{font:{size:11}}}}
       }
     });
   }
 
-  // Popular books
+  // ── Most-read books ──
   const bookCount={};
   readings.forEach(e=>{ if(e.bookTitle){ bookCount[e.bookTitle]=(bookCount[e.bookTitle]||0)+1; } });
-  const sorted = Object.entries(bookCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  $('tpPopularBooks').innerHTML = sorted.length
-    ? sorted.map(([title,cnt],i)=>`
+  const sortedByCount = Object.entries(bookCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  $('tpPopularBooks').innerHTML = sortedByCount.length
+    ? sortedByCount.map(([title,cnt],i)=>`
         <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);">
           <span style="font-weight:800;color:var(--brand);min-width:22px;">${i+1}.</span>
-          <span style="flex:1;font-size:.9rem;">${title}</span>
-          <span style="font-size:.8rem;color:var(--muted);background:#f3f6fb;border-radius:6px;padding:3px 10px;">${cnt} read${cnt!==1?'s':''}</span>
+          <span style="flex:1;font-size:.88rem;">${title}</span>
+          <span style="font-size:.8rem;color:var(--muted);background:#f3f6fb;border-radius:6px;padding:3px 10px;">${cnt}</span>
         </div>`).join('')
     : '<div style="color:var(--muted);font-size:.88rem;">No reading data yet.</div>';
 
-  // Students not logged this week
+  // ── Top-rated books (by avg star rating) ──
+  const bookRatings={};
+  readings.forEach(e=>{
+    if(e.bookTitle && n(e.reaction)>0){
+      if(!bookRatings[e.bookTitle]) bookRatings[e.bookTitle]={sum:0,cnt:0};
+      bookRatings[e.bookTitle].sum+=n(e.reaction);
+      bookRatings[e.bookTitle].cnt++;
+    }
+  });
+  const sortedByRating = Object.entries(bookRatings)
+    .filter(([,v])=>v.cnt>=2)
+    .map(([title,v])=>([title, (v.sum/v.cnt).toFixed(1), v.cnt]))
+    .sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const allRatedOnce = Object.entries(bookRatings)
+    .map(([title,v])=>([title, (v.sum/v.cnt).toFixed(1), v.cnt]))
+    .sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const ratedList = sortedByRating.length ? sortedByRating : allRatedOnce;
+  $('tpTopRated').innerHTML = ratedList.length
+    ? ratedList.map(([title,avg,cnt])=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);">
+          <span style="font-size:.95rem;">⭐</span>
+          <span style="flex:1;font-size:.88rem;">${title}</span>
+          <span style="font-size:.8rem;font-weight:700;color:var(--gold);">${avg}</span>
+          <span style="font-size:.75rem;color:var(--muted);">(${cnt})</span>
+        </div>`).join('')
+    : '<div style="color:var(--muted);font-size:.88rem;">Not enough ratings yet (need ≥2 per book).</div>';
+
+  // ── Students not logged this week ──
   const loggedThisWeek = new Set(
     readings.filter(e=>e.week===currentWeek).map(e=>e.studentNumber)
   );
@@ -3037,48 +3140,163 @@ function renderTeacherMyData(){
     ? notLogged.map(s=>`<div class="tp-not-logged-chip">${s.englishName}${s.chineseName?' · '+s.chineseName:''}</div>`).join('')
     : '<div style="color:var(--green);font-weight:700;">✅ All students have logged this week!</div>';
 
-  // Student summary table
+  // ── Student summary table with health dots ──
+  const totalWeeksStarted = startedWeeks.length || 1;
   const stuRows = students.map(s=>{
-    const ents  = readings.filter(e=>e.studentNumber===s.studentNumber);
-    const mins  = ents.reduce((a,e)=>a+n(e.minutesRead),0);
-    const rArr  = ents.map(e=>n(e.reaction)).filter(Boolean);
-    const avgR  = rArr.length ? (rArr.reduce((a,b)=>a+b,0)/rArr.length).toFixed(1) : '—';
-    const last  = ents.length ? fmtDate(ents.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))[0].timestamp) : '—';
+    const ents    = readings.filter(e=>e.studentNumber===s.studentNumber);
+    const mins    = ents.reduce((a,e)=>a+n(e.minutesRead),0);
+    const rArr    = ents.map(e=>n(e.reaction)).filter(Boolean);
+    const avgR    = rArr.length ? (rArr.reduce((a,b)=>a+b,0)/rArr.length).toFixed(1) : '—';
+    const avgMpW  = totalWeeksStarted ? Math.round(mins/totalWeeksStarted) : 0;
+    const last    = ents.length ? fmtDate([...ents].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp))[0].timestamp) : '—';
+    // Health: green = logged ≥ half of weeks; amber = logged 1+; red = never logged
+    const weeksLogged = startedWeeks.filter(w=>ents.some(e=>e.week===w.value)).length;
+    let healthDot, healthTitle;
+    if(weeksLogged===0){ healthDot='#fc8181'; healthTitle='Never logged'; }
+    else if(weeksLogged < Math.ceil(totalWeeksStarted/2)){ healthDot='#f6ad55'; healthTitle=`Logged ${weeksLogged}/${totalWeeksStarted} weeks`; }
+    else { healthDot='#48bb78'; healthTitle=`Logged ${weeksLogged}/${totalWeeksStarted} weeks`; }
     return `<tr>
       <td>${s.englishName}${s.chineseName?`<br><span style="color:var(--muted);font-size:.78rem;">${s.chineseName}</span>`:''}</td>
       <td>G${s.grade}</td>
-      <td>${ents.length}</td>
-      <td>${mins}</td>
-      <td>${avgR}</td>
+      <td style="text-align:center;"><span title="${healthTitle}" style="display:inline-block;width:13px;height:13px;border-radius:50%;background:${healthDot};"></span></td>
+      <td style="text-align:center;">${ents.length}</td>
+      <td style="text-align:center;">${mins}</td>
+      <td style="text-align:center;">${avgMpW}</td>
+      <td style="text-align:center;">${avgR}</td>
       <td style="font-size:.8rem;color:var(--muted);">${last}</td>
     </tr>`;
   }).join('');
-  $('tpStudentBody').innerHTML = stuRows || '<tr><td colspan="6" style="color:var(--muted);text-align:center;">No students found</td></tr>';
+  $('tpStudentBody').innerHTML = stuRows || '<tr><td colspan="8" style="color:var(--muted);text-align:center;">No students found</td></tr>';
 }
 
-// ── Book box for teacher ──
+// ── Book box for teacher (interactive, narrative, 30-copy target) ──
 function renderTeacherBookBox(){
-  const readings = getFilteredReadings();
-  const levelCount={};
-  readings.forEach(e=>{ if(e.level) levelCount[e.level]=(levelCount[e.level]||0)+1; });
+  const BOX_SIZE = 30;
+  const myStudents  = getFilteredStudents();
+  const myReadings  = getFilteredReadings();
 
-  const booksByLevel={};
-  BOOKS.forEach(b=>{
-    if(!booksByLevel[b.level]) booksByLevel[b.level]=[];
-    booksByLevel[b.level].push(b);
-  });
+  // All-grade readings (for grade-wide context)
+  const myGrade     = myStudents[0]?.grade || null;
+  const gradeReads  = myGrade
+    ? (state.allReading||[]).filter(e=>{
+        const stu = STUDENTS.find(s=>s.studentNumber===e.studentNumber);
+        return stu && stu.grade===myGrade;
+      })
+    : myReadings;
 
-  const levelOrder=['Starter','Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6'];
-  const html = levelOrder.filter(l=>booksByLevel[l]).map(level=>{
-    const cnt = levelCount[level]||0;
-    const books = booksByLevel[level];
-    return `<div style="background:#fff;border-radius:12px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line);">
-      <div style="font-weight:800;font-size:.95rem;margin-bottom:4px;">${level}</div>
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px;">${cnt} read${cnt!==1?'s':''} by your class</div>
-      ${books.map(b=>`<div style="font-size:.82rem;padding:5px 0;border-bottom:1px solid #f1f5f9;color:var(--ink);">📖 ${b.title}</div>`).join('')}
+  // Build title-level popularity maps
+  function titleMap(readArr){
+    const m={};
+    readArr.forEach(e=>{
+      if(e.bookTitle){ m[e.bookTitle]=(m[e.bookTitle]||0)+1; }
+    });
+    return m;
+  }
+  function ratingMap(readArr){
+    const m={};
+    readArr.forEach(e=>{
+      if(e.bookTitle && n(e.reaction)>0){
+        if(!m[e.bookTitle]) m[e.bookTitle]={sum:0,cnt:0};
+        m[e.bookTitle].sum+=n(e.reaction); m[e.bookTitle].cnt++;
+      }
+    });
+    return m;
+  }
+
+  const myCount    = titleMap(myReadings);
+  const gradeCount = titleMap(gradeReads);
+  const myRatings  = ratingMap(myReadings);
+  const gradeRatings = ratingMap(gradeReads);
+
+  // Build full book list with scores
+  // Score = (myCount * 3) + (gradeCount * 1) + (avgRating * 2) — weighted
+  const scored = BOOKS.map(b=>{
+    const mc  = myCount[b.title]||0;
+    const gc  = gradeCount[b.title]||0;
+    const mr  = myRatings[b.title]  ? myRatings[b.title].sum/myRatings[b.title].cnt : 0;
+    const gr  = gradeRatings[b.title] ? gradeRatings[b.title].sum/gradeRatings[b.title].cnt : 0;
+    const avgR = mr || gr;
+    return { ...b, myCount:mc, gradeCount:gc, avgRating:avgR,
+             score: mc*3 + gc*1 + avgR*2 };
+  }).sort((a,b)=>b.score-a.score);
+
+  // Distribute 30 copies across top books proportionally
+  // First pass: take top 10 books with score>0; else top 10 overall
+  const candidates = scored.filter(b=>b.score>0).slice(0,10);
+  const useAll     = candidates.length<3;
+  const pool       = useAll ? scored.slice(0,10) : candidates;
+
+  const totalScore = pool.reduce((a,b)=>a+Math.max(b.score,0.1),0);
+  let allocated    = pool.map(b=>({
+    ...b,
+    copies: Math.max(1, Math.round((Math.max(b.score,0.1)/totalScore)*BOX_SIZE))
+  }));
+
+  // Adjust so total === BOX_SIZE
+  let diff = BOX_SIZE - allocated.reduce((a,b)=>a+b.copies,0);
+  // Add or remove from highest-scored book
+  if(diff!==0 && allocated.length){
+    allocated[0].copies = Math.max(1, allocated[0].copies + diff);
+  }
+
+  const hasData = myReadings.length > 0;
+
+  // Narrative intro
+  const topThree = allocated.slice(0,3).map(b=>`<strong>${b.title}</strong>`).join(', ');
+  const intro = hasData
+    ? `Based on what your class is currently reading, the most popular titles are ${topThree}. Here's a suggested box of ${BOX_SIZE} — weighted by how many of your students have read each title, plus overall Grade ${myGrade} popularity and average ratings.`
+    : `No reading data yet for your class. The box below is based on Grade ${myGrade} popularity and book ratings across all classes. Once your students start logging, these suggestions will become personalised.`;
+
+  // Grade-wide trending note
+  const gradeTrend = Object.entries(gradeCount).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([t])=>t);
+  const gradeNote  = gradeTrend.length
+    ? `Across all Grade ${myGrade} classes, the most-read titles right now are: ${gradeTrend.map(t=>`<em>${t}</em>`).join(', ')}.`
+    : '';
+
+  // Build card HTML for each book
+  const levelColors = {
+    'Starter':'#e9f5ff','Stage 1':'#f0fdf4','Stage 2':'#fffbeb',
+    'Stage 3':'#fff7ed','Stage 4':'#fef2f2','Stage 5':'#f5f3ff','Stage 6':'#fdf2f8'
+  };
+  const levelBorder = {
+    'Starter':'#93c5fd','Stage 1':'#86efac','Stage 2':'#fcd34d',
+    'Stage 3':'#fdba74','Stage 4':'#fca5a5','Stage 5':'#c4b5fd','Stage 6':'#f9a8d4'
+  };
+
+  const cards = allocated.map((b,i)=>{
+    const pct    = Math.round(b.copies/BOX_SIZE*100);
+    const stars  = b.avgRating ? '⭐'.repeat(Math.round(b.avgRating))+'<span style="font-size:.78rem;color:var(--muted);"> ('+b.avgRating.toFixed(1)+')</span>' : '<span style="color:var(--muted);font-size:.82rem;">No ratings yet</span>';
+    const myNote = b.myCount ? `<span style="color:var(--green);font-size:.78rem;">✔ ${b.myCount} read${b.myCount!==1?'s':''} in your class</span>` : '';
+    const grNote = b.gradeCount>b.myCount ? `<span style="color:#6366f1;font-size:.78rem;">📊 ${b.gradeCount} reads across Gr ${myGrade||''}</span>` : '';
+    const bg     = levelColors[b.level]||'#f8fafc';
+    const border = levelBorder[b.level]||'#e2e8f0';
+    return `<div style="background:${bg};border-radius:12px;padding:16px;border:2px solid ${border};position:relative;">
+      <div style="position:absolute;top:12px;right:14px;background:var(--brand);color:#fff;font-size:.78rem;font-weight:800;border-radius:20px;padding:3px 10px;">${b.copies} cop${b.copies!==1?'ies':'y'}</div>
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">#${i+1} · ${b.level}</div>
+      <div style="font-weight:800;font-size:.95rem;line-height:1.3;margin-bottom:2px;padding-right:60px;">${b.title}</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-bottom:10px;">${b.author||''}${b.pages?' · '+b.pages+' pp':''}</div>
+      <div style="margin-bottom:8px;">${stars}</div>
+      <div style="height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:8px;">
+        <div style="height:100%;width:${pct}%;background:var(--brand2);border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">${myNote}${grNote}</div>
     </div>`;
   }).join('');
-  $('tpBookBoxContent').innerHTML = html || '<div style="color:var(--muted);">No book data available.</div>';
+
+  const html = `
+    <div style="background:#fff7ed;border:1px solid #f6ad55;border-radius:12px;padding:16px 18px;margin-bottom:18px;font-size:.88rem;line-height:1.6;">
+      <div style="font-weight:700;font-size:.95rem;margin-bottom:6px;">📦 Your suggested book box — ${BOX_SIZE} copies</div>
+      <div>${intro}</div>
+      ${gradeNote?`<div style="margin-top:6px;color:#6366f1;">${gradeNote}</div>`:''}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;">
+      ${cards}
+    </div>
+    <div style="margin-top:14px;font-size:.78rem;color:var(--muted);text-align:center;">
+      Suggestions update automatically as more students log their reading. Copy counts are recommendations — adjust based on your knowledge of your class.
+    </div>`;
+
+  $('tpBookBoxContent').innerHTML = html;
 }
 
 // ── Survey lock logic ──
