@@ -1453,8 +1453,8 @@
           <select id="sv1Settling"><option value="">Select</option><option value="1">1 — Not yet settled</option><option value="2">2</option><option value="3">3 — Getting there</option><option value="4">4</option><option value="5">5 — Very settled</option></select></div>
         <div class="survey-q"><label>Are students generally choosing books at an appropriate level?</label>
           <select id="sv1Level"><option value="">Select</option><option>Yes</option><option>Mostly</option><option>Sometimes</option><option>No</option></select></div>
-        <div class="survey-q"><label>How often did students need to change books?</label>
-          <select id="sv1LevelChanges"><option value="">Select</option><option>Never</option><option>1–2 students</option><option>Several students</option><option>Many students</option></select></div>
+        <div class="survey-q"><label>How often did students need to change books during the session?</label>
+          <select id="sv1LevelChanges"><option value="">Select</option><option>Never — all students kept their book</option><option>Rarely — 1 or 2 students swapped</option><option>Sometimes — a handful needed a different book</option><option>Often — many students changed books</option><option>Most students needed a different book</option></select></div>
         <div class="survey-q"><label>What level or type of books are students using most?</label>
           <select id="sv1BookLevels"><option value="">Select</option><option>Starter</option><option>Stage 1</option><option>Stage 2</option><option>Stage 3</option><option>Stage 4</option><option>Mixed</option></select></div>
         <div class="survey-q"><label>What was student engagement like overall?</label>
@@ -1511,8 +1511,8 @@
           <select id="sv2Settling"><option value="">Select</option><option value="1">1 — Not yet settled</option><option value="2">2</option><option value="3">3 — Getting there</option><option value="4">4</option><option value="5">5 — Very settled</option></select></div>
         <div class="survey-q"><label>Are students generally choosing books at an appropriate level?</label>
           <select id="sv2Level"><option value="">Select</option><option>Yes</option><option>Mostly</option><option>Sometimes</option><option>No</option></select></div>
-        <div class="survey-q"><label>How often did students need to change books?</label>
-          <select id="sv2LevelChanges"><option value="">Select</option><option>Never</option><option>1–2 students</option><option>Several students</option><option>Many students</option></select></div>
+        <div class="survey-q"><label>How often did students need to change books during the session?</label>
+          <select id="sv2LevelChanges"><option value="">Select</option><option>Never — all students kept their book</option><option>Rarely — 1 or 2 students swapped</option><option>Sometimes — a handful needed a different book</option><option>Often — many students changed books</option><option>Most students needed a different book</option></select></div>
         <div class="survey-q"><label>What level or type of books are students using most?</label>
           <select id="sv2BookLevels"><option value="">Select</option><option>Starter</option><option>Stage 1</option><option>Stage 2</option><option>Stage 3</option><option>Stage 4</option><option>Mixed</option></select></div>
         <div class="survey-q"><label>What was student engagement like overall?</label>
@@ -2851,10 +2851,13 @@ $('exportImplBtn').addEventListener('click',()=>{
    TEACHER PORTAL
 ══════════════════════════════════════════════════ */
 
-// ── Barrier chip toggles (delegated, works for sv1 and sv2) ──
-document.addEventListener('click', e=>{
-  const chip = e.target.closest('.survey-barrier-chip');
-  if(chip) chip.classList.toggle('selected');
+// ── Barrier chip toggles ──
+// Using change event on the hidden checkbox (most reliable — avoids double-fire from label+input)
+document.addEventListener('change', e=>{
+  if(e.target.matches('.survey-barrier-chip input[type="checkbox"]')){
+    const chip = e.target.closest('.survey-barrier-chip');
+    if(chip) chip.classList.toggle('selected', e.target.checked);
+  }
 });
 
 function getSelectedBarriers(containerId){
